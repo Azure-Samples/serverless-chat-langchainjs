@@ -1,0 +1,19 @@
+# Compiled output
+node_modules/
+dist/
+.tmp/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Deployment
+*.env
+.azure
+
+# OS
+.DS_Store
