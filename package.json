@@ -7,9 +7,11 @@
   "scripts": {
     "start": "echo not implemented",
     "start:webapp": "npm run start --workspace=webapp",
-    "start:api": "npm run start --workspace=api",
+    "start:api": "npm run dev --workspace=api",
     "build": "npm run build --workspaces --if-present",
     "clean": "echo not implemented",
+    "lint": "xo",
+    "lint:fix": "xo --fix",
     "format": "prettier --list-different --write .",
     "prepare": "simple-git-hooks || echo 'simple-git-hooks install skipped'"
   },
@@ -41,8 +43,7 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts}": "xo --fix",
-    "*": "prettier --write"
+    "*.{js,ts,json,md,yaml,yml,html,css}": "prettier --write"
   },
   "prettier": {
     "tabWidth": 2,

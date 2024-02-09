@@ -1,0 +1,24 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "Web app for the serverless ChatGPT RAG sample",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 8000 --host",
+    "build": "vite build",
+    "watch": "vite build --watch --minify false",
+    "lint": "lit-analyzer",
+    "clean": "npx rimraf dist"
+  },
+  "author": "Microsoft",
+  "license": "MIT",
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "lit-analyzer": "^2.0.1",
+    "vite": "^5.0.12"
+  },
+  "files": ["dist"]
+}
