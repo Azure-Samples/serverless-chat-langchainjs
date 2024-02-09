@@ -30,5 +30,6 @@
       }
     ]
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "types": ["vite/client"]
 }

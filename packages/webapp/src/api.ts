@@ -1,6 +1,6 @@
 import { type ChatResponse, type ChatRequestOptions, type ChatResponseChunk } from './models.js';
 
-export const apiBaseUrl = import.meta.env.VITE_BACKEND_API_URI || '';
+export const apiBaseUrl: string = import.meta.env.VITE_BACKEND_API_URI || '';
 
 export async function getCompletion(options: ChatRequestOptions) {
   const apiUrl = options.apiUrl || apiBaseUrl;
@@ -65,10 +65,12 @@ export async function* getChunksFromResponse<T>(response: Response, intervalMs: 
 
   let value: JSON | undefined;
   let done: boolean;
+  // eslint-disable-next-line no-await-in-loop
   while ((({ value, done } = await reader.read()), !done)) {
+    const chunk = value as T;
     yield new Promise<T>((resolve) => {
       setTimeout(() => {
-        resolve(value as T);
+        resolve(chunk);
       }, intervalMs);
     });
   }

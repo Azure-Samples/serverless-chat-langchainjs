@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/template-indent */
 import { LitElement, css, html } from 'lit';
 import { map } from 'lit/directives/map.js';
 import { customElement, property } from 'lit/decorators.js';
@@ -41,10 +40,20 @@ export class DebugComponent extends LitElement {
     return html`<aside class="debug-container">
       <slot name="close-button"></slot>
       <nav class="nav">
-        <button class=${this.showThoughtProcess ? 'active' : ''} @click=${() => (this.showThoughtProcess = true)}>
+        <button
+          class=${this.showThoughtProcess ? 'active' : ''}
+          @click=${() => {
+            this.showThoughtProcess = true;
+          }}
+        >
           ${this.options.strings.thoughtsTitle}
         </button>
-        <button class=${this.showThoughtProcess ? '' : 'active'} @click=${() => (this.showThoughtProcess = false)}>
+        <button
+          class=${this.showThoughtProcess ? '' : 'active'}
+          @click=${() => {
+            this.showThoughtProcess = false;
+          }}
+        >
           ${this.options.strings.supportingContentTitle}
         </button>
       </nav>

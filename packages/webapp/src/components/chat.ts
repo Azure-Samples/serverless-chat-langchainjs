@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/template-indent */
 import { LitElement, css, html, nothing } from 'lit';
 import { map } from 'lit/directives/map.js';
 import { repeat } from 'lit/directives/repeat.js';
@@ -93,7 +92,7 @@ export const defaultOptions: ChatComponentOptions = {
 export class ChatComponent extends LitElement {
   @property({
     type: Object,
-    converter: (value) => ({ ...defaultOptions, ...JSON.parse(value || '{}') }),
+    converter: (value) => ({ ...defaultOptions, ...JSON.parse(value ?? '{}') }),
   })
   options: ChatComponentOptions = defaultOptions;
 
@@ -103,12 +102,12 @@ export class ChatComponent extends LitElement {
   @state() protected isLoading = false;
   @state() protected isStreaming = false;
   @state() protected debugDetails?: ChatDebugDetails;
-  @query('.messages') protected messagesElement;
-  @query('.chat-input') protected chatInputElement;
+  @query('.messages') protected messagesElement!: HTMLElement;
+  @query('.chat-input') protected chatInputElement!: HTMLElement;
 
-  onSuggestionClicked(suggestion: string) {
+  async onSuggestionClicked(suggestion: string) {
     this.question = suggestion;
-    this.onSendClicked();
+    await this.onSendClicked();
   }
 
   onCitationClicked(citation: string) {
@@ -120,10 +119,10 @@ export class ChatComponent extends LitElement {
     }
   }
 
-  onKeyPressed(event: KeyboardEvent) {
+  async onKeyPressed(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.onSendClicked();
+      await this.onSendClicked();
     }
   }
 
@@ -213,7 +212,7 @@ export class ChatComponent extends LitElement {
       this.dispatchEvent(stateUpdatedEvent);
     }
 
-    return super.requestUpdate(name, oldValue);
+    super.requestUpdate(name, oldValue);
   }
 
   protected scrollToLastMessage() {
@@ -236,8 +235,8 @@ export class ChatComponent extends LitElement {
           (suggestion) => html`
             <button
               class="suggestion"
-              @click=${() => {
-                this.onSuggestionClicked(suggestion);
+              @click=${async () => {
+                await this.onSuggestionClicked(suggestion);
               }}
             >
               ${suggestion}
@@ -334,8 +333,8 @@ export class ChatComponent extends LitElement {
               (question) => html`
                 <button
                   class="question animation"
-                  @click=${() => {
-                    this.onSuggestionClicked(question);
+                  @click=${async () => {
+                    await this.onSuggestionClicked(question);
                   }}
                 >
                   ${question}
@@ -350,7 +349,9 @@ export class ChatComponent extends LitElement {
     <div class="chat-input">
       <button
         class="button new-chat-button"
-        @click=${() => (this.messages = [])}
+        @click=${() => {
+          this.messages = [];
+        }}
         title=${this.options.strings.newChatButton}
         .disabled=${this.messages?.length === 0 || this.isLoading || this.isStreaming}
       >
@@ -362,7 +363,9 @@ export class ChatComponent extends LitElement {
           placeholder="${this.options.strings.chatInputPlaceholder}"
           .value=${this.question}
           autocomplete="off"
-          @input=${(event) => (this.question = event.target.value)}
+          @input=${(event) => {
+            this.question = event.target.value;
+          }}
           @keypress=${this.onKeyPressed}
           .disabled=${this.isLoading}
         ></textarea>
@@ -400,7 +403,9 @@ export class ChatComponent extends LitElement {
               <button
                 slot="close-button"
                 class="button close-button"
-                @click=${() => (this.debugDetails = undefined)}
+                @click=${() => {
+                  this.debugDetails = undefined;
+                }}
                 title=${this.options.strings.closeTitle}
               >
                 X

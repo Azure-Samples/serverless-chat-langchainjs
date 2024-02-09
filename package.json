@@ -43,7 +43,24 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,json,md,yaml,yml,html,css}": "prettier --write"
+    "*.{js,ts,json,md,yaml,yml,html,css}": "prettier --write",
+    "*.{js,ts}": "xo --fix",
+    "packages/webapp/src/components/*.{js,ts}": "npx lit-analyzer"
+  },
+  "xo": {
+    "space": true,
+    "prettier": true,
+    "envs": ["node"],
+    "rules": {
+      "@typescript-eslint/triple-slash-reference": "off",
+      "@typescript-eslint/naming-convention": "off",
+      "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/member-ordering": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "import/no-unassigned-import": "off"
+    }
   },
   "prettier": {
     "tabWidth": 2,
