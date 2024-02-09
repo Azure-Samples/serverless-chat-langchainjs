@@ -1,0 +1,62 @@
+{
+  "name": "serverless-ai-langchainjs",
+  "version": "1.0.0",
+  "description": "Create your own serverless ChatGPT with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "echo not implemented",
+    "start:webapp": "npm run start --workspace=webapp",
+    "start:api": "npm run start --workspace=api",
+    "build": "npm run build --workspaces --if-present",
+    "clean": "echo not implemented",
+    "format": "prettier --list-different --write .",
+    "prepare": "simple-git-hooks || echo 'simple-git-hooks install skipped'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Azure-Samples/serverless-ai-langchainjs.git"
+  },
+  "homepage": "https://github.com/Azure-Samples/serverless-ai-langchainjs",
+  "bugs": {
+    "url": "https://github.com/Azure-Samples/serverless-ai-langchainjs/issues"
+  },
+  "keywords": [],
+  "author": "Microsoft",
+  "license": "MIT",
+  "workspaces": ["packages/*"],
+  "devDependencies": {
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "simple-git-hooks": "^2.9.0",
+    "typescript": "^5.3.3",
+    "xo": "^0.57.0"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=9"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "xo --fix",
+    "*": "prettier --write"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 120,
+    "bracketSpacing": true,
+    "overrides": [
+      {
+        "files": ["*.json"],
+        "options": {
+          "parser": "json"
+        }
+      }
+    ]
+  }
+}
