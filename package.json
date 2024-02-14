@@ -23,7 +23,18 @@
   "bugs": {
     "url": "https://github.com/Azure-Samples/serverless-ai-langchainjs/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "langchainjs",
+    "chatgpt",
+    "retrieval-augmented-generation",
+    "serverless",
+    "typescript",
+    "azure",
+    "azure-functions",
+    "azure-static-web-apps",
+    "azure-cosmos-db",
+    "mongodb"
+  ],
   "author": "Microsoft",
   "license": "MIT",
   "workspaces": ["packages/*"],
@@ -57,9 +68,11 @@
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/member-ordering": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
-      "import/no-unassigned-import": "off"
+      "import/no-unassigned-import": "off",
+      "import/extensions": "off"
     }
   },
   "prettier": {
