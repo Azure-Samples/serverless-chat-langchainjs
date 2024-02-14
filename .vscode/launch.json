@@ -2,11 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to Node Functions",
+      "name": "Debug API",
+      "request": "launch",
+      "runtimeArgs": ["start", "--typescript"],
+      "runtimeExecutable": "func",
+      "skipFiles": ["<node_internals>/**"],
       "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "preLaunchTask": "func: host start"
+      "cwd": "${workspaceFolder}/packages/api",
+      "preLaunchTask": "Restore API",
+      "outputCapture": "std"
     }
   ]
 }
