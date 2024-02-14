@@ -11,8 +11,6 @@
     "sourceMap": true,
     "strict": false,
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "strictNullChecks": true
   }
