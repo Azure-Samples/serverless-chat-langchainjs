@@ -62,4 +62,4 @@ npm run start
 
 This command will start the API and you will be able to access it through the URL `http://localhost:7071/api/your-function-name`. As a sample function, we are using the `hello-chat` function, so the URL will be `http://localhost:7071/api/hello`.
 
-> **Note**: if you are using Codespaces, you will need to include the `api/name-of-your-function` in the URL after of the `app.github.dev` domain. For example, `https://didactic-space-adventure-5vqqqq9xvxcrwq-7071.app.github.dev/api/hello`.
+> **Note**: if you are using Codespaces, you will need to include the `api/name-of-your-function` in the URL after of the `app.github.dev` domain. For example, `https://<codespaces-url>.app.github.dev/api/hello`.
