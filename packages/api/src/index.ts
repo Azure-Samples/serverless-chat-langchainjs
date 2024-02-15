@@ -1,8 +1,29 @@
 import { app } from '@azure/functions';
-import { GetHelloTest } from './functions/get-hello-test';
+import { postChat, getChat } from './functions/chat';
+import { postUpload, getUpload } from './functions/upload';
 
-app.get('get-hello', {
-  route: 'hello',
+// Including this as a test
+app.get('get-chat', {
+  route: 'chat',
   authLevel: 'anonymous',
-  handler: GetHelloTest,
+  handler: getChat,
+});
+
+app.post('post-chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: postChat,
+});
+
+// Including this as a test
+app.get('get-upload', {
+  route: 'upload',
+  authLevel: 'anonymous',
+  handler: getUpload,
+});
+
+app.post('post-upload', {
+  route: 'upload',
+  authLevel: 'anonymous',
+  handler: postUpload,
 });
