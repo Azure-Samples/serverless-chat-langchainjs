@@ -71,6 +71,7 @@
       "@typescript-eslint/prefer-nullish-coalescing": "off",
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/consistent-type-imports": "off",
       "import/no-unassigned-import": "off",
       "import/extensions": "off"
     }
