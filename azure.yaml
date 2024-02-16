@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: serverless-ai-langchainjs
+metadata:
+  template: serverless-ai-langchainjs@1.0.0
+
+services:
+  webapp:
+    project: ./src/webapp
+    dist: dist
+    language: ts
+    host: staticwebapp
+
+hooks:
+  postup:
+    run: |
+      echo "Post up hook"
+      # TODO curl to ingest the data
+    interactive: true
+    continueOnError: false
