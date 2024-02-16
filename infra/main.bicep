@@ -11,7 +11,8 @@ param location string
 
 param resourceGroupName string = ''
 param webappName string = 'webapp'
-param databaseName string = 'mongodb'
+param cosmosAccountName string = ''
+param mongoDbSkuName string = 'Free'
 param indexName string // Set in main.parameters.json
 
 @description('Location for the OpenAI resource group')
@@ -47,9 +48,6 @@ param embeddingModelName string = 'text-embedding-ada-002'
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
-@description('Use Application Insights for monitoring and performance tracing')
-param useApplicationInsights bool = false
-
 // Differentiates between automated and manual deployments
 param isContinuousDeployment bool = false
 
@@ -65,18 +63,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 
-// // Monitor application with Azure Monitor
-// module monitoring './core/monitor/monitoring.bicep' = {
-//   name: 'monitoring'
-//   scope: resourceGroup
-//   params: {
-//     location: location
-//     tags: tags
-//     logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
-//     applicationInsightsName: useApplicationInsights ? '${abbrs.insightsComponents}${resourceToken}' : ''
-//   }
-// }
-
 // The application webapp
 module webapp './core/host/staticwebapp.bicep' = {
   name: 'webapp'
@@ -85,6 +71,18 @@ module webapp './core/host/staticwebapp.bicep' = {
     name: !empty(webappName) ? webappName : '${abbrs.webStaticSites}web-${resourceToken}'
     location: webappLocation
     tags: union(tags, { 'azd-service-name': webappName })
+  }
+}
+
+module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
+  name: 'cosmos-mongo'
+  scope: resourceGroup
+  params: {
+    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+    administratorLogin: 'admin'
+    skuName: mongoDbSkuName
+    location: location
+    tags: tags
   }
 }
 
@@ -197,28 +195,6 @@ module openAiRoleUser 'core/security/role.bicep' = if (empty(openAiUrl) && !isCo
   }
 }
 
-// module searchContribRoleUser 'core/security/role.bicep' = if (useAzureAISearch && !isContinuousDeployment) {
-//   scope: resourceGroup
-//   name: 'search-contrib-role-user'
-//   params: {
-//     principalId: principalId
-//     // Search Index Data Contributor
-//     roleDefinitionId: '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
-//     principalType: 'User'
-//   }
-// }
-
-// module searchSvcContribRoleUser 'core/security/role.bicep' = if (useAzureAISearch && !isContinuousDeployment) {
-//   scope: resourceGroup
-//   name: 'search-svccontrib-role-user'
-//   params: {
-//     principalId: principalId
-//     // Search Service Contributor
-//     roleDefinitionId: '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
-//     principalType: 'User'
-//   }
-// }
-
 // // SYSTEM IDENTITIES
 // module openAiRoleBackendApi 'core/security/role.bicep' = if (empty(openAiUrl)) {
 //   scope: resourceGroup
@@ -227,17 +203,6 @@ module openAiRoleUser 'core/security/role.bicep' = if (empty(openAiUrl) && !isCo
 //     principalId: backendApi.outputs.identityPrincipalId
 //     // Cognitive Services OpenAI User
 //     roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
-//     principalType: 'ServicePrincipal'
-//   }
-// }
-
-// module searchRoleBackendApi 'core/security/role.bicep' = if (useAzureAISearch) {
-//   scope: resourceGroup
-//   name: 'search-role-backendapi'
-//   params: {
-//     principalId: backendApi.outputs.identityPrincipalId
-//     // Search Index Data Reader
-//     roleDefinitionId: '1407120a-92aa-4202-b7e9-c0e197c71c8f'
 //     principalType: 'ServicePrincipal'
 //   }
 // }
