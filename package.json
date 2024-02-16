@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "echo not implemented",
+    "start": "swa start",
     "start:webapp": "npm run start --workspace=webapp",
     "start:api": "npm run dev --workspace=api",
     "build": "npm run build --workspaces --if-present",
@@ -39,6 +39,7 @@
   "license": "MIT",
   "workspaces": ["packages/*"],
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^1.1.6",
     "lint-staged": "^15.2.2",
     "prettier": "^3.0.3",
     "rimraf": "^5.0.5",
@@ -47,7 +48,7 @@
     "xo": "^0.57.0"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=18",
     "npm": ">=9"
   },
   "simple-git-hooks": {
