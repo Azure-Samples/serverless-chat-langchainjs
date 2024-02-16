@@ -7,7 +7,7 @@
     "watch": "tsc -w",
     "clean": "rimraf dist",
     "prestart": "npm run clean && npm run build",
-    "start:host": "npm run prestart && func start",
+    "start:host": "npm run prestart && func start --typescript",
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
   },
