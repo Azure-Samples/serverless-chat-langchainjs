@@ -45,12 +45,6 @@ param embeddingDeploymentName string = 'embedding'
 param embeddingDeploymentCapacity int = 30
 param embeddingModelName string = 'text-embedding-ada-002'
 
-@description('Id of the user or app to assign application roles')
-param principalId string = ''
-
-// Differentiates between automated and manual deployments
-param isContinuousDeployment bool = false
-
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
@@ -79,7 +73,7 @@ module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
   scope: resourceGroup
   params: {
     accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-    administratorLogin: 'admin'
+    administratorLogin: 'admin${resourceToken}'
     skuName: mongoDbSkuName
     location: location
     tags: tags
@@ -183,30 +177,6 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
-// USER ROLES
-module openAiRoleUser 'core/security/role.bicep' = if (empty(openAiUrl) && !isContinuousDeployment) {
-  scope: resourceGroup
-  name: 'openai-role-user'
-  params: {
-    principalId: principalId
-    // Cognitive Services OpenAI User
-    roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
-    principalType: 'User'
-  }
-}
-
-// // SYSTEM IDENTITIES
-// module openAiRoleBackendApi 'core/security/role.bicep' = if (empty(openAiUrl)) {
-//   scope: resourceGroup
-//   name: 'openai-role-backendapi'
-//   params: {
-//     principalId: backendApi.outputs.identityPrincipalId
-//     // Cognitive Services OpenAI User
-//     roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
-//     principalType: 'ServicePrincipal'
-//   }
-// }
-
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
@@ -216,6 +186,8 @@ output AZURE_OPENAI_CHATGPT_DEPLOYMENT string = chatGptDeploymentName
 output AZURE_OPENAI_CHATGPT_MODEL string = chatGptModelName
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = embeddingDeploymentName
 output AZURE_OPENAI_EMBEDDING_MODEL string = embeddingModelName
+
+output MONGODB_CONNECTION_STRING string = cosmos.outputs.connectionString
 
 output INDEX_NAME string =  indexName
 output WEBAPP_URI string = webapp.outputs.uri
