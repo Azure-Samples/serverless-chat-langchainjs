@@ -8,8 +8,6 @@ param location string = resourceGroup().location
 param skuName string = 'Free'
 param tags object = {}
 
-param connectionStringKey string = 'AZURE-COSMOS-CONNECTION-STRING'
-
 resource cosmos 'Microsoft.DocumentDB/mongoClusters@2023-11-15-preview' = {
   name: accountName
   location: location
@@ -38,4 +36,4 @@ resource cosmos 'Microsoft.DocumentDB/mongoClusters@2023-11-15-preview' = {
   }
 }
 
-// output connectionString string = cosmos.outputs.connectionStrings[connectionStringKey].connectionString
+output connectionString string = replace(cosmos.properties.connectionString, '<user>:<password>', '${administratorLogin}:${administratorLoginPassword}')
