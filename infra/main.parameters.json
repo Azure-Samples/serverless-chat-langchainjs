@@ -27,16 +27,13 @@
       "value": "${AZURE_WEBAPP_LOCATION=eastus2}"
     },
     "mongoDbSkuName": {
-      "value": "${AZURE_MONGODB_SKU=standard}"
+      "value": "${AZURE_MONGODB_SKU=Free}"
     },
     "chatGptDeploymentName": {
       "value": "${AZURE_OPENAI_CHATGPT_DEPLOYMENT=chat}"
     },
     "indexName": {
       "value": "${INDEX_NAME=kbindex}"
-    },
-    "isContinuousDeployment": {
-      "value": "${CI=false}"
     }
   }
 }
