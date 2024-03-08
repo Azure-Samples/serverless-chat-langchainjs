@@ -3,7 +3,7 @@ import { chat } from './functions/chat';
 import { postUpload, getUpload } from './functions/upload';
 
 // Including this as a test
-app.get('chat', {
+app.post('chat', {
   route: 'chat',
   authLevel: 'anonymous',
   handler: chat,
