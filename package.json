@@ -73,7 +73,8 @@
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/consistent-type-imports": "off",
       "import/no-unassigned-import": "off",
-      "import/extensions": "off"
+      "import/extensions": "off",
+      "n/prefer-global/process": "off"
     }
   },
   "prettier": {
