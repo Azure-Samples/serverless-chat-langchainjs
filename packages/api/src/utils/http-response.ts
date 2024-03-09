@@ -48,9 +48,6 @@ export function unauthorized(error: Error): HttpResponseInit {
 export function noContent(): HttpResponseInit {
   return {
     status: 204,
-    jsonBody: {
-      null: null,
-    },
   };
 }
 

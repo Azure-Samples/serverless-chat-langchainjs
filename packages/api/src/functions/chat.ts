@@ -1,7 +1,7 @@
-import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import 'dotenv/config';
-import { badRequest, serviceUnavailable, ok, internalServerError } from '../utils';
+import { badRequest, serviceUnavailable, ok } from '../utils';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   context.log(`Http function processed request for url "${request.url}"`);
