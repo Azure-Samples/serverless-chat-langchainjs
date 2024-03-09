@@ -19,13 +19,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
 
     const { question } = requestBody;
 
-    const embeddings = new AzureOpenAIEmbeddings({
-      azureOpenAIEndpoint: process.env.AZURE_OPENAI_API_ENDPOINT || '',
-      azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY || '',
-      azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_API_EMBEDDING_DEPLOYMENT_NAME || '',
-      modelName: process.env.AZURE_OPENAI_MODEL_NAME || '',
-      maxRetries: 2,
-    });
+    const embeddings = new AzureOpenAIEmbeddings();
 
     const prompt = `Question: ${question}`;
     context.log(`Sending prompt to the model: ${prompt}`);
