@@ -1,18 +1,12 @@
 import { app } from '@azure/functions';
-import { postChat, getChat } from './functions/chat';
+import { chat } from './functions/chat';
 import { postUpload, getUpload } from './functions/upload';
 
 // Including this as a test
-app.get('get-chat', {
+app.post('chat', {
   route: 'chat',
   authLevel: 'anonymous',
-  handler: getChat,
-});
-
-app.post('post-chat', {
-  route: 'chat',
-  authLevel: 'anonymous',
-  handler: postChat,
+  handler: chat,
 });
 
 // Including this as a test
