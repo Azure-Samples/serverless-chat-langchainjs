@@ -235,14 +235,14 @@ export function noContent(): HttpResponseInit {
   };
 }
 
-export function created(body: object): HttpResponseInit {
+export function created(body: Record<string, unknown>): HttpResponseInit {
   return {
     status: 201,
     jsonBody: body,
   };
 }
 
-export function ok(body: object): HttpResponseInit {
+export function ok(body: Record<string, unknown>): HttpResponseInit {
   return {
     status: 200,
     jsonBody: body,
@@ -295,8 +295,8 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       ? ok({ promptResponse })
       : serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   } catch (error: unknown) {
-    const err = error as Error;
-    context.error(`Error when processing chat request: ${err.message}`);
+    const error_ = error as Error;
+    context.error(`Error when processing chat request: ${error_.message}`);
 
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
