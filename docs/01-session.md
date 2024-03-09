@@ -82,22 +82,22 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
           promptResponse,
         },
       };
+    } else {
+      return {
+        status: 503,
+        jsonBody: {
+          error: 'Service temporarily unavailable. Please try again later.',
+        },
+      };
     }
-
-    return {
-      status: 404,
-      jsonBody: {
-        error: 'No response from the model',
-      },
-    };
   } catch (error: unknown) {
-    const error_ = error as Error;
-    context.error(`Error when processing chat request: ${error_.message}`);
+    const err = error as Error;
+    context.error(`Error when processing chat request: ${err.message}`);
 
     return {
-      status: 500,
+      status: 503,
       jsonBody: {
-        error: 'An error occurred while processing the chat request. Please try again later.',
+        error: 'Service temporarily unavailable. Please try again later.',
       },
     };
   }
