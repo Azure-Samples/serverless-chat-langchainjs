@@ -1,5 +1,7 @@
 # Session 01: Creating a function with Azure OpenAI, LangChain and Azure Functions
 
+**[Article - How to create a structure the new v4 programming model of Azure Functions](https://techcommunity.microsoft.com/t5/educator-developer-blog/step-by-step-guide-migrating-v3-to-v4-programming-model-for/ba-p/3897691)**
+
 ## Overview
 
 In this tutorial, we will create a function that uses Azure OpenAI to answer questions. To do this, we will use the `@langchain/azure-openai` and `langchain` packages. And then, we will use Azure Functions v4 programming model to create the function.
@@ -23,6 +25,8 @@ npm install -S langchain
 ## Configure access credentials
 
 As we will need to include the access credentials to Azure OpenAI, let's create a `.env` file at the root of the project with the following variables:
+
+- `.env`
 
 ```env
 AZURE_OPENAI_API_ENDPOINT=""
@@ -169,6 +173,147 @@ Maybe you wonder: 'Why is `promptResponse` returning an array of numbers?' This 
 
 **todo: explain better what a vector representation is**
 
+## Refactoring the `chat` function
+
+Now that we have the `chat` function working, let's refactor the code to make it clearer and easier to maintain. You may have noticed that the code contains many `statusCode`, which ends up making the code quite repetitive!
+
+Inside the `src` folder, create a folder called `utils` and inside it create a file called: `http-helper.ts` with the following block of code:
+
+- `packages/api/src/utils/http-helper.ts`
+
+```typescript
+import { HttpResponseInit } from '@azure/functions';
+
+export function badRequest(error: Error): HttpResponseInit {
+  return {
+    status: 400,
+    jsonBody: {
+      error: error.message,
+    },
+  };
+}
+
+export function notFound(error: Error): HttpResponseInit {
+  return {
+    status: 404,
+    jsonBody: {
+      error: error.message,
+    },
+  };
+}
+
+export function serviceUnavailable(error: Error): HttpResponseInit {
+  return {
+    status: 503,
+    jsonBody: {
+      error: error.message,
+    },
+  };
+}
+
+export function internalServerError(error: Error): HttpResponseInit {
+  return {
+    status: 500,
+    jsonBody: {
+      error: error.message,
+    },
+  };
+}
+
+export function unauthorized(error: Error): HttpResponseInit {
+  return {
+    status: 401,
+    jsonBody: {
+      error: error.message,
+    },
+  };
+}
+
+export function noContent(): HttpResponseInit {
+  return {
+    status: 204,
+    jsonBody: {
+      null: null,
+    },
+  };
+}
+
+export function created(body: object): HttpResponseInit {
+  return {
+    status: 201,
+    jsonBody: body,
+  };
+}
+
+export function ok(body: object): HttpResponseInit {
+  return {
+    status: 200,
+    jsonBody: body,
+  };
+}
+```
+
+Note that we abstracted the logic of returning each status code into separate functions. This will help us to keep the code cleaner and easier to maintain.
+
+Inside that same `utils` folder, now create a file called `index.ts` with the following block of code:
+
+- `packages/api/src/utils/index.ts`
+
+```typescript
+export * from './http-helper';
+```
+
+Done! Now that we have the status code return functions abstracted, let's refactor the `chat.ts` function to use these functions.
+
+Open the file `chat.ts` and replace the code block with:
+
+- `packages/api/src/functions/chat.ts`
+
+```typescript
+import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import 'dotenv/config';
+import { badRequest, serviceUnavailable, ok, internalServerError } from '../utils';
+
+export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  context.log(`Http function processed request for url "${request.url}"`);
+
+  try {
+    const requestBody: any = await request.json();
+
+    if (!requestBody?.question) {
+      return badRequest(new Error('No question provided'));
+    }
+
+    const { question } = requestBody;
+
+    const embeddings = new AzureOpenAIEmbeddings();
+
+    const prompt = `Question: ${question}`;
+    context.log(`Sending prompt to the model: ${prompt}`);
+
+    const promptResponse = await embeddings.embedQuery(prompt);
+
+    return promptResponse
+      ? ok({ promptResponse })
+      : serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  } catch (error: unknown) {
+    const err = error as Error;
+    context.error(`Error when processing chat request: ${err.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+}
+```
+
+Now that we've refactored the `chat` function, let's test it again locally. Run the command:
+
+```bash
+npm run start
+```
+
+Open the `api.http` file and click the `Send Request` button. You should see the response from the Azure OpenAI template. If everything went well, congratulations! We've refactored the `chat` function and made it cleaner and easier to maintain. 🎉
+
 In the next step, we will start creating the use of `CosmosDB LC vector store` to store the vectors generated by Azure OpenAI.
 
-[Next Step: Using CosmosDB LC vector store](./02-session.md)
+▶ **[Next Step: Using CosmosDB LC vector store](./02-session.md)**
