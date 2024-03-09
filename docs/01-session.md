@@ -232,9 +232,6 @@ export function unauthorized(error: Error): HttpResponseInit {
 export function noContent(): HttpResponseInit {
   return {
     status: 204,
-    jsonBody: {
-      null: null,
-    },
   };
 }
 
@@ -270,10 +267,10 @@ Open the file `chat.ts` and replace the code block with:
 - `packages/api/src/functions/chat.ts`
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import 'dotenv/config';
-import { badRequest, serviceUnavailable, ok, internalServerError } from '../utils';
+import { badRequest, serviceUnavailable, ok } from '../utils';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   context.log(`Http function processed request for url "${request.url}"`);
