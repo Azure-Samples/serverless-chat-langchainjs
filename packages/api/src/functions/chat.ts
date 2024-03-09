@@ -36,9 +36,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     }
 
     return {
-      status: 404,
+      status: 503,
       jsonBody: {
-        error: 'No response from the model',
+        error: 'Service temporarily unavailable. Please try again later.',
       },
     };
   } catch (error: unknown) {
@@ -46,9 +46,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     context.error(`Error when processing chat request: ${error_.message}`);
 
     return {
-      status: 500,
+      status: 503,
       jsonBody: {
-        error: 'An error occurred while processing the chat request. Please try again later.',
+        error: 'Service temporarily unavailable. Please try again later.',
       },
     };
   }
