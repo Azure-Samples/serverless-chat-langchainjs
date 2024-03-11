@@ -7,7 +7,7 @@
   "scripts": {
     "start": "swa start",
     "start:webapp": "npm run start --workspace=webapp",
-    "start:api": "npm run dev --workspace=api",
+    "start:api": "npm run start --workspace=api",
     "build": "npm run build --workspaces --if-present",
     "clean": "echo not implemented",
     "lint": "xo",
