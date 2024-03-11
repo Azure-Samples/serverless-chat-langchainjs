@@ -11,6 +11,9 @@ param location string
 
 param resourceGroupName string = ''
 param webappName string = 'webapp'
+param apiServiceName string = 'api'
+param appServicePlanName string = ''
+param storageAccountName string = ''
 param cosmosAccountName string = ''
 param mongoDbSkuName string = 'Free'
 param indexName string // Set in main.parameters.json
@@ -77,6 +80,53 @@ module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
     skuName: mongoDbSkuName
     location: location
     tags: tags
+  }
+}
+
+// The application backend
+module api './core/host/functions.bicep' = {
+  name: 'api'
+  scope: resourceGroup
+  params: {
+    name: '${abbrs.webSitesFunctions}api-${resourceToken}'
+    location: location
+    tags: union(tags, { 'azd-service-name': apiServiceName })
+    allowedOrigins: [webapp.outputs.uri]
+    alwaysOn: false
+    runtimeName: 'node'
+    runtimeVersion: '20'
+    appServicePlanId: appServicePlan.outputs.id
+    storageAccountName: storage.outputs.name
+    appSettings: {
+      API_ALLOW_ORIGINS: webapp.outputs.uri
+     }
+  }
+}
+
+// Create an App Service Plan to group applications under the same payment plan and SKU
+module appServicePlan './core/host/appserviceplan.bicep' = {
+  name: 'appserviceplan'
+  scope: resourceGroup
+  params: {
+    name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
+    location: location
+    tags: tags
+    sku: {
+      name: 'Y1'
+      tier: 'Dynamic'
+    }
+  }
+}
+
+// Backing storage for Azure functions backend API
+module storage './core/storage/storage-account.bicep' = {
+  name: 'storage'
+  scope: resourceGroup
+  params: {
+    name: !empty(storageAccountName) ? storageAccountName : '${abbrs.storageStorageAccounts}${resourceToken}'
+    location: location
+    tags: tags
+    allowBlobPublicAccess: false
   }
 }
 
@@ -190,4 +240,5 @@ output AZURE_OPENAI_EMBEDDING_MODEL string = embeddingModelName
 output MONGODB_CONNECTION_STRING string = cosmos.outputs.connectionString
 
 output INDEX_NAME string =  indexName
+output API_URI string = api.outputs.uri
 output WEBAPP_URI string = webapp.outputs.uri
