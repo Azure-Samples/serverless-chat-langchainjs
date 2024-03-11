@@ -6,10 +6,16 @@ metadata:
 
 services:
   webapp:
-    project: ./src/webapp
+    project: ./packages/webapp
     dist: dist
     language: ts
     host: staticwebapp
+
+  # api:
+  #   project: ./packages/api
+  #   dist: dist
+  #   language: ts
+  #   host: functionapp
 
 hooks:
   postup:
