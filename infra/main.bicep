@@ -26,8 +26,10 @@ param indexName string // Set in main.parameters.json
   }
 })
 param openAiLocation string // Set in main.parameters.json
-param openAiUrl string = ''
 param openAiSkuName string = 'S0'
+param openAiUrl string = ''
+@secure()
+param openAiKey string = ''
 
 // Location is not relevant here as it's only for the built-in api
 // which is not used here. Static Web App is a global service otherwise
@@ -38,20 +40,22 @@ param openAiSkuName string = 'S0'
     type: 'location'
   }
 })
-param webappLocation string = 'eastus2' // Set in main.parameters.json
+param webappLocation string // Set in main.parameters.json
 
-param chatGptDeploymentName string // Set in main.parameters.json
-param chatGptDeploymentCapacity int = 30
-param chatGptModelName string = 'gpt-35-turbo'
-param chatGptModelVersion string = '0613'
-param embeddingDeploymentName string = 'embedding'
-param embeddingDeploymentCapacity int = 30
-param embeddingModelName string = 'text-embedding-ada-002'
+param chatModelName string // Set in main.parameters.json
+param chatDeploymentName string = chatModelName
+param chatModelVersion string // Set in main.parameters.json
+param chatDeploymentCapacity int = 30
+param embeddingsModelName string // Set in main.parameters.json
+param embeddingsModelVersion string // Set in main.parameters.json
+param embeddingsDeploymentName string = embeddingsModelName
+param embeddingsDeploymentCapacity int = 30
 
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
+var finalOpenAiApiKey = empty(openAiKey) ? openAi.outputs.apiKey : openAiKey
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -71,19 +75,7 @@ module webapp './core/host/staticwebapp.bicep' = {
   }
 }
 
-module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
-  name: 'cosmos-mongo'
-  scope: resourceGroup
-  params: {
-    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-    administratorLogin: 'admin${resourceToken}'
-    skuName: mongoDbSkuName
-    location: location
-    tags: tags
-  }
-}
-
-// The application backend
+// The application backend API
 module api './core/host/functions.bicep' = {
   name: 'api'
   scope: resourceGroup
@@ -98,12 +90,17 @@ module api './core/host/functions.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     storageAccountName: storage.outputs.name
     appSettings: {
-      API_ALLOW_ORIGINS: webapp.outputs.uri
+      AZURE_OPENAI_API_KEY: finalOpenAiApiKey
+      AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
+      AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
+      AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
+      AZURE_COSMOSDB_CONNECTION_STRING: cosmos.outputs.connectionString
+      INDEX_NAME: indexName
      }
   }
 }
 
-// Create an App Service Plan to group applications under the same payment plan and SKU
+// Compute plan for the Azure Functions API
 module appServicePlan './core/host/appserviceplan.bicep' = {
   name: 'appserviceplan'
   scope: resourceGroup
@@ -118,7 +115,7 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
   }
 }
 
-// Backing storage for Azure functions backend API
+// Backing storage for Azure Functions API
 module storage './core/storage/storage-account.bicep' = {
   name: 'storage'
   scope: resourceGroup
@@ -130,66 +127,17 @@ module storage './core/storage/storage-account.bicep' = {
   }
 }
 
-// The backend API
-// module backendApi './core/host/container-app.bicep' = {
-//   name: 'backend-api'
-//   scope: resourceGroup
-//   params: {
-//     name: !empty(backendApiName) ? backendApiName : '${abbrs.appContainerApps}search-${resourceToken}'
-//     location: location
-//     tags: union(tags, { 'azd-service-name': backendApiName })
-//     containerAppsEnvironmentName: containerApps.outputs.environmentName
-//     containerRegistryName: containerApps.outputs.registryName
-//     managedIdentity: true
-//     containerCpuCoreCount: '1.0'
-//     containerMemory: '2.0Gi'
-//     secrets: useApplicationInsights ? [
-//       {
-//         name: 'appinsights-cs'
-//         value: monitoring.outputs.applicationInsightsConnectionString
-//       }
-//     ] : []
-//     env: concat([
-//       {
-//         name: 'AZURE_OPENAI_CHATGPT_DEPLOYMENT'
-//         value: chatGptDeploymentName
-//       }
-//       {
-//         name: 'AZURE_OPENAI_CHATGPT_MODEL'
-//         value: chatGptModelName
-//       }
-//       {
-//         name: 'AZURE_OPENAI_EMBEDDING_DEPLOYMENT'
-//         value: embeddingDeploymentName
-//       }
-//       {
-//         name: 'AZURE_OPENAI_EMBEDDING_MODEL'
-//         value: embeddingModelName
-//       }
-//       {
-//         name: 'AZURE_OPENAI_URL'
-//         value: finalOpenAiUrl
-//       }
-//       {
-//         name: 'AZURE_SEARCH_SERVICE'
-//         value: azureSearchService
-//       }
-//       {
-//         name: 'INDEX_NAME'
-//         value: indexName
-//       }
-//       {
-//         name: 'QDRANT_URL'
-//         value: qdrantUrl
-//       }
-//     ], useApplicationInsights ? [{
-//       name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-//       secretRef: 'appinsights-cs'
-//     }] : [])
-//     imageName: !empty(backendApiImageName) ? backendApiImageName : 'nginx:latest'
-//     targetPort: 3000
-//   }
-// }
+module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
+  name: 'cosmos-mongo'
+  scope: resourceGroup
+  params: {
+    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+    administratorLogin: 'admin${resourceToken}'
+    skuName: mongoDbSkuName
+    location: location
+    tags: tags
+  }
+}
 
 module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   name: 'openai'
@@ -203,25 +151,25 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
     }
     deployments: [
       {
-        name: chatGptDeploymentName
+        name: chatDeploymentName
         model: {
           format: 'OpenAI'
-          name: chatGptModelName
-          version: chatGptModelVersion
+          name: chatModelName
+          version: chatModelVersion
         }
         sku: {
           name: 'Standard'
-          capacity: chatGptDeploymentCapacity
+          capacity: chatDeploymentCapacity
         }
       }
       {
-        name: embeddingDeploymentName
+        name: embeddingsDeploymentName
         model: {
           format: 'OpenAI'
-          name: embeddingModelName
-          version: '2'
+          name: embeddingsModelName
+          version: embeddingsModelVersion
         }
-        capacity: embeddingDeploymentCapacity
+        capacity: embeddingsDeploymentCapacity
       }
     ]
   }
@@ -231,14 +179,17 @@ output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
-output AZURE_OPENAI_URL string = finalOpenAiUrl
-output AZURE_OPENAI_CHATGPT_DEPLOYMENT string = chatGptDeploymentName
-output AZURE_OPENAI_CHATGPT_MODEL string = chatGptModelName
-output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = embeddingDeploymentName
-output AZURE_OPENAI_EMBEDDING_MODEL string = embeddingModelName
+output AZURE_OPENAI_API_ENDPOINT string = finalOpenAiUrl
+output AZURE_OPENAI_API_KEY string = finalOpenAiApiKey
+output AZURE_OPENAI_API_DEPLOYMENT_NAME string = chatDeploymentName
+output AZURE_OPENAI_API_MODEL string = chatModelName
+output AZURE_OPENAI_API_MODEL_VERSION string = chatModelVersion
+output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingsDeploymentName
+output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
+output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
 
-output MONGODB_CONNECTION_STRING string = cosmos.outputs.connectionString
-
+output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
 output INDEX_NAME string =  indexName
+
 output API_URI string = api.outputs.uri
 output WEBAPP_URI string = webapp.outputs.uri
