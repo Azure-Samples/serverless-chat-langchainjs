@@ -11,26 +11,32 @@
     "location": {
       "value": "${AZURE_LOCATION}"
     },
-    "principalId": {
-      "value": "${AZURE_PRINCIPAL_ID}"
-    },
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION=eastus2}"
     },
     "openAiUrl": {
-      "value": "${AZURE_OPENAI_URL}"
+      "value": "${OPENAI_URL}"
     },
     "openAiKey": {
-      "value": "${AZURE_OPENAI_KEY}"
+      "value": "${OPENAI_KEY}"
+    },
+    "chatModelName": {
+      "value": "${AZURE_OPENAI_API_MODEL=gpt-35-turbo}"
+    },
+    "chatModelVersion": {
+      "value": "${AZURE_OPENAI_API_MODEL_VERSION=0613}"
+    },
+    "embeddingsModelName": {
+      "value": "${AZURE_OPENAI_API_EMBEDDINGS_MODEL=text-embedding-ada-002}"
+    },
+    "embeddingsModelVersion": {
+      "value": "${AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION=2}"
     },
     "webappLocation": {
       "value": "${AZURE_WEBAPP_LOCATION=eastus2}"
     },
     "mongoDbSkuName": {
       "value": "${AZURE_MONGODB_SKU=Free}"
-    },
-    "chatGptDeploymentName": {
-      "value": "${AZURE_OPENAI_CHATGPT_DEPLOYMENT=chat}"
     },
     "indexName": {
       "value": "${INDEX_NAME=kbindex}"
