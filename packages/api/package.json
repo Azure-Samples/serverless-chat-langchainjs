@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "a sample api demonstrating how to use Azure Functions with Azure OpenAI and LangChain.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -14,8 +14,11 @@
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@langchain/azure-openai": "^0.0.2",
+    "@langchain/community": "^0.0.36",
     "dotenv": "^16.4.5",
-    "langchain": "^0.1.25"
+    "langchain": "^0.1.25",
+    "mongodb": "^6.5.0",
+    "@langchain/core": "^0.1.44"
   },
   "devDependencies": {
     "@types/node": "^18.x",

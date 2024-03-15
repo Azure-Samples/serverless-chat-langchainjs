@@ -1,5 +1,5 @@
 import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
-import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import 'dotenv/config';
 import { badRequest, serviceUnavailable, ok } from '../utils';
 
