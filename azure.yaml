@@ -16,14 +16,10 @@ services:
           shell: sh
           # TODO build app with API url
           run: echo ""
-          continueOnError: false
-          interactive: false
         windows:
           shell: pwsh
           # TODO build app with API url
           run: echo ""
-          continueOnError: false
-          interactive: false
 
   api:
     project: ./packages/api
@@ -31,9 +27,10 @@ services:
     host: function
 
 hooks:
+  postprovision:
+    shell: sh
+    run: azd env get-values > .env
   postup:
-    # TODO curl to ingest the data
-    run: |
-      echo "Post up hook"
-    interactive: true
-    continueOnError: false
+    shell: sh
+    # TODO: add curl to ingest the data
+    run: echo ""
