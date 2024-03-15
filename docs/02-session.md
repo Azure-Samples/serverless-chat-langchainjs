@@ -15,34 +15,42 @@ Well, to start, let's install the following packages:
 npm install mongodb @langchain/community @langchain/core
 ```
 
-However, as `third-party` providers, it is necessary to make some changes to the `package.json` file. Why?
-
-Imagine that you are building a LEGO model. LangChain is like the complete LEGO set that allows you to build something cool, like a robot. Within this set, there are smaller packages (specific LEGO piece boxes) that you can use to add special features to your robot. For example, a small package can give your robot the ability to light up, similar to how `@langchain/azure-openai` adds Azure OpenAI model features to LangChain. Another package may include a variety of pieces contributed by LEGO fans, just as `@langchain/community` has several community-contributed integrations.
-
-All these special packages, including the main LangChain set, need a foundation to build on, which is like having a base plate in LEGO terms. This base is `@langchain/core`. It's the fundamental piece that everything else connects to, ensuring your robot stands firm and works well.
-
-When building your LEGO robot, it's crucial that all the pieces fit perfectly on the base. In the world of LangChain, this means that all special packages (like the ones that make your robot light up) must be compatible with the `@langchain/core` base plate. To ensure this, you need to use a trick in the instruction manual (the `package.json` file of your project). This trick is to add a special note, called _resolutions_ or _overrides_, telling everyone to use the same version of the base (`@langchain/core`) to ensure everything fits perfectly without issues.
-
-So by setting up your project, you're ensuring that all parts of your LangChain LEGO set work harmoniously, specifying the correct version of the base for everything to build on top of.
-
-Excellent analogy, isn't it?
-
 Now, let's do the following, add the following code to the `package.json` file:
 
 - `package.json`
 
 ```json
-(...)
-  "resolutions": {
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "a sample api demonstrating how to use Azure Functions with Azure OpenAI and LangChain.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start:host": "npm run prestart && func start",
+    "start": "npm-run-all --parallel start:host watch",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0",
+    "@langchain/azure-openai": "^0.0.2",
+    "@langchain/community": "^0.0.36",
+    "dotenv": "^16.4.5",
+    "langchain": "^0.1.25",
+    "mongodb": "^6.5.0",
     "@langchain/core": "^0.1.44"
   },
-  "overrides": {
-    "@langchain/core": "^0.1.44"
+  "devDependencies": {
+    "@types/node": "^18.x",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.0",
+    "typescript": "^4.0.0"
   },
-(...)
+  "main": "dist/src/index.js"
+}
 ```
-
-> you can check how it looks in the project's `package.json` file **[here](https://github.com/Azure-Samples/serverless-ai-langchainjs/blob/main/packages/api/package.json)**. And, to learn more about Installing integration packages, access **[here](https://js.langchain.com/docs/get_started/installation#installing-integration-packages)**.
 
 ## Step 02 - Create a CosmosDB for MongoDB vCore cluster using Azure Portal
 
