@@ -3,8 +3,5 @@
   "navigationFallback": {
     "rewrite": "index.html",
     "exclude": ["/assets/*", "*.css"]
-  },
-  "platform": {
-    "apiRuntime": "node:18"
   }
 }
