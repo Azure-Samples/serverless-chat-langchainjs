@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="description" content="ChatGPT with Enterprise Data" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <title>ChatGPT with Enterprise Data</title>
     <style>
       :root {
-        --azc-primary: #06b;
+        --azc-primary: #07b;
         --azc-bg: #eee;
         --azc-border-radius: 16px;
       }
@@ -30,6 +30,13 @@
           'Helvetica Neue',
           sans-serif;
         font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+
+        & img {
+          height: 32px;
+          margin-right: 0.5em;
+        }
       }
       azc-chat {
         display: block;
@@ -39,7 +46,10 @@
     </style>
   </head>
   <body>
-    <nav>ChatGPT with Enterprise Data</nav>
+    <nav>
+      <img src="/favicon.png" alt="" />
+      ChatGPT with Enterprise Data
+    </nav>
     <azc-chat></azc-chat>
     <script type="module" src="/src/index.ts"></script>
   </body>
