@@ -12,14 +12,12 @@ services:
     host: staticwebapp
     hooks:
       predeploy:
-        posix:
-          shell: sh
-          # TODO build app with API url
-          run: echo ""
         windows:
           shell: pwsh
-          # TODO build app with API url
-          run: echo ""
+          run: Export-ModuleMember -Variable API_URI && npm run build:webapp
+        posix:
+          shell: sh
+          run: export API_URI && npm run build:webapp
 
   api:
     project: ./packages/api
