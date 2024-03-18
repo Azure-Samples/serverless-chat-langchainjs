@@ -1,6 +1,6 @@
 import { type ChatResponse, type ChatRequestOptions, type ChatResponseChunk } from './models.js';
 
-export const apiBaseUrl: string = import.meta.env.VITE_BACKEND_API_URI || 'api';
+export const apiBaseUrl: string = import.meta.env.VITE_API_URI || 'api';
 
 export async function getCompletion(options: ChatRequestOptions) {
   const apiUrl = options.apiUrl || apiBaseUrl;
@@ -30,7 +30,7 @@ export async function getCompletion(options: ChatRequestOptions) {
 }
 
 export function getCitationUrl(citation: string): string {
-  return `${apiBaseUrl}/content/${citation}`;
+  return `${apiBaseUrl}/documents/${citation}`;
 }
 
 export class NdJsonParserStream extends TransformStream<string, JSON> {

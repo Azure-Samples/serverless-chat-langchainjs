@@ -3,15 +3,7 @@ export type Message = {
   role: string;
 };
 
-export type ChatDebugDetails = {
-  thoughts: string;
-  dataPoints: string[];
-};
-
-export type ChatMessageContext = Record<string, any> & {
-  thoughts?: string;
-  data_points?: string[];
-};
+export type ChatMessageContext = Record<string, any>;
 
 export type ChatMessage = Message & {
   context?: ChatMessageContext;
