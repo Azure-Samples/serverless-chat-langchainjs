@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "swa start",
-    "start:webapp": "npm run start --workspace=webapp",
+    "start:webapp": "npm run dev --workspace=webapp",
     "start:api": "npm run start --workspace=api",
     "build": "npm run build --workspaces --if-present",
     "build:webapp": "npm run build --workspace=webapp",
