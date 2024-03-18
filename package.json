@@ -9,6 +9,8 @@
     "start:webapp": "npm run start --workspace=webapp",
     "start:api": "npm run start --workspace=api",
     "build": "npm run build --workspaces --if-present",
+    "build:webapp": "npm run build --workspace=webapp",
+    "build:api": "npm run build --workspace=api",
     "clean": "echo not implemented",
     "lint": "xo",
     "lint:fix": "xo --fix",
