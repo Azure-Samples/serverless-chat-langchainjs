@@ -10,7 +10,7 @@ To upload more documents, use one of these commands depending on your environmen
 Make sure your API is started by running `npm run start:api` from the root of the project. Then you can use the following command to upload a new PDF document:
 
 ```bash
-curl -F "file=@<your-document.pdf>" http://localhost:7071/documents
+curl -F "file=@<your-document.pdf>" http://localhost:7071/api/documents
 ```
 
 ### For the deployed version
@@ -24,7 +24,7 @@ azd env get-values | grep API_URI
 Then you can use the following command to upload a new PDF document:
 
 ```bash
-curl -F "file=@<your-document.pdf>" <your_api_url>/documents
+curl -F "file=@<your-document.pdf>" <your_api_url>/api/documents
 ```
 
 </details>
