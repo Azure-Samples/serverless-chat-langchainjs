@@ -31,12 +31,12 @@ This sample shows how to build a serverless ChatGPT-like with Retrieval-Augmente
 
 This sample demonstrate how LangChain.js and Azure serverless technologies makes it easy to build a serverless AI application. The application is a chatbot that uses a set of enterprise documents to generate the responses to user queries.
 
-We provide sample data to make this sample ready to try. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describe its terms of service, privacy policy and a support guide.
+We provide sample data to make this sample ready to try. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describes its terms of service, privacy policy and a support guide.
 
 ![Application architecture](./docs/images/architecture.drawio.png)
 
 <div align="center">
-  <img src="./docs/images/architecture.drawio.png" alt="Application architecture" width="520px" />
+  <img src="./docs/images/architecture.drawio.png" alt="Application architecture" width="640px" />
 </div>
 
 This application is made from multiple components:
