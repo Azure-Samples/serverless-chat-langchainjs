@@ -14,9 +14,7 @@
 
 <!-- TODO: gif demo -->
 
-<!-- ![](./packages/webapp/public/favicon.png) -->
-
-:star: If you like this sample, star it on GitHub — it motivates us a lot!
+:star: If you like this sample, star it on GitHub — it helps a lot!
 
 [Overview](#overview) • [Get started](#get-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
 
@@ -36,6 +34,10 @@ This sample demonstrate how LangChain.js and Azure serverless technologies makes
 We provide sample data to make this sample ready to try. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describe its terms of service, privacy policy and a support guide.
 
 ![Application architecture](./docs/images/architecture.drawio.png)
+
+<div align="center">
+  <img src="./docs/images/architecture.drawio.png" alt="Application architecture" width="520px" />
+</div>
 
 This application is made from multiple components:
 
