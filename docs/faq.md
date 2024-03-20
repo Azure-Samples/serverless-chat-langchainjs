@@ -1,7 +1,7 @@
 ## Frequently Asked Questions
 
 <details>
-<summary>How can we upload additional documents without redeploying everything?</summary>
+<summary><b>How can we upload additional documents without redeploying everything?</b></summary><br>
 
 To upload more documents, use one of these commands depending on your environment.
 
@@ -30,14 +30,14 @@ curl -F "file=@<your-document.pdf>" <your_api_url>/api/documents
 </details>
 
 <details>
-<summary>Why do we need to break up the documents into chunks?</summary>
+<summary><b>Why do we need to break up the documents into chunks?</b></summary><br>
 
 Chunking allows us to limit the amount of information we send to the LLM due to token limits. By breaking up the content, it allows us to easily find potential chunks of text that we can inject and improve the relevance of the results. The method of chunking we use leverages a sliding window of text such that sentences that end one chunk will start the next. This allows us to reduce the chance of losing the context of the text.
 
 </details>
 
 <details>
-<summary>How do you change the models used in this sample?</summary>
+<summary><b>How do you change the models used in this sample?</b></summary><br>
 
 You can use the environment variables to change the chat and embeddings models used in this sample when deployed.
 Run these commands:
@@ -58,7 +58,7 @@ TODO: change local models version with Ollama
 </details>
 
 <details>
-<summary>What does the `azd up` command do?</summary>
+<summary><b>What does the `azd up` command do?</b></summary><br>
 
 The `azd up` command comes from the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview), and takes care of both provisioning the Azure resources and deploying code to the selected Azure hosts.
 
