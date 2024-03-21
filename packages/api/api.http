@@ -6,9 +6,9 @@
 @api_host = http://localhost:7071
 
 # Chat with a bot (this is a sample ---> will be change)
-POST {{api_host}}/api/chat 
+POST {{api_host}}/api/chat
 Content-Type: application/json
 
 {
-  "question": "What is the United States currency?"
+  "question": "How to Search and Book Rentals?"
 }
