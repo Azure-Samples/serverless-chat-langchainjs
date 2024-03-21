@@ -238,3 +238,9 @@ If everything goes well, you will see the following message:
 Watch the gif of the whole process being executed:
 
 ![api-upload-test](./images/test-upload-function.gif)
+
+Great! We have finished implementing the `upload` API. Now, let's finish implementing chain in the `chat` API.
+
+▶ **[Next Step: Generate completion using `chain` in the `chat` API](./04-session.md)**
+
+
