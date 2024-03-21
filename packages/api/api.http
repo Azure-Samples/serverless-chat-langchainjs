@@ -5,10 +5,15 @@
 
 @api_host = http://localhost:7071
 
-# Chat with a bot (this is a sample ---> will be change)
+### Chat with a bot (this is a sample)
 POST {{api_host}}/api/chat
 Content-Type: application/json
 
 {
   "question": "How to Search and Book Rentals?"
 }
+
+
+### Upload PDF Document
+POST {{api_host}}/api/upload
+
