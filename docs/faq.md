@@ -1,6 +1,21 @@
 ## Frequently Asked Questions
 
 <details>
+<summary><b>What is <em>Retrieval-Augmented Generation</em>?</b></summary><br>
+
+Retrieval-Augmented Generation (RAG) is a method used in artificial intelligence, particularly in natural language processing, to generate text responses that are both contextually relevant and rich in content using AI models.
+
+At its core, RAG involves two main components:
+
+- **Retriever**: Think "_like a search engine_", finding relevant information from a knowledgebase, usually a vector database. In this sample, we're using Azure CosmosDB for MongoDB vCore as our vector database.
+
+- **Generator**: Acts like a writer, taking the prompt and information retrieved to create a response. We're using here a Large Language Model (LLM) for this task.
+
+![Retrieval-Augmented Generation schema](./images/rag.png)
+
+</details>
+
+<details>
 <summary><b>How can we upload additional documents without redeploying everything?</b></summary><br>
 
 To upload more documents, use one of these commands depending on your environment.
@@ -58,7 +73,7 @@ TODO: change local models version with Ollama
 </details>
 
 <details>
-<summary><b>What does the `azd up` command do?</b></summary><br>
+<summary><b>What does the <code>azd up</code> command do?</b></summary><br>
 
 The `azd up` command comes from the [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/overview), and takes care of both provisioning the Azure resources and deploying code to the selected Azure hosts.
 
