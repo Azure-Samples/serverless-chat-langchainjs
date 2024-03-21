@@ -2,13 +2,13 @@ import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functio
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { badRequest, serviceUnavailable, ok } from '../utils';
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import 'dotenv/config';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import {
   AzureCosmosDBVectorStore,
   AzureCosmosDBSimilarityType,
 } from "@langchain/community/vectorstores/azure_cosmosdb";
 
+import 'dotenv/config';
 
 export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
