@@ -1,17 +1,59 @@
 import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import { badRequest, serviceUnavailable, ok } from '../utils';
+import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import 'dotenv/config';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import {
+  AzureCosmosDBVectorStore,
+  AzureCosmosDBSimilarityType,
+} from "@langchain/community/vectorstores/azure_cosmosdb";
 
-export async function getUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
 
-  const string = request.query.get('name') || (await request.text()) || 'Upload Function';
+export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  try {
+    const parsedForm = await request.formData();
 
-  return { body: `Hello, ${string}!` };
-}
+    if (!parsedForm.has('pdfDocumentFile')) {
+      return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+    }
 
-export async function postUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
+    const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
 
-  const string = request.query.get('name') || (await request.text()) || 'Upload Function';
+    const loadPDFFile = new PDFLoader(file, {
+      splitPages: false,
+    });
 
-  return { body: `Hello, ${string}!` };
-}
+    const rawPDFFile = await loadPDFFile.load();
+
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+      chunkOverlap: 100,
+    });
+
+    const pdfFileDocuments = await splitter.splitDocuments(rawPDFFile);
+
+    const store = await AzureCosmosDBVectorStore.fromDocuments(
+      pdfFileDocuments,
+      new AzureOpenAIEmbeddings(),
+      {
+        databaseName: "langchaindatabase",
+        collectionName: "pdfs"
+      }
+    );
+
+    const numLists = 100;
+    const dimensions = 1536;
+    const similarity = AzureCosmosDBSimilarityType.COS;
+    await store.createIndex(numLists, dimensions, similarity);
+
+    await store.close();
+
+    return ok({ message: 'PDF file uploaded successfully.' });
+  } catch (error: unknown) {
+    const error_ = error as Error;
+    context.error(`Error when processing chat request: ${error_.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+};

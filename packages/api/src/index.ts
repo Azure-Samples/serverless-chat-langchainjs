@@ -1,6 +1,7 @@
 import { app } from '@azure/functions';
 import { chat } from './functions/chat';
-import { postUpload, getUpload } from './functions/upload';
+import { upload } from './functions/upload';
+import { testUpload } from './functions/testUpload';
 
 // Including this as a test
 app.post('chat', {
@@ -9,15 +10,15 @@ app.post('chat', {
   handler: chat,
 });
 
-// Including this as a test
-app.get('get-upload', {
-  route: 'upload',
-  authLevel: 'anonymous',
-  handler: getUpload,
-});
-
 app.post('post-upload', {
   route: 'upload',
   authLevel: 'anonymous',
-  handler: postUpload,
+  handler: upload,
+});
+
+/***remover depois */
+app.post('testUpload', {
+  route: 'testUpload',
+  authLevel: 'anonymous',
+  handler: testUpload,
 });
