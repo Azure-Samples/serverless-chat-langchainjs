@@ -95,17 +95,146 @@ export async function testUpload(request: HttpRequest, context: InvocationContex
 };
 ```
 
-Vamos entender o que fizemos aqui:
+Let's understand what we did here:
 
-- Importamos as classes `PDFLoader` e `RecursiveCharacterTextSplitter` do pacote `langchain`. 
+We imported the `PDFLoader` and `RecursiveCharacterTextSplitter` classes from the `langchain` package.
 
-A classe **[PDFLoader](https://api.js.langchain.com/classes/langchain_document_loaders_fs_pdf.PDFLoader.html)** é responsável por carregar documentos de arquivos PDF. 
+The **[PDFLoader](https://api.js.langchain.com/classes/langchain_document_loaders_fs_pdf.PDFLoader.html)** class is responsible for loading documents from PDF files. It can load a PDF file from a file path or a `Blob` object. It can also load a PDF file from a URL. In this case, we are using a `Blob` object.
 
-Já a classe `RecursiveCharacterTextSplitter` 
+The **[RecursiveCharacterTextSplitter](https://js.langchain.com/docs/modules/data_connection/document_transformers/recursive_text_splitter)** class is responsible for splitting the text of a document into smaller parts. This is useful for large documents. How does this class do this? It does so using a set of characters. And, the default characters provided are: `["\n\n", "\n", " ", ""]`
+
+It will take a large text and split it by the first character `\n\n`. If the first split is not enough, it will try to split by the character `\n`. And so on. Until the text or the split is smaller than the specified block size.
+
+After that, we created an instance of the `PDFLoader` class passing the `pdfDocumentFile` file and a configuration object with the `splitPages` property as `false`. Why? Because by default, a document will be created for each page of the PDF file. That's why we are disabling this option.
+
+Then, we loaded the PDF file using the `load` method of the `PDFLoader` class instance.
+
+We create an instance of the `RecursiveCharacterTextSplitter` class by passing a configuration object with the `chunkSize` and `chunkOverlap` properties.  
+
+The `chunkSize` controls the maximum size (in terms of number of characters) of the final documents. And, the `chunkOverlap` will specify how much overlap there should be between the chunks. This is useful to ensure that the text is not split inappropriately. Usually the default is `1000` and `200`, respectively.
+
+Finally, we divided the PDF document into smaller parts using the **[splitDocuments](https://api.js.langchain.com/classes/langchain_text_splitter.RecursiveCharacterTextSplitter.html#splitDocuments)** method of the `RecursiveCharacterTextSplitter` class instance. The method returns an array of documents.
+
+## Save the PDF File in CosmosDB
+
+Now that we have the PDF file divided into smaller parts, we can save it in `Azure CosmosDB for MongoDB`. Let's implement the code to do this.
+
+```typescript
+import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import { badRequest, serviceUnavailable, ok } from '../utils';
+import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import 'dotenv/config';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import {
+  AzureCosmosDBVectorStore,
+  AzureCosmosDBSimilarityType,
+} from "@langchain/community/vectorstores/azure_cosmosdb";
 
 
+export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  try {
+    const parsedForm = await request.formData();
 
-- Criamos uma instância da classe `PDFLoader` passando o arquivo `pdf` e um objeto de configuração com a propriedade `splitPages` como `false`. Isso é necessário para que o `pdf` seja carregado como um único documento.
-- Carregamos o arquivo `pdf` usando o método `load` da instância da classe `PDFLoader`.
-- Criamos uma instância da classe `RecursiveCharacterTextSplitter` passando um objeto de configuração com as propriedades `chunkSize` e `chunkOverlap`. Isso é necessário para que o texto seja dividido em partes menores. Isso é útil para documentos grandes. O `chunkSize` é o tamanho de cada parte e o `chunkOverlap` é a quantidade de caracteres que cada parte deve ter em comum com a parte anterior.
-- Dividimos o documento `pdf` em partes menores usando o método `splitDocuments` da instância da classe `RecursiveCharacterTextSplitter`. O método retorna um array de documentos.
+    if (!parsedForm.has('pdfDocumentFile')) {
+      return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+    }
+
+    const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
+
+    const loadPDFFile = new PDFLoader(file, {
+      splitPages: false,
+    });
+
+    const rawPDFFile = await loadPDFFile.load();
+
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+      chunkOverlap: 100,
+    });
+
+    const pdfFileDocuments = await splitter.splitDocuments(rawPDFFile);
+
+    const store = await AzureCosmosDBVectorStore.fromDocuments(
+      pdfFileDocuments,
+      new AzureOpenAIEmbeddings(),
+      {
+        databaseName: "langchain-database",
+        collectionName: "pdfs"
+      }
+    );
+
+    const numLists = 100;
+    const dimensions = 1536;
+    const similarity = AzureCosmosDBSimilarityType.COS;
+    await store.createIndex(numLists, dimensions, similarity);
+
+    await store.close();
+
+    return ok({ message: 'PDF file uploaded successfully.' });
+  } catch (error: unknown) {
+    const error_ = error as Error;
+    context.error(`Error when processing chat request: ${error_.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+};
+```
+
+Let's understand what we did here:
+
+We imported the `AzureCosmosDBVectorStore` and `AzureCosmosDBSimilarityType` classes from the `langchain` package.
+
+The `AzureCosmosDBVectorStore` class is responsible for storing and retrieving vectors from `Azure CosmosDB for MongoDB`. It can be used to store and retrieve vectors from a collection in a database. It can also be used to create an index in the collection. 
+
+Then we created an instance of the `AzureCosmosDBVectorStore` class by passing the `pdfFileDocuments` array using the method `fromDocuments`. This method is responsible for creating an instance of the `AzureCosmosDBVectorStore` from a list of documents. It first converts the documents to vectors and then adds them to the collection.
+
+We created an instance of the `AzureOpenAIEmbeddings`, at this point this class will grab the `Azure OpenAI` credentials from the environment variables. Then we passed a configuration object with the `databaseName` and `collectionName` properties.
+
+Then we created three variables:
+
+- `numLists`: which controls the number of lists to be used in the index.
+- `dimensions`: which controls the number of dimensions of the vectors. The maximum number of dimensions supported is `2000`
+- `similarity`: similarity metric to be used when creating the index. In this case, we can use `COS` (cosine distance), `L2` (Euclidean distance) and `IP` (inner product). In this case, we are using the `COS` algorithm.
+
+Thereafter use the `createIndex` method, which is responsible for creating an index in the collection with the name of the index specified during the construction of the instance. This method is precisely waiting for the `numLists`, `dimensions` and `similarity` parameters that we have just defined.
+
+Finally, we closed the store using the `close` method of the `AzureCosmosDBVectorStore` class instance. 
+
+If you want to learn more about Azure CosmosDB for MongoDB vCore in vector use cases, you can access the **[official documentation](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/vector-search)**.
+
+Phew! We have implemented the `upload` API. Now let's test it.
+
+## Test the `upload` API
+
+To test the `upload` API, let's use Visual Studio Code's own terminal. To do this, run the command inside the `api` folder:
+
+- `packages/api`
+  
+```bash
+npm run start
+```
+
+The following message will appear, as shown in the image below:
+
+![upload function](./images/upload-function.png)
+
+Now let's use a new terminal to make the `POST` request to the `upload` API. To do this, run the following command:
+
+```bash
+curl -F "pdfDocumentFile=@data/support.pdf" http://localhost:7071/api/upload
+```
+
+Note that we are using the file that needs to be sent to the `upload` API that we defined in the code as `pdfDocumentFile`.
+
+If everything goes well, you will see the following message:
+
+```json
+{
+  "message": "PDF file uploaded successfully."
+}
+```
+
+Watch the gif of the whole process being executed:
+
+![api-upload-test](./images/test-upload-function.gif)
