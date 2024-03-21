@@ -42,10 +42,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
 
     const store = new AzureCosmosDBVectorStore(
       embeddings, {
-      databaseName: "langchaindatabase",
+      databaseName: "langchain-database",
       collectionName: "pdfs"
-    }
-    );
+    });
 
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
@@ -56,12 +55,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       input: question
     });
 
-    return {
-      status: 200,
-      jsonBody: {
-        response,
-      },
-    }
+    return response
+      ? ok({ response })
+      : serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   } catch (error: unknown) {
     const error_ = error as Error;
     context.error(`Error when processing chat request: ${error_.message}`);
