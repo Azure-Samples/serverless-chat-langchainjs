@@ -37,7 +37,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
       pdfFileDocuments,
       new AzureOpenAIEmbeddings(),
       {
-        databaseName: "langchaindatabase",
+        databaseName: "langchain-database",
         collectionName: "pdfs"
       }
     );
