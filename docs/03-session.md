@@ -158,10 +158,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     const store = await AzureCosmosDBVectorStore.fromDocuments(
       documents,
       new AzureOpenAIEmbeddings(),
-      {
-        databaseName: "langchain-database",
-        collectionName: "pdfs"
-      }
+      {},
     );
 
     const numLists = 100;
