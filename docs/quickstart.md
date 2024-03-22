@@ -23,9 +23,9 @@ This sample shows how to build a serverless ChatGPT-like experience with Retriev
 
 ## Overview
 
-This sample demonstrate how LangChain.js and Azure serverless technologies allows to quickly build an AI application. The application is a chatbot that uses a set of enterprise documents to generate the responses to user queries.
+Building AI applications can be complex and time-consuming, but using LangChain.js and Azure serverless technologies allows to greatly simplify the process. This application is a chatbot that uses a set of enterprise documents to generate responses to user queries.
 
-We provide sample data to make this sample ready to try. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describes its terms of service, privacy policy and a support guide.
+We provide sample data to make this sample ready to try, but feel free to replace it with your own. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describes its terms of service, privacy policy and a support guide.
 
 <div align="center">
   <img src="./images/architecture.drawio.png" alt="Application architecture" width="640px" />
