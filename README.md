@@ -22,10 +22,8 @@
 
 This sample shows how to build a serverless ChatGPT-like experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
 
-<!--
 > [!TIP]
 > You can test this application locally without any cost using [Ollama](https://ollama.com/). Follow the instructions in the [Local Development](#local-development) section to get started.
--->
 
 ## Overview
 
@@ -53,7 +51,8 @@ There are multiple ways to get started with this project.
 
 The quickest way to use [GitHub Codespaces](#use-github-codespaces) that provides a preconfigured environment for you. Alternatively, you can [set up your local environment](#use-your-local-environment) following the instructions below.
 
-<!-- > **Note**: If you want to run this sample entirely locally using Ollama, you have to follow the instructions in the [local environment](#use-your-local-environment) section. -->
+> [!IMPORTANT]
+> If you want to run this sample entirely locally using Ollama, you have to follow the instructions in the [local environment](#use-your-local-environment) section.
 
 ### Use your local environment
 
@@ -65,15 +64,14 @@ You need to install following tools to work on your local machine:
 <!-- - [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
   - **Important**: Ensure you can run `pwsh.exe` from a PowerShell command. If this fails, you likely need to upgrade PowerShell. -->
 
-<!--
-TODO: Ollama setup
--->
-
 Then you can get the project code:
 
-1. Click on the **Fork** button at the top of this page to create your own copy of this repository.
-1. Select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
-1. Open a terminal and run this command to clone the repo: `git clone <your-repo-url>`
+1. [**Fork**](https://github.com/Azure-Samples/langchainjs-quickstart-demo/fork) the project to create your own copy of this repository.
+2. Select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
+<div align="center">
+  <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="646px" />
+</div>
+3. Open a terminal and run this command to clone the repo: `git clone <your-repo-url>`
 
 ### Use GitHub Codespaces
 
@@ -91,9 +89,47 @@ You will also need to have [Docker](https://www.docker.com/products/docker-deskt
 
 ## Run the sample
 
+There are multiple ways to run this sample: locally using Ollama or Azure OpenAI models, or by deploying it to Azure.
+
 ### Run the sample locally with Ollama
 
+If you have a machine with enough resources, you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
+
+```bash
+ollama pull mistral
+ollama pull all-minilm:l6-v2
+```
+
+> [!NOTE]
+> The `mistral` model with download a few gigabytes of data, so it can take some time depending on your internet connection.
+
+After that you have to install the NPM dependencies:
+
+```bash
+npm install
+```
+
+Then you can start the application by running the commands:
+
+```bash
+npm start
+```
+
+This will start the web app and the API locally. Open the URL `http://localhost:4280` in your browser to start chatting with the bot.
+
 ### Run the sample locally with Azure OpenAI models
+
+First you need to provision the Azure resources needed to run the sample. Follow the instructions in the [Deploy the sample to Azure](#deploy-the-sample-to-azure) section to deploy the sample to Azure, then you'll be able to run the sample locally using the deployed Azure resources.
+
+Once your deployment is complete, you can run the following commands to start the application locally:
+
+1. Run `azd env get-values > .env` to get the environment variables.
+2. Run `npm start` to start the application.
+
+This will start the web app and the API locally. Open the URL `http://localhost:4280` in your browser to start chatting with the bot.
+
+> [!TIP]
+> You can switch back to using Ollama models by simply deleting the `.env` file and starting the application again.
 
 ### Deploy the sample to Azure
 
@@ -106,8 +142,11 @@ You will also need to have [Docker](https://www.docker.com/products/docker-deskt
 #### Deploy the sample
 
 1. Open a terminal and navigate to the root of the project.
-2. Run `azd up` to deploy the application to Azure.
-3. When asked, you'll have to enter a name for the project and the location where you want to deploy the resources.
+2. Authenticate with Azure by running `azd auth login`.
+3. Run `azd up` to deploy the application to Azure. This will provision Azure resources, deploy this sample, and build the search index based on the files found in the `./data` folder.
+
+- You will be prompted to select a base location for the resources. Choose a location that is closest to you.
+- By default, the OpenAI resource will be deployed to `eastus2`. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a short list of locations is accepted. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and may become outdated as availability changes.
 
 The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
 
@@ -132,10 +171,12 @@ Here are some resources to learn more about the technologies used in this sample
 - [LangChain.js documentation](https://js.langchain.com)
 - [Generative AI For Beginners](https://github.com/microsoft/generative-ai-for-beginners)
 - [Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)
+- [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)
+- [Ask YouTube: LangChain.js + Azure Quickstart sample](https://github.com/Azure-Samples/langchainjs-quickstart-demo)
 - [Revolutionize your Enterprise Data with ChatGPT: Next-gen Apps w/ Azure OpenAI and AI Search](https://aka.ms/entgptsearchblog)
-- [Building ChatGPT-Like Experiences with Azure: A Guide to Retrieval Augmented Generation for JavaScript applications](https://devblogs.microsoft.com/azure-sdk/building-chatgpt-like-experiences-with-azure-a-guide-to-retrieval-augmented-generation-for-javascript-applications/)
+- [Find more Azure AI samples](https://github.com/Azure-Samples/azureai-samples)
 
-<!-- TODO: write our own blog post instead of the last one -->
+<!-- TODO: write blog post and link it here -->
 
 ## FAQ
 
