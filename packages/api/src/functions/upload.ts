@@ -24,14 +24,14 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
       splitPages: false,
     });
 
-    const rawPDFFile = await loader .load();
+    const rawDocument = await loader .load();
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 100,
     });
 
-    const pdfFileDocuments = await splitter.splitDocuments(rawPDFFile);
+    const pdfFileDocuments = await splitter.splitDocuments(rawDocument);
 
     const store = await AzureCosmosDBVectorStore.fromDocuments(
       pdfFileDocuments,
