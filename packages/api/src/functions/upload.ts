@@ -31,10 +31,10 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
       chunkOverlap: 100,
     });
 
-    const pdfFileDocuments = await splitter.splitDocuments(rawDocument);
+    const documents = await splitter.splitDocuments(rawDocument);
 
     const store = await AzureCosmosDBVectorStore.fromDocuments(
-      pdfFileDocuments,
+      documents,
       new AzureOpenAIEmbeddings(),
       {
         databaseName: "langchain-database",
