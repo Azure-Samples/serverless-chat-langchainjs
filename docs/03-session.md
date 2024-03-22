@@ -83,7 +83,7 @@ export async function testUpload(request: HttpRequest, context: InvocationContex
             chunkOverlap: 100,
         });
 
-        const pdfFileDocuments = await splitter.splitDocuments(rawDocument);
+        const documents= await splitter.splitDocuments(rawDocument);
 
         return ok({ message: 'PDF file uploaded successfully.' });
     } catch (error: unknown) {
@@ -153,10 +153,10 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
       chunkOverlap: 100,
     });
 
-    const pdfFileDocuments = await splitter.splitDocuments(rawDocument);
+    const documents = await splitter.splitDocuments(rawDocument );
 
     const store = await AzureCosmosDBVectorStore.fromDocuments(
-      pdfFileDocuments,
+      documents,
       new AzureOpenAIEmbeddings(),
       {
         databaseName: "langchain-database",
@@ -187,7 +187,7 @@ We imported the `AzureCosmosDBVectorStore` and `AzureCosmosDBSimilarityType` cla
 
 The `AzureCosmosDBVectorStore` class is responsible for storing and retrieving vectors from `Azure CosmosDB for MongoDB`. It can be used to store and retrieve vectors from a collection in a database. It can also be used to create an index in the collection. 
 
-Then we created an instance of the `AzureCosmosDBVectorStore` class by passing the `pdfFileDocuments` array using the method `fromDocuments`. This method is responsible for creating an instance of the `AzureCosmosDBVectorStore` from a list of documents. It first converts the documents to vectors and then adds them to the collection.
+Then we created an instance of the `AzureCosmosDBVectorStore` class by passing the `documents` array using the method `fromDocuments`. This method is responsible for creating an instance of the `AzureCosmosDBVectorStore` from a list of documents. It first converts the documents to vectors and then adds them to the collection.
 
 We created an instance of the `AzureOpenAIEmbeddings`, at this point this class will grab the `Azure OpenAI` credentials from the environment variables. Then we passed a configuration object with the `databaseName` and `collectionName` properties.
 
