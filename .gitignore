@@ -15,5 +15,7 @@ yarn-error.log*
 *.env
 .azure
 
-# OS
+# Misc
 .DS_Store
+Thumbs.db
+TODO
