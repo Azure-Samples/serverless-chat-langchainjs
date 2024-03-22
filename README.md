@@ -144,9 +144,8 @@ This will start the web app and the API locally. Open the URL `http://localhost:
 1. Open a terminal and navigate to the root of the project.
 2. Authenticate with Azure by running `azd auth login`.
 3. Run `azd up` to deploy the application to Azure. This will provision Azure resources, deploy this sample, and build the search index based on the files found in the `./data` folder.
-
-- You will be prompted to select a base location for the resources. Choose a location that is closest to you.
-- By default, the OpenAI resource will be deployed to `eastus2`. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a short list of locations is accepted. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and may become outdated as availability changes.
+   - You will be prompted to select a base location for the resources. Choose a location that is closest to you.
+   - By default, the OpenAI resource will be deployed to `eastus2`. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a short list of locations is accepted. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and may become outdated as availability changes.
 
 The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
 
