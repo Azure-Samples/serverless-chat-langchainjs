@@ -67,9 +67,9 @@ You need to install following tools to work on your local machine:
 Then you can get the project code:
 
 1. [**Fork**](https://github.com/Azure-Samples/langchainjs-quickstart-demo/fork) the project to create your own copy of this repository.
-2. Select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
+2. On your forked repository, select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
 <div align="center">
-  <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="646px" />
+  <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="400px" />
 </div>
 3. Open a terminal and run this command to clone the repo: `git clone <your-repo-url>`
 
@@ -150,8 +150,9 @@ This will start the web app and the API locally. Open the URL `http://localhost:
 
 The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
 
-TODO: screenshot
-![Screenshot of the azd up command result](./docs/images/azd-up.png)
+<div align="center">
+  <img src="./docs/images/azd-up.png" alt="Screenshot of the azd up command result" width="600px" />
+</div>
 
 You can now open the web app in your browser and start chatting with the bot.
 
