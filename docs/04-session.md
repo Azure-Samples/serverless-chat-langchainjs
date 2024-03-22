@@ -88,11 +88,7 @@ Agora que já criamos um chat mais dinâmico, vamos implementar o `chain` para q
       prompt: questionAnsweringPrompt,
     });
 
-    const store = new AzureCosmosDBVectorStore(
-      embeddings, {
-      databaseName: "langchain-database",
-      collectionName: "pdfs"
-    });
+    const store = new AzureCosmosDBVectorStore(embeddings, {});
 
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
@@ -122,10 +118,10 @@ This function is used to create a string that passes a list of documents to a te
 
 Just as we did in the `upload` API, we will need to store the vectors in the database. To do this, we created a variable called `store` so that we can instantiate the `AzureCosmosDBVectorStore` class. This class is used to create a vector that can be used to store and retrieve vectors from the language model.
 
-E, finalmente criamos o `chain` usando a função `createRetrievalChain`. Esta função é usada justamente para criar uma cadeira de recuperação que irá recuperar os documentos e depois repassá-los para o chat. Por isso que, essa função há dois parametros: 
+We create the `chain` using the `createRetrievalChain` function. This function is used precisely to create a retrieval chain that will retrieve the documents and then pass them on to the chat. That's why this function has two parameters: 
 
-- `retriever`: que tem como objetivo retornar uma lista de documentos.
-- `combineDocsChain`: que reproduzirá uma saída de string. 
+- `retriever`: which aims to return a list of documents.
+- `combineDocsChain`: which will reproduce a string output. 
 
 Finally, we invoked the `chain` using the `invoke` method. This method is used to invoke the chain with the input question and get the response from the language model. 
 
