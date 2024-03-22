@@ -20,11 +20,11 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 
     const file: Blob = parsedForm.get('file') as Blob;
 
-    const loader  = new PDFLoader(file, {
+    const loader = new PDFLoader(file, {
       splitPages: false,
     });
 
-    const rawDocument = await loader .load();
+    const rawDocument = await loader.load();
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
@@ -36,10 +36,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     const store = await AzureCosmosDBVectorStore.fromDocuments(
       documents,
       new AzureOpenAIEmbeddings(),
-      {
-        databaseName: "langchain-database",
-        collectionName: "pdfs"
-      }
+      {},
     );
 
     const numLists = 100;
