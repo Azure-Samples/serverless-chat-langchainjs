@@ -20,11 +20,11 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     try {
         const requestFormData = await request.formData();
 
-        if (!requestFormData.has('pdfDocumentFile')) {
+        if (!requestFormData.has('file')) {
             return badRequest(new Error('"file" field not found in form data.'));
         }
 
-        const file: Blob = requestFormData.get('pdfDocumentFile') as Blob;
+        const file: Blob = requestFormData.get('file') as Blob;
 
         return ok({ message: 'PDF file uploaded successfully.' });
     } catch (error: unknown) {
@@ -38,15 +38,15 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 
 The `requestFormData` variable is an object of type `FormData` which contains the fields sent in the request.
 
-The `has` method checks that the `pdfDocumentFile` field has been sent in the request. Since it is a `POST` request. If the field is not found, we return a `400 Bad Request` message.
+The `has` method checks that the `file` field has been sent in the request. Since it is a `POST` request. If the field is not found, we return a `400 Bad Request` message.
 
 As we are uploading a `pdf` file, we will need to use the **[Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)** class so that we can manipulate the file.
 
-The `get` method retrieves the value of the `pdfDocumentFile` field from the `FormData` object. If the field does not exist, the method returns `null`.
+The `get` method retrieves the value of the `file` field from the `FormData` object. If the field does not exist, the method returns `null`.
 
 ## Load the PDF File
 
-After checking the `pdfDocumentFile` field, now we need to load the file, read its the content and finally split it. To do this, we will need to use the [pdf-parse](https://www.npmjs.com/package/pdf-parse) package. Let's install it.
+After checking the `file` field, now we need to load the file, read its the content and finally split it. To do this, we will need to use the [pdf-parse](https://www.npmjs.com/package/pdf-parse) package. Let's install it.
 
 ```bash
 npm install pdf-parse
@@ -66,11 +66,11 @@ export async function testUpload(request: HttpRequest, context: InvocationContex
     try {
         const requestFormData = await request.formData();
 
-        if (!requestFormData.has('pdfDocumentFile')) {
+        if (!requestFormData.has('file')) {
             return badRequest(new Error('"file" field not found in form data.'));
         }
 
-        const file: Blob = requestFormData.get('pdfDocumentFile') as Blob;
+        const file: Blob = requestFormData.get('file') as Blob;
 
         const loadPDFFile = new PDFLoader(file, {
             splitPages: false,
@@ -105,7 +105,7 @@ The **[RecursiveCharacterTextSplitter](https://js.langchain.com/docs/modules/dat
 
 It will take a large text and split it by the first character `\n\n`. If the first split is not enough, it will try to split by the character `\n`. And so on. Until the text or the split is smaller than the specified block size.
 
-After that, we created an instance of the `PDFLoader` class passing the `pdfDocumentFile` file and a configuration object with the `splitPages` property as `false`. Why? Because by default, a document will be created for each page of the PDF file. That's why we are disabling this option.
+After that, we created an instance of the `PDFLoader` class passing the `file` document and a configuration object with the `splitPages` property as `false`. Why? Because by default, a document will be created for each page of the PDF file. That's why we are disabling this option.
 
 Then, we loaded the PDF file using the `load` method of the `PDFLoader` class instance.
 
@@ -136,11 +136,11 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
   try {
     const parsedForm = await request.formData();
 
-    if (!parsedForm.has('pdfDocumentFile')) {
+    if (!parsedForm.has('file')) {
       return badRequest(new Error('"file" field not found in form data.'));
     }
 
-    const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
+    const file: Blob = parsedForm.get('file') as Blob;
 
     const loadPDFFile = new PDFLoader(file, {
       splitPages: false,
@@ -222,10 +222,10 @@ The following message will appear, as shown in the image below:
 Now let's use a new terminal to make the `POST` request to the `upload` API. To do this, run the following command:
 
 ```bash
-curl -F "pdfDocumentFile=@data/support.pdf" http://localhost:7071/api/upload
+curl -F "file=@data/support.pdf" http://localhost:7071/api/upload
 ```
 
-Note that we are using the file that needs to be sent to the `upload` API that we defined in the code as `pdfDocumentFile`.
+Note that we are using the file that needs to be sent to the `upload` API that we defined in the code as `file`.
 
 If everything goes well, you will see the following message:
 
