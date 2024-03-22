@@ -21,7 +21,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
         const requestFormData = await request.formData();
 
         if (!requestFormData.has('pdfDocumentFile')) {
-            return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+            return badRequest(new Error('"file" field not found in form data.'));
         }
 
         const file: Blob = requestFormData.get('pdfDocumentFile') as Blob;
@@ -67,7 +67,7 @@ export async function testUpload(request: HttpRequest, context: InvocationContex
         const requestFormData = await request.formData();
 
         if (!requestFormData.has('pdfDocumentFile')) {
-            return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+            return badRequest(new Error('"file" field not found in form data.'));
         }
 
         const file: Blob = requestFormData.get('pdfDocumentFile') as Blob;
@@ -137,7 +137,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     const parsedForm = await request.formData();
 
     if (!parsedForm.has('pdfDocumentFile')) {
-      return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+      return badRequest(new Error('"file" field not found in form data.'));
     }
 
     const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
