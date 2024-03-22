@@ -14,11 +14,11 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
   try {
     const parsedForm = await request.formData();
 
-    if (!parsedForm.has('pdfDocumentFile')) {
+    if (!parsedForm.has('file')) {
       return badRequest(new Error('"file" field not found in form data.'));
     }
 
-    const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
+    const file: Blob = parsedForm.get('file') as Blob;
 
     const loadPDFFile = new PDFLoader(file, {
       splitPages: false,
