@@ -11,7 +11,7 @@ At its core, RAG involves two main components:
 
 - **Generator**: Acts like a writer, taking the prompt and information retrieved to create a response. We're using here a Large Language Model (LLM) for this task.
 
-![Retrieval-Augmented Generation schema](./images/rag.png)
+<img src="./images/rag.png" alt="Retrieval-Augmented Generation schema" width="640"/>
 
 </details>
 
