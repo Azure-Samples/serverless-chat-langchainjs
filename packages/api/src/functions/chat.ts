@@ -40,11 +40,12 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       prompt: questionAnsweringPrompt,
     });
 
-    const store = new AzureCosmosDBVectorStore(
+    /*const store = new AzureCosmosDBVectorStore(
       embeddings, {
       databaseName: "langchain-database",
       collectionName: "pdfs"
-    });
+    });*/
+    const store = new AzureCosmosDBVectorStore(embeddings, {});
 
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
