@@ -39,12 +39,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       llm: model,
       prompt: questionAnsweringPrompt,
     });
-
-    /*const store = new AzureCosmosDBVectorStore(
-      embeddings, {
-      databaseName: "langchain-database",
-      collectionName: "pdfs"
-    });*/
+    
     const store = new AzureCosmosDBVectorStore(embeddings, {});
 
     const chain = await createRetrievalChain({
