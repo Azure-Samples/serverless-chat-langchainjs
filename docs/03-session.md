@@ -72,11 +72,11 @@ export async function testUpload(request: HttpRequest, context: InvocationContex
 
         const file: Blob = requestFormData.get('file') as Blob;
 
-        const loadPDFFile = new PDFLoader(file, {
+        const loader = new PDFLoader(file, {
             splitPages: false,
         });
 
-        const rawPDFFile = await loadPDFFile.load();
+        const rawPDFFile = await loader.load();
 
         const splitter = new RecursiveCharacterTextSplitter({
             chunkSize: 1000,
@@ -142,11 +142,11 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 
     const file: Blob = parsedForm.get('file') as Blob;
 
-    const loadPDFFile = new PDFLoader(file, {
+    const loader = new PDFLoader(file, {
       splitPages: false,
     });
 
-    const rawPDFFile = await loadPDFFile.load();
+    const rawPDFFile = await loader.load();
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
