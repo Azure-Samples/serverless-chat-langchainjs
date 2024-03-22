@@ -138,7 +138,7 @@ npm run start
 The message related to the `chat` and `upload` API will appear again. Open a new terminal and include the following command:
 
 ```bash
-curl -F "pdfDocumentFile=@data/support.pdf" http://localhost:7071/api/upload
+curl -F "file=@data/support.pdf" http://localhost:7071/api/upload
 ```
 
 If all goes well, you will see the following message:
