@@ -15,7 +15,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     const parsedForm = await request.formData();
 
     if (!parsedForm.has('pdfDocumentFile')) {
-      return badRequest(new Error('No PDF File field wasnt found in the form data.'));
+      return badRequest(new Error('"file" field not found in form data.'));
     }
 
     const file: Blob = parsedForm.get('pdfDocumentFile') as Blob;
