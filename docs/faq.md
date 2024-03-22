@@ -67,7 +67,7 @@ azd env set AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION 1
 You may also need to adjust the capacity in `infra/main.bicep` file, depending on how much TPM your account is allowed.
 
 <!--
-TODO: change local models version with Ollama
+TODO: how to change local models version with Ollama
 -->
 
 </details>
@@ -86,3 +86,18 @@ Finally, it looks at `azure.yaml` to determine the Azure host (Functions and Sta
 Related commands are `azd provision` for just provisioning (if infra files change) and `azd deploy` for just deploying updated app code.
 
 </details>
+
+<!-- TODO: implement this in the code
+<details>
+<summary><b>I don't have access to Azure OpenAI, can I use the regular OpenAI API?</b></summary><br>
+
+Yes! You can use the regular OpenAI API by setting the `OPENAI_URL` and the `OPENAI_KEY` environment variables. You can do this by running the following commands:
+
+```bash
+azd env set OPENAI_URL https://api.openai.com/v1/chat/completions
+azd env set OPENAI_KEY <your-openai-api-key>
+```
+
+After setting these environment variables, you can run the `azd up` command to deploy the app.
+
+</details> -->
