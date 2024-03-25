@@ -77,7 +77,16 @@
       "@typescript-eslint/consistent-type-imports": "off",
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
-      "n/prefer-global/process": "off"
+      "n/prefer-global/process": "off",
+      "unicorn/prevent-abbreviations": [
+        "error",
+        {
+          "allowList": {
+            "combineDocsChain": true,
+            "env": true
+          }
+        }
+      ]
     }
   },
   "prettier": {
