@@ -36,5 +36,5 @@ jobs:
     needs: build_test
     steps:
       - name: Check build matrix status
-        if: ${{ needs.test.result != 'success' }}
+        if: ${{ needs.build_test.result != 'success' }}
         run: exit 1
