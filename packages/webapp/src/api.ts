@@ -1,6 +1,6 @@
 import { type ChatResponse, type ChatRequestOptions, type ChatResponseChunk } from './models.js';
 
-export const apiBaseUrl: string = import.meta.env.VITE_API_URI || 'api';
+export const apiBaseUrl: string = import.meta.env.VITE_API_URL || 'api';
 
 export async function getCompletion(options: ChatRequestOptions) {
   const apiUrl = options.apiUrl || apiBaseUrl;

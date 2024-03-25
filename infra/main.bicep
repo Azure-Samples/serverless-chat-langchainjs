@@ -191,5 +191,5 @@ output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
 output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
 output INDEX_NAME string =  indexName
 
-output API_URI string = api.outputs.uri
-output WEBAPP_URI string = webapp.outputs.uri
+output API_URL string = api.outputs.uri
+output WEBAPP_URL string = webapp.outputs.uri
