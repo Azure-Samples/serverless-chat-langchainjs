@@ -37,9 +37,6 @@
     },
     "mongoDbSkuName": {
       "value": "${AZURE_MONGODB_SKU=Free}"
-    },
-    "indexName": {
-      "value": "${INDEX_NAME=kbindex}"
     }
   }
 }
