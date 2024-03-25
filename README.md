@@ -45,6 +45,8 @@ This application is made from multiple components:
 
 - A file storage to store the source documents, using [Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/storage-blobs-introduction).
 
+We use the [HTTP protocol for AI chat apps](https://github.com/Azure-Samples/ai-chat-app-protocol) to communicate between the web app and the API.
+
 ## Get started
 
 There are multiple ways to get started with this project.
