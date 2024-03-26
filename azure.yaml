@@ -14,10 +14,10 @@ services:
       predeploy:
         windows:
           shell: pwsh
-          run: Export-ModuleMember -Variable API_URI && npm run build:webapp
+          run: Export-ModuleMember -Variable API_URL && npm run build
         posix:
           shell: sh
-          run: export API_URI && npm run build:webapp
+          run: export API_URL && npm run build
 
   api:
     project: ./packages/api
@@ -30,5 +30,7 @@ hooks:
     run: azd env get-values > .env
   postup:
     shell: sh
-    # TODO: add curl to ingest the data
-    run: echo ""
+    run: |
+      curl -F "file=@./data/privacy-policy.pdf" "$API_URL/api/documents"
+      curl -F "file=@./data/support.pdf" "$API_URL/api/documents"
+      curl -F "file=@./data/terms-of-service.pdf" "$API_URL/api/documents"
