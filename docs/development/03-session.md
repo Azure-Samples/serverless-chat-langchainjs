@@ -1,4 +1,4 @@
-# Session 03: Implement Upload API
+# Session 03: Implement `upload` API
 
 Nessa sessão aprenderemos a implementar a API `upload`, que será responsável por receber um arquivo `pdf`, extrairemos o texto usando o `LangChain.js` e salvaremos no `Azure CosmosDB for MongoDB`.
 
@@ -11,29 +11,29 @@ Since we already have `Azure CosmosDB for MongoDB` configured, let's start imple
 - `api/src/functions/upload.ts`
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { badRequest, ok, serviceUnavailable } from "../utils";
+import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { badRequest, ok, serviceUnavailable } from '../utils';
 
 export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    context.log(`Http function processed request for url "${request.url}"`);
+  context.log(`Http function processed request for url "${request.url}"`);
 
-    try {
-        const requestFormData = await request.formData();
+  try {
+    const requestFormData = await request.formData();
 
-        if (!requestFormData.has('file')) {
-            return badRequest(new Error('"file" field not found in form data.'));
-        }
+    if (!requestFormData.has('file')) {
+      return badRequest(new Error('"file" field not found in form data.'));
+    }
 
-        const file: Blob = requestFormData.get('file') as Blob;
+    const file: Blob = requestFormData.get('file') as Blob;
 
-        return ok({ message: 'PDF file uploaded successfully.' });
-    } catch (error: unknown) {
-        const error_ = error as Error;
-        context.error(`Error when processing upload request: ${error_.message}`);
-        
-        return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'))
-    }   
-};
+    return ok({ message: 'PDF file uploaded successfully.' });
+  } catch (error: unknown) {
+    const error_ = error as Error;
+    context.error(`Error when processing upload request: ${error_.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+}
 ```
 
 The `requestFormData` variable is an object of type `FormData` which contains the fields sent in the request.
@@ -55,44 +55,44 @@ npm install pdf-parse
 Now, let's implement the code to load the `pdf` file and extract its content.
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { badRequest, ok, serviceUnavailable } from "../utils";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { badRequest, ok, serviceUnavailable } from '../utils';
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
 export async function testUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    context.log(`Http function processed request for url "${request.url}"`);
+  context.log(`Http function processed request for url "${request.url}"`);
 
-    try {
-        const requestFormData = await request.formData();
+  try {
+    const requestFormData = await request.formData();
 
-        if (!requestFormData.has('file')) {
-            return badRequest(new Error('"file" field not found in form data.'));
-        }
+    if (!requestFormData.has('file')) {
+      return badRequest(new Error('"file" field not found in form data.'));
+    }
 
-        const file: Blob = requestFormData.get('file') as Blob;
+    const file: Blob = requestFormData.get('file') as Blob;
 
-        const loader = new PDFLoader(file, {
-            splitPages: false,
-        });
+    const loader = new PDFLoader(file, {
+      splitPages: false,
+    });
 
-        const rawDocument = await loader.load();
+    const rawDocument = await loader.load();
 
-        const splitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 1000,
-            chunkOverlap: 100,
-        });
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+      chunkOverlap: 100,
+    });
 
-        const documents= await splitter.splitDocuments(rawDocument);
+    const documents = await splitter.splitDocuments(rawDocument);
 
-        return ok({ message: 'PDF file uploaded successfully.' });
-    } catch (error: unknown) {
-        const error_ = error as Error;
-        context.error(`Error when processing upload request: ${error_.message}`);
-        
-        return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'))
-    }   
-};
+    return ok({ message: 'PDF file uploaded successfully.' });
+  } catch (error: unknown) {
+    const error_ = error as Error;
+    context.error(`Error when processing upload request: ${error_.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+}
 ```
 
 Let's understand what we did here:
@@ -109,13 +109,13 @@ After that, we created an instance of the `PDFLoader` class passing the `file` d
 
 Then, we loaded the PDF file using the `load` method of the `PDFLoader` class instance.
 
-We create an instance of the `RecursiveCharacterTextSplitter` class by passing a configuration object with the `chunkSize` and `chunkOverlap` properties.  
+We create an instance of the `RecursiveCharacterTextSplitter` class by passing a configuration object with the `chunkSize` and `chunkOverlap` properties.
 
 The `chunkSize` controls the maximum size (in terms of number of characters) of the final documents. And, the `chunkOverlap` will specify how much overlap there should be between the chunks. This is useful to ensure that the text is not split inappropriately. Usually the default is `1000` and `200`, respectively.
 
 Finally, we divided the PDF document into smaller parts using the **[splitDocuments](https://api.js.langchain.com/classes/langchain_text_splitter.RecursiveCharacterTextSplitter.html#splitDocuments)** method of the `RecursiveCharacterTextSplitter` class instance. The method returns an array of documents.
 
-## Save the PDF File in CosmosDB
+## Save the PDF File in Azure Cosmos DB
 
 Now that we have the PDF file divided into smaller parts, we can save it in `Azure CosmosDB for MongoDB`. Let's implement the code to do this.
 
@@ -123,14 +123,13 @@ Now that we have the PDF file divided into smaller parts, we can save it in `Azu
 import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { badRequest, serviceUnavailable, ok } from '../utils';
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import 'dotenv/config';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import {
   AzureCosmosDBVectorStore,
   AzureCosmosDBSimilarityType,
-} from "@langchain/community/vectorstores/azure_cosmosdb";
-
+} from '@langchain/community/vectorstores/azure_cosmosdb';
 
 export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
@@ -153,18 +152,14 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
       chunkOverlap: 100,
     });
 
-    const documents = await splitter.splitDocuments(rawDocument );
+    const documents = await splitter.splitDocuments(rawDocument);
 
-    const store = await AzureCosmosDBVectorStore.fromDocuments(
-      documents,
-      new AzureOpenAIEmbeddings(),
-      {},
-    );
+    const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
 
-    const numLists = 100;
+    const numberLists = 100;
     const dimensions = 1536;
     const similarity = AzureCosmosDBSimilarityType.COS;
-    await store.createIndex(numLists, dimensions, similarity);
+    await store.createIndex(numberLists, dimensions, similarity);
 
     await store.close();
 
@@ -175,14 +170,14 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
-};
+}
 ```
 
 Let's understand what we did here:
 
 We imported the `AzureCosmosDBVectorStore` and `AzureCosmosDBSimilarityType` classes from the `langchain` package.
 
-The `AzureCosmosDBVectorStore` class is responsible for storing and retrieving vectors from `Azure CosmosDB for MongoDB`. It can be used to store and retrieve vectors from a collection in a database. It can also be used to create an index in the collection. 
+The `AzureCosmosDBVectorStore` class is responsible for storing and retrieving vectors from `Azure CosmosDB for MongoDB`. It can be used to store and retrieve vectors from a collection in a database. It can also be used to create an index in the collection.
 
 Then we created an instance of the `AzureCosmosDBVectorStore` class by passing the `documents` array using the method `fromDocuments`. This method is responsible for creating an instance of the `AzureCosmosDBVectorStore` from a list of documents. It first converts the documents to vectors and then adds them to the collection.
 
@@ -190,13 +185,13 @@ We created an instance of the `AzureOpenAIEmbeddings`, at this point this class 
 
 Then we created three variables:
 
-- `numLists`: which controls the number of lists to be used in the index.
+- `numberLists`: which controls the number of lists to be used in the index.
 - `dimensions`: which controls the number of dimensions of the vectors. The maximum number of dimensions supported is `2000`
 - `similarity`: similarity metric to be used when creating the index. In this case, we can use `COS` (cosine distance), `L2` (Euclidean distance) and `IP` (inner product). In this case, we are using the `COS` algorithm.
 
-Thereafter use the `createIndex` method, which is responsible for creating an index in the collection with the name of the index specified during the construction of the instance. This method is precisely waiting for the `numLists`, `dimensions` and `similarity` parameters that we have just defined.
+Thereafter use the `createIndex` method, which is responsible for creating an index in the collection with the name of the index specified during the construction of the instance. This method is precisely waiting for the `numberLists`, `dimensions` and `similarity` parameters that we have just defined.
 
-Finally, we closed the store using the `close` method of the `AzureCosmosDBVectorStore` class instance. 
+Finally, we closed the store using the `close` method of the `AzureCosmosDBVectorStore` class instance.
 
 If you want to learn more about Azure CosmosDB for MongoDB vCore in vector use cases, you can access the **[official documentation](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/vector-search)**.
 
@@ -204,10 +199,40 @@ Phew! We have implemented the `upload` API. Now let's test it.
 
 ## Test the `upload` API
 
-To test the `upload` API, let's use Visual Studio Code's own terminal. To do this, run the command inside the `api` folder:
+Before we test the `upload` API, let's configure the `api.http` file for this request. To do this, open the file:
+
+- `api/http`
+
+```http
+(... here are the previous requests)
+
+### Upload PDF Document
+POST {{api_host}}/api/upload
+Accept: */*
+Content-Type: multipart/form-data; boundary=Boundary
+
+--Boundary
+Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Type: application/pdf
+
+< ../../data/support.pdf
+--Boundary
+Content-Disposition: form-data; name="options"
+
+{
+  "category": "test-category",
+  "wait": true,
+  "useVectors": true
+}
+--Boundary--
+```
+
+In this file, we added the `POST` request to the `upload` API. Note that we are sending the `test.pdf` file that is in the `data` folder. In addition, we are sending an `options` object with the properties `category`, `wait` and `useVectors`.
+
+Perfect! Now we can test the `upload` API. To do this, let's use Visual Studio Code's own terminal. Execute the command inside the `api` folder:
 
 - `packages/api`
-  
+
 ```bash
 npm run start
 ```
@@ -216,13 +241,9 @@ The following message will appear, as shown in the image below:
 
 ![upload function](./images/upload-function.png)
 
-Now let's use a new terminal to make the `POST` request to the `upload` API. To do this, run the following command:
+Now, open the `api.http` file and click on the `Send Request` button next to the `Upload PDF Document` request.
 
-```bash
-curl -F "file=@data/support.pdf" http://localhost:7071/api/upload
-```
-
-Note that we are using the file that needs to be sent to the `upload` API that we defined in the code as `file`.
+Se tudo correr bem, você verá a seguinte mensagem:
 
 If everything goes well, you will see the following message:
 
@@ -239,5 +260,3 @@ Watch the gif of the whole process being executed:
 Great! We have finished implementing the `upload` API. Now, let's finish implementing chain in the `chat` API.
 
 ▶ **[Next Step: Generate completion using `chain` in the `chat` API](./04-session.md)**
-
-
