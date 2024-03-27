@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
-    "@langchain/azure-openai": "^0.0.2",
-    "@langchain/community": "^0.0.36",
-    "@langchain/core": "^0.1.44",
+    "@langchain/azure-openai": "^0.0.4",
+    "@langchain/community": "^0.0.43",
+    "@langchain/core": "^0.1.51",
     "dotenv": "^16.4.5",
-    "langchain": "^0.1.25",
+    "langchain": "^0.1.30",
     "mongodb": "^6.5.0",
     "pdf-parse": "^1.1.1"
   },
