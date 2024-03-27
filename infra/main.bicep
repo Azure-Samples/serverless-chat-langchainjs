@@ -50,6 +50,8 @@ param embeddingsModelVersion string // Set in main.parameters.json
 param embeddingsDeploymentName string = embeddingsModelName
 param embeddingsDeploymentCapacity int = 30
 
+param blobContainerName string = 'files'
+
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
@@ -94,6 +96,8 @@ module api './core/host/functions.bicep' = {
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
       AZURE_COSMOSDB_CONNECTION_STRING: cosmos.outputs.connectionString
+      AZURE_STORAGE_CONNECTION_STRING: storage.outputs.connectionString
+      AZURE_STORAGE_CONTAINER_NAME: blobContainerName
      }
   }
 }
@@ -113,7 +117,7 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
   }
 }
 
-// Backing storage for Azure Functions API
+// Storage for Azure Functions API and Blob storage
 module storage './core/storage/storage-account.bicep' = {
   name: 'storage'
   scope: resourceGroup
@@ -121,7 +125,12 @@ module storage './core/storage/storage-account.bicep' = {
     name: !empty(storageAccountName) ? storageAccountName : '${abbrs.storageStorageAccounts}${resourceToken}'
     location: location
     tags: tags
-    allowBlobPublicAccess: false
+    containers: [
+      {
+        name: blobContainerName
+        publicAccess: 'Container'
+      }
+    ]
   }
 }
 
@@ -185,8 +194,9 @@ output AZURE_OPENAI_API_MODEL_VERSION string = chatModelVersion
 output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingsDeploymentName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
-
 output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
+output AZURE_STORAGE_CONNECTION_STRING string = storage.outputs.connectionString
+output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 
 output API_URL string = api.outputs.uri
 output WEBAPP_URL string = webapp.outputs.uri
