@@ -13,7 +13,6 @@ Content-Type: application/json
   "question": "How to Search and Book Rentals?"
 }
 
-
 ### Upload PDF Document
 POST {{api_host}}/api/upload
 Accept: */*
@@ -24,13 +23,6 @@ Content-Disposition: form-data; name="file"; filename="test.pdf"
 Content-Type: application/pdf
 
 < ../../data/support.pdf
---Boundary
-Content-Disposition: form-data; name="options"
-
-{
-  "category": "test-category",
-  "wait": true,
-  "useVectors": true
-}
 --Boundary--
+
 
