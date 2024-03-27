@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
+    "@azure/storage-blob": "^12.17.0",
     "@langchain/azure-openai": "^0.0.4",
     "@langchain/community": "^0.0.43",
     "@langchain/core": "^0.1.51",
@@ -27,5 +28,5 @@
     "rimraf": "^5.0.0",
     "typescript": "^4.0.0"
   },
-  "main": "dist/src/index.js"
+  "main": "dist/src/**/*.js"
 }
