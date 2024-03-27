@@ -216,18 +216,10 @@ Content-Disposition: form-data; name="file"; filename="test.pdf"
 Content-Type: application/pdf
 
 < ../../data/support.pdf
---Boundary
-Content-Disposition: form-data; name="options"
-
-{
-  "category": "test-category",
-  "wait": true,
-  "useVectors": true
-}
 --Boundary--
 ```
 
-In this file, we added the `POST` request to the `upload` API. Note that we are sending the `test.pdf` file that is in the `data` folder. In addition, we are sending an `options` object with the properties `category`, `wait` and `useVectors`.
+In this file, we added the `POST` request to the `upload` API. Note that we are sending the `test.pdf` file that is in the `data` folder. This file is a support document that we will use to test the `upload` API.
 
 Perfect! Now we can test the `upload` API. To do this, let's use Visual Studio Code's own terminal. Execute the command inside the `api` folder:
 
@@ -242,8 +234,6 @@ The following message will appear, as shown in the image below:
 ![upload function](./images/upload-function.png)
 
 Now, open the `api.http` file and click on the `Send Request` button next to the `Upload PDF Document` request.
-
-Se tudo correr bem, você verá a seguinte mensagem:
 
 If everything goes well, you will see the following message:
 
