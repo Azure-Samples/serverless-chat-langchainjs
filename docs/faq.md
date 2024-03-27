@@ -20,14 +20,18 @@ At its core, RAG involves two main components:
 <details>
 <summary><b>How can we upload additional documents without redeploying everything?</b></summary><br>
 
-To upload more documents, use one of these commands depending on your environment.
+To upload more documents, first put your PDF document in the `data/` folder, then use one of these commands depending on your environment.
 
 ### For local development
 
-Make sure your API is started by running `npm run start:api` from the root of the project. Then you can use the following command to upload a new PDF document:
+Make sure your API is started by running `npm run start:api` from the root of the project. Then you can use one of the following commands to upload a new PDF document:
 
 ```bash
-curl -F "file=@<your-document.pdf>" http://localhost:7071/api/documents
+# If you're using a POSIX shell
+curl -F "file=@data/<your-document.pdf>" http://localhost:7071/api/documents
+
+# If you're using PowerShell
+Invoke-RestMethod -Uri "http://localhost:7071/api/documents" -Method Post -InFile "./data/<your-document.pdf>"
 ```
 
 ### For the deployed version
@@ -38,10 +42,14 @@ First you need to find the URL of the deployed function. You can either look at 
 azd env get-values | grep API_URI
 ```
 
-Then you can use the following command to upload a new PDF document:
+Then you can use the one of the following commands to upload a new PDF document:
 
 ```bash
-curl -F "file=@<your-document.pdf>" <your_api_url>/api/documents
+# If you're using a POSIX shell
+curl -F "file=@data/<your-document.pdf>" <your_api_url>/api/documents
+
+# If you're using PowerShell
+Invoke-RestMethod -Uri "<your_api_url>/api/documents" -Method Post -InFile "./data/<your-document.pdf>"
 ```
 
 </details>
