@@ -5,7 +5,7 @@
 
 @api_host = http://localhost:7071
 
-### Chat with a bot (this is a sample)
+### Create a new question
 POST {{api_host}}/api/chat
 Content-Type: application/json
 
@@ -16,4 +16,21 @@ Content-Type: application/json
 
 ### Upload PDF Document
 POST {{api_host}}/api/upload
+Accept: */*
+Content-Type: multipart/form-data; boundary=Boundary
+
+--Boundary
+Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Type: application/pdf
+
+< ../../data/support.pdf
+--Boundary
+Content-Disposition: form-data; name="options"
+
+{
+  "category": "test-category",
+  "wait": true,
+  "useVectors": true
+}
+--Boundary--
 
