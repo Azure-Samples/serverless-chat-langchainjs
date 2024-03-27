@@ -75,6 +75,8 @@
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/consistent-type-imports": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-floating-promises": "off",
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
       "n/prefer-global/process": "off",
