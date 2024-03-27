@@ -29,8 +29,15 @@ hooks:
     shell: sh
     run: azd env get-values > .env
   postup:
-    shell: sh
-    run: |
-      curl -F "file=@./data/privacy-policy.pdf" "$API_URL/api/documents"
-      curl -F "file=@./data/support.pdf" "$API_URL/api/documents"
-      curl -F "file=@./data/terms-of-service.pdf" "$API_URL/api/documents"
+    windows:
+      shell: pwsh
+      run: |
+        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/privacy-policy.pdf"
+        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/support.pdf"
+        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/terms-of-service.pdf"
+    posix:
+      shell: sh
+      run: |
+        curl -F "file=@./data/privacy-policy.pdf" "$API_URL/api/documents"
+        curl -F "file=@./data/support.pdf" "$API_URL/api/documents"
+        curl -F "file=@./data/terms-of-service.pdf" "$API_URL/api/documents"
