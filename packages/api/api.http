@@ -26,3 +26,5 @@ Content-Type: application/pdf
 --Boundary--
 
 
+### Retrieve PDF document
+GET {{api_host}}/api/documents/privacy-policy.pdf
