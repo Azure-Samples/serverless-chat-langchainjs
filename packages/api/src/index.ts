@@ -2,6 +2,7 @@ import { app } from '@azure/functions';
 import { chat } from './functions/chat';
 import { upload } from './functions/upload';
 
+app.setup({ enableHttpStream: true });
 app.post('chat', {
   route: 'chat',
   authLevel: 'anonymous',
