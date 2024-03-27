@@ -80,6 +80,7 @@
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
       "n/prefer-global/process": "off",
+      "unicorn/prefer-module": "off",
       "unicorn/prevent-abbreviations": [
         "error",
         {
