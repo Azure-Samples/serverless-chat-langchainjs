@@ -6,13 +6,17 @@ import {
   AzureCosmosDBVectorStore,
   AzureCosmosDBSimilarityType,
 } from '@langchain/community/vectorstores/azure_cosmosdb';
+import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
+import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../utils';
+import { ollamaEmbeddingsModel } from '../ollama';
 
 export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
+  const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
   try {
     const parsedForm = await request.formData();
@@ -37,14 +41,19 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
 
     const documents = await splitter.splitDocuments(rawDocument);
 
-    const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
+    if (azureOpenAiEndpoint) {
+      const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
 
-    const numberLists = 100;
-    const dimensions = 1536;
-    const similarity = AzureCosmosDBSimilarityType.COS;
-    await store.createIndex(numberLists, dimensions, similarity);
-
-    await store.close();
+      const numberLists = 100;
+      const dimensions = 1536;
+      const similarity = AzureCosmosDBSimilarityType.COS;
+      await store.createIndex(numberLists, dimensions, similarity);
+      await store.close();
+    } else {
+      // If no environment variables are set, it means we are running locally
+      const embeddings = new OllamaEmbeddings({ model: ollamaEmbeddingsModel });
+      await FaissStore.fromDocuments(documents, embeddings, {});
+    }
 
     if (connectionString && containerName) {
       // Upload the file to Azure Blob Storage
