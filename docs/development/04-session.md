@@ -17,10 +17,10 @@ Open the `chat.ts` file and let's make some significant changes to this code.
 - `packages/packages/api/functions/chat.ts`:
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from "@azure/functions";
-import { badRequest, serviceUnavailable } from "../utils";
-import { AzureChatOpenAI, AzureOpenAIEmbeddings } from "@langchain/azure-openai";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { badRequest, serviceUnavailable } from '../utils';
+import { AzureChatOpenAI, AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 import 'dotenv/config';
 
@@ -41,19 +41,13 @@ export async function testChat(request: HttpRequest, context: InvocationContext)
     const model = new AzureChatOpenAI();
 
     const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
-      [
-        "system",
-        "Answer the user's questions based on the below context:\n\n{context}",
-      ],
-      [
-        "human",
-        "{input}",
-      ]
+      ['system', "Answer the user's questions based on the below context:\n\n{context}"],
+      ['human', '{input}'],
     ]);
 
     return {
       status: 200,
-      body: "Testing chat function.",
+      body: 'Testing chat function.',
     };
   } catch (error: unknown) {
     const error_ = error as Error;
@@ -61,7 +55,7 @@ export async function testChat(request: HttpRequest, context: InvocationContext)
 
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
-};
+}
 ```
 
 Let's understand what we did here:
@@ -112,18 +106,18 @@ Agora que já criamos um chat mais dinâmico, vamos implementar o `chain` para q
 
 Let's understand again in each line what we did:
 
-We created a `combineDocsChain` using the `createStuffDocumentsChain` function. 
+We created a `combineDocsChain` using the `createStuffDocumentsChain` function.
 
 This function is used to create a string that passes a list of documents to a template. There a few parameters in this function. There include `llm`, which is the language model we are using, and `prompt`, which is the conversation we are having with the model. We will use them to create the chain.
 
 Just as we did in the `upload` API, we will need to store the vectors in the database. To do this, we created a variable called `store` so that we can instantiate the `AzureCosmosDBVectorStore` class. This class is used to create a vector that can be used to store and retrieve vectors from the language model.
 
-We create the `chain` using the `createRetrievalChain` function. This function is used precisely to create a retrieval chain that will retrieve the documents and then pass them on to the chat. That's why this function has two parameters: 
+We create the `chain` using the `createRetrievalChain` function. This function is used precisely to create a retrieval chain that will retrieve the documents and then pass them on to the chat. That's why this function has two parameters:
 
 - `retriever`: which aims to return a list of documents.
-- `combineDocsChain`: which will reproduce a string output. 
+- `combineDocsChain`: which will reproduce a string output.
 
-Finally, we invoked the `chain` using the `invoke` method. This method is used to invoke the chain with the input question and get the response from the language model. 
+Finally, we invoked the `chain` using the `invoke` method. This method is used to invoke the chain with the input question and get the response from the language model.
 
 Wow! we have completed our `chat` API. Now, let's test our API together with the `upload` API.
 
@@ -157,18 +151,6 @@ You will see the exact response requested in the `chat` request. If you want to 
 
 ![chat API](./images/chat-final-result.gif)
 
-Ainda não concluímos o nosso projeto. Ainda temos mais um item muito importante que não podemos esquecer de implementar num chat: `stream` response. Vamos aprender como fazer isso na próxima sessão.
+We haven't finished our project yet. We still have one more very important item that we mustn't forget to implement in a chat: `stream` response. We'll learn how to do this in the next session.
 
 ▶ **[Next Step: Generate `stream` response](./05-session.md)**
-
-
-
-
-
-
-
-
-
-
-
-
