@@ -5,18 +5,21 @@ import { finished } from 'node:stream/promises';
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
+import { notFound } from '../utils';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const { fileName } = request.params;
 
   try {
     let fileData: Uint8Array;
 
-    if (process.env.AZURE_STORAGE_CONNECTION_STRING && process.env.AZURE_STORAGE_CONTAINER_NAME) {
-      const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
-      const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
-      const blobClient = containerClient.getBlobClient(fileName);
-      const response = await blobClient.download();
+    if (connectionString && containerName) {
+      context.log(`Reading blob from: "${containerName}/${fileName}"`);
+      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+      const containerClient = blobServiceClient.getContainerClient(containerName);
+      const response = await containerClient.getBlobClient(fileName).download();
       fileData = await streamToBuffer(response.readableStreamBody!);
     } else {
       // If no environment variables are set, it means we are running locally
@@ -30,10 +33,7 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       body: fileData,
     };
   } catch {
-    return {
-      status: 404,
-      jsonBody: { error: 'Document not found' },
-    };
+    return notFound(new Error('Document not found'));
   }
 }
 
