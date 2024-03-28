@@ -27,4 +27,4 @@ Content-Type: application/pdf
 
 
 ### Retrieve PDF document
-GET {{api_host}}/api/documents/privacy-policy.pdf
+GET {{api_host}}/api/documents/test.pdf
