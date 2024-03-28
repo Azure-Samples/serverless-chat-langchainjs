@@ -6,7 +6,7 @@ import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/fu
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
 
-async function getDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const { fileName } = request.params;
 
   try {
@@ -49,5 +49,5 @@ async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Ui
 app.get('documents', {
   route: 'documents/{fileName}',
   authLevel: 'anonymous',
-  handler: getDocuments,
+  handler: getDocument,
 });
