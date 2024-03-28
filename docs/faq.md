@@ -76,9 +76,22 @@ azd env set AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION 1
 
 You may also need to adjust the capacity in `infra/main.bicep` file, depending on how much TPM your account is allowed.
 
-<!--
-TODO: how to change local models version with Ollama
--->
+### Local models
+
+To change the local models used by Ollama, you can edit the file `packages/api/src/ollama.ts`:
+
+```typescript
+export const ollamaEmbeddingsModel = 'all-minilm:l6-v2';
+export const ollamaChatModel = 'mistral';
+```
+
+You can see the complete list of available models at https://ollama.ai/models.
+
+After changing the models, you also need to fetch the new models by running the command:
+
+```bash
+ollama pull <model-name>
+```
 
 </details>
 
