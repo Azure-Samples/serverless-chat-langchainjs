@@ -1,5 +1,4 @@
 import { Readable } from 'node:stream';
-import { IterableReadableStream } from '@langchain/core/dist/utils/stream';
 import { Document } from '@langchain/core/documents';
 import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
@@ -8,7 +7,7 @@ import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
-import { badRequest, serviceUnavailable, okStreamResponse } from '../utils';
+import { badRequest, serviceUnavailable } from '../utils';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   context.log(`Http function processed request for url "${request.url}"`);
@@ -51,7 +50,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     });
 
     return {
-      ...okStreamResponse(),
+      headers: { 'Content-Type': 'text/plain' },
       body: createStream(response),
     };
   } catch (error: unknown) {
@@ -62,14 +61,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
   }
 }
 
-function createStream(
-  chunks: IterableReadableStream<
-    {
-      context: Document[];
-      answer: string;
-    } & Record<string, unknown>
-  >,
-) {
+function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
   const buffer = new Readable({
     read() {},
   });
