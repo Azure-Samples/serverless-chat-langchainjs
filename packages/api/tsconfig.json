@@ -12,6 +12,7 @@
     "strict": false,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "lib": ["ESNext", "DOM"]
   }
 }
