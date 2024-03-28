@@ -64,12 +64,3 @@ export function ok(body: Record<string, unknown>): HttpResponseInit {
     jsonBody: body,
   };
 }
-
-export function okStreamResponse(): HttpResponseInit {
-  return {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/plain',
-    },
-  };
-}

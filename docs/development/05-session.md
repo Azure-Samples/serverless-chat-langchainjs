@@ -214,10 +214,8 @@ Note that we are importing:
 
 ```typescript
 return {
+  headers: { 'Content-Type': 'text/plain' },
   body: createStream(response),
-  headers: {
-    'Content-Type': 'text/plain',
-  },
 };
 ```
 
@@ -238,35 +236,5 @@ And then open the `api.http` file and send the `chat` API request, and now see t
 Note that when we send the request, the `Response` header shows `Transfer-Encoding: chunked`, which indicates that the response is being sent in chunks. And the response is displayed sequentially, i.e. as the response is generated, it is displayed.
 
 ![chat-stream-response](./images/stream-response.png)
-
-Just to make the code more organized, let's change the `return` of the `response`. Open the file `http-response.ts` and include the following code:
-
-- `http-response.ts`
-
-```typescript
-export function okStreamResponse(): HttpResponseInit {
-  return {
-    status: 200,
-    headers: {
-      'Content-Type': 'text/plain',
-    },
-  };
-}
-```
-
-And, in the `chat.ts` file, we're going to change the `return` of the `response`:
-
-- `chat.ts`
-
-```typescript
-(... previous code)
-
-return {
-      ...okStreamResponse(),
-      body: createStream(response),
-    };
-
-(... same code)
-```
 
 And that's it! You've now learned how to generate a stream response in the `chat` API using LangChain.js and the new stream feature that is also available for v4 of the Azure Functions programming model.
