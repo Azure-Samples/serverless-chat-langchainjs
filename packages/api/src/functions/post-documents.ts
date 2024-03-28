@@ -11,6 +11,9 @@ import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../utils';
 
 export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
+
   try {
     const parsedForm = await request.formData();
 
@@ -43,10 +46,10 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
 
     await store.close();
 
-    if (process.env.AZURE_STORAGE_CONNECTION_STRING && process.env.AZURE_STORAGE_CONTAINER_NAME) {
+    if (connectionString && containerName) {
       // Upload the file to Azure Blob Storage
-      const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING);
-      const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
+      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+      const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(fileName);
       await blockBlobClient.upload(file, file.size);
     }
