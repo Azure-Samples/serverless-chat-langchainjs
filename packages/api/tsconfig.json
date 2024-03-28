@@ -9,10 +9,9 @@
     "outDir": "dist",
     "rootDir": ".",
     "sourceMap": true,
-    "strict": false,
+    "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "strictNullChecks": true,
     "lib": ["ESNext", "DOM"]
   }
 }
