@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <div align="center">
 
 <img src="./packages/webapp/public/favicon.png" alt="" align="center" height="64" />
