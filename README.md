@@ -68,7 +68,7 @@ You need to install following tools to work on your local machine:
 
 Then you can get the project code:
 
-1. [**Fork**](https://github.com/Azure-Samples/langchainjs-quickstart-demo/fork) the project to create your own copy of this repository.
+1. [**Fork**](https://github.com/Azure-Samples/serverless-ai-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
 <div align="center">
   <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="400px" />

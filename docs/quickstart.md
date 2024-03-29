@@ -53,7 +53,7 @@ This application is made from multiple components:
 
 You can run this project directly in your browser by using GitHub Codespaces, which will open a web-based VS Code.
 
-1. [**Fork**](https://github.com/Azure-Samples/langchainjs-quickstart-demo/fork) the project to create your own copy of this repository.
+1. [**Fork**](https://github.com/Azure-Samples/serverless-ai-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Codespaces** tab, and clink on the button **Create codespace on main**.
 <div align="center">
   <img src="./images/codespaces.png" alt="Screenshot showing how to create a new codespace" width="400px" />
