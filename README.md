@@ -117,7 +117,7 @@ Then you can start the application by running the commands:
 npm start
 ```
 
-This will start the web app and the API locally. Open the URL `http://localhost:4280` in your browser to start chatting with the bot.
+This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
 ### Run the sample locally with Azure OpenAI models
 
@@ -128,7 +128,7 @@ Once your deployment is complete, you can run the following commands to start th
 1. Run `azd env get-values > .env` to get the environment variables.
 2. Run `npm start` to start the application.
 
-This will start the web app and the API locally. Open the URL `http://localhost:4280` in your browser to start chatting with the bot.
+This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
 > [!TIP]
 > You can switch back to using Ollama models by simply deleting the `.env` file and starting the application again.
