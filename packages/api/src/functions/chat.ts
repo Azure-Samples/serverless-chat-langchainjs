@@ -10,49 +10,53 @@ import 'dotenv/config';
 import { badRequest, serviceUnavailable } from '../utils';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
-
   try {
     const requestBody: any = await request.json();
 
-    if (!requestBody?.question) {
-      return badRequest(new Error('No question provided'));
+    const { messages } = requestBody;
+    const { stream } = requestBody;
+
+    if (!messages || messages.length === 0 || !messages[0].content) {
+      return badRequest(new Error('Invalid or missing messages in the request body'));
     }
 
-    const { question } = requestBody;
+    const firstUserMessageContent = messages[0].content;
 
     const embeddings = new AzureOpenAIEmbeddings();
-
-    const prompt = `Question: ${question}`;
-    context.log(`Sending prompt to the model: ${prompt}`);
-
     const model = new AzureChatOpenAI();
 
-    const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
-      ['system', "Answer the user's questions based on the below context:\n\n{context}"],
-      ['human', '{input}'],
-    ]);
+    const prompt = `Question: ${firstUserMessageContent}`;
+    context.log(`Sending prompt to the model: ${prompt}`);
 
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
-      prompt: questionAnsweringPrompt,
+      prompt: ChatPromptTemplate.fromMessages([
+        ['system', "Answer the user's questions based on the below context:\n\n{context}"],
+        ['human', '{input}'],
+      ]),
     });
 
     const store = new AzureCosmosDBVectorStore(embeddings, {});
-
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
       combineDocsChain,
     });
 
-    const response = await chain.stream({
-      input: question,
-    });
+    if (stream) {
+      const responseStream = await chain.stream({
+        input: firstUserMessageContent,
+      });
 
-    return {
-      headers: { 'Content-Type': 'text/plain' },
-      body: createStream(response),
-    };
+      return {
+        headers: {
+          'Content-Type': 'application/json-lines',
+          'Transfer-Encoding': 'chunked',
+        },
+        body: createStream(responseStream),
+      };
+    }
+
+    return badRequest(new Error('Stream is not supported'));
   } catch (error: unknown) {
     const error_ = error as Error;
     context.error(`Error when processing chat request: ${error_.message}`);
