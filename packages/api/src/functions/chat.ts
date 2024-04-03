@@ -1,6 +1,6 @@
 import { Readable } from 'node:stream';
 import { Document } from '@langchain/core/documents';
-import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
+import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
@@ -78,3 +78,10 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
 
   return buffer;
 }
+
+app.setup({ enableHttpStream: true });
+app.post('chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: chat,
+});
