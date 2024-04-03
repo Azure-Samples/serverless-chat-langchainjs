@@ -1,30 +1,41 @@
-# Session 03: Implement `upload` API
+# Session 03: Implement `uploadDocuments` API
 
-Nessa sessão aprenderemos a implementar a API `upload`, que será responsável por receber um arquivo `pdf`, extrairemos o texto usando o `LangChain.js` e salvaremos no `Azure CosmosDB for MongoDB`.
+In this session we will learn how to implement the `uploadDocuments` API, which will be responsible for receiving a `pdf` file, extracting the text using `LangChain.js` and saving it in `Azure CosmosDB for MongoDB`. Let's get started!
 
-In this session we will learn how to implement the `upload` API, which will be responsible for receiving a `pdf` file, extracting the text using `LangChain.js` and saving it in `Azure CosmosDB for MongoDB`. Let's get started!
+## Start to Implement `uploadDocuments` API
 
-## Start to Implement `upload` API
+Before we start implementing the `uploadDocuments` API, we need to install some dependencies. To do this, run the following command inside the `api` folder:
 
-Since we already have `Azure CosmosDB for MongoDB` configured, let's start implementing the `CosmosDB LC Vector Store` in the `upload` API. To do this, open the
+```bash
+npm install -D @azure/storage-blob
+```
 
-- `api/src/functions/upload.ts`
+This package will be responsible for helping us manipulate files using **[Azure's Blob Storage service](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview)**.
+
+We can now proceed with the implementation of the `uploadDocuments` API.
+
+Since we already have `Azure CosmosDB for MongoDB` configured, let's start implementing the `CosmosDB LC Vector Store` in the `uploadDocuments` API. To do this, open the
+
+- `api/src/functions/post-documents.ts`
 
 ```typescript
 import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { badRequest, ok, serviceUnavailable } from '../utils';
+import { BlobServiceClient } from '@azure/storage-blob';
 
-export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
+export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
 
   try {
-    const requestFormData = await request.formData();
+    const parsedForm = await request.formData();
 
-    if (!requestFormData.has('file')) {
+    if (!parsedForm.has('file')) {
       return badRequest(new Error('"file" field not found in form data.'));
     }
 
     const file: Blob = requestFormData.get('file') as Blob;
+    const fileName: string = parsedForm.get('filename') as string;
 
     return ok({ message: 'PDF file uploaded successfully.' });
   } catch (error: unknown) {
@@ -36,13 +47,21 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 }
 ```
 
-The `requestFormData` variable is an object of type `FormData` which contains the fields sent in the request.
+Let's understand what we did here:
+
+First, we created two variables `connectionString` and `containerName` that will store the connection string and the name of the Azure Storage container, respectively.
+
+The `parsedForm` variable is an object of type `FormData` which contains the fields sent in the request.
 
 The `has` method checks that the `file` field has been sent in the request. Since it is a `POST` request. If the field is not found, we return a `400 Bad Request` message.
 
 As we are uploading a `pdf` file, we will need to use the **[Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob)** class so that we can manipulate the file.
 
 The `get` method retrieves the value of the `file` field from the `FormData` object. If the field does not exist, the method returns `null`.
+
+And finally the `fileName` variable which will store the name of the file sent in the `filename` field.
+
+Finally, we return a `200 OK` message if the file is uploaded successfully.
 
 ## Load the PDF File
 
@@ -57,20 +76,21 @@ Now, let's implement the code to load the `pdf` file and extract its content.
 ```typescript
 import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { badRequest, ok, serviceUnavailable } from '../utils';
-import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { BlobServiceClient } from '@azure/storage-blob';
 
-export async function testUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
+export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
 
   try {
-    const requestFormData = await request.formData();
+    const parsedForm = await request.formData();
 
-    if (!requestFormData.has('file')) {
+    if (!parsedForm.has('file')) {
       return badRequest(new Error('"file" field not found in form data.'));
     }
 
     const file: Blob = requestFormData.get('file') as Blob;
+    const fileName: string = parsedForm.get('filename') as string;
 
     const loader = new PDFLoader(file, {
       splitPages: false,
@@ -120,18 +140,22 @@ Finally, we divided the PDF document into smaller parts using the **[splitDocume
 Now that we have the PDF file divided into smaller parts, we can save it in `Azure CosmosDB for MongoDB`. Let's implement the code to do this.
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
-import { badRequest, serviceUnavailable, ok } from '../utils';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
-import 'dotenv/config';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import {
   AzureCosmosDBVectorStore,
   AzureCosmosDBSimilarityType,
 } from '@langchain/community/vectorstores/azure_cosmosdb';
+import 'dotenv/config';
+import { BlobServiceClient } from '@azure/storage-blob';
+import { badRequest, serviceUnavailable, ok } from '../utils';
 
-export async function upload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
+
   try {
     const parsedForm = await request.formData();
 
@@ -140,6 +164,7 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     }
 
     const file: Blob = parsedForm.get('file') as Blob;
+    const fileName: string = parsedForm.get('filename') as string;
 
     const loader = new PDFLoader(file, {
       splitPages: false,
@@ -163,6 +188,14 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
 
     await store.close();
 
+    if (connectionString && containerName) {
+      // Upload the file to Azure Blob Storage
+      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+      const containerClient = blobServiceClient.getContainerClient(containerName);
+      const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+      await blockBlobClient.upload(file, file.size);
+    }
+
     return ok({ message: 'PDF file uploaded successfully.' });
   } catch (error: unknown) {
     const error_ = error as Error;
@@ -171,6 +204,13 @@ export async function upload(request: HttpRequest, context: InvocationContext): 
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
 }
+
+app.http('post-documents', {
+  route: 'upload',
+  methods: ['GET', 'POST'],
+  authLevel: 'anonymous',
+  handler: uploadDocuments,
+});
 ```
 
 Let's understand what we did here:
@@ -191,13 +231,19 @@ Then we created three variables:
 
 Thereafter use the `createIndex` method, which is responsible for creating an index in the collection with the name of the index specified during the construction of the instance. This method is precisely waiting for the `numberLists`, `dimensions` and `similarity` parameters that we have just defined.
 
-Finally, we closed the store using the `close` method of the `AzureCosmosDBVectorStore` class instance.
+We closed the `store` variable using the `close` method of the `AzureCosmosDBVectorStore` class instance.
+
+After closing the connection to the database, we check that the variables `connectionString` and `containerName` are defined. If they are, we create an instance of `BlobServiceClient` passing `connectionString`. Next, we create an instance of `ContainerClient` passing the `containerName`. And finally, we create an instance of `BlockBlobClient` passing the `fileName`.
+
+We then proceeded to upload the file to Azure Blob Storage utilizing the `upload` method provided by an instance of the `BlockBlobClient` class. This method is designed to either create a new block blob or update the content of an existing one. It's important to note that updating an existing block blob results in the overwrite of any pre-existing metadata associated with the blob.
+
+Finally, we return a `200 OK` message if the file is uploaded successfully.
 
 If you want to learn more about Azure CosmosDB for MongoDB vCore in vector use cases, you can access the **[official documentation](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/vcore/vector-search)**.
 
-Phew! We have implemented the `upload` API. Now let's test it.
+Phew! We have implemented the `uploadDocuments` API. Now let's test it.
 
-## Test the `upload` API
+## Test the `uploadDocuments` API
 
 Before we test the `upload` API, let's configure the `api.http` file for this request. To do this, open the file:
 
@@ -219,9 +265,9 @@ Content-Type: application/pdf
 --Boundary--
 ```
 
-In this file, we added the `POST` request to the `upload` API. Note that we are sending the `test.pdf` file that is in the `data` folder. This file is a support document that we will use to test the `upload` API.
+In this file, we added the `POST` request to the `uploadDocuments` API. Note that we are sending the `test.pdf` file that is in the `data` folder. This file is a support document that we will use to test the `uploadDocuments` API.
 
-Perfect! Now we can test the `upload` API. To do this, let's use Visual Studio Code's own terminal. Execute the command inside the `api` folder:
+Perfect! Now we can test the `uploadDocuments` API. To do this, let's use Visual Studio Code's own terminal. Execute the command inside the `api` folder:
 
 - `packages/api`
 
@@ -247,6 +293,6 @@ Watch the gif of the whole process being executed:
 
 ![api-upload-test](./images/test-upload-function.gif)
 
-Great! We have finished implementing the `upload` API. Now, let's finish implementing chain in the `chat` API.
+Great! We have finished implementing the `uploadDocuments` API. Now, let's finish implementing chain in the `chat` API.
 
 ▶ **[Next Step: Generate completion using `chain` in the `chat` API](./04-session.md)**
