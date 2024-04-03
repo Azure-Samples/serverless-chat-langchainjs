@@ -24,9 +24,6 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     const embeddings = new AzureOpenAIEmbeddings();
     const model = new AzureChatOpenAI();
 
-    const prompt = `Question: ${firstUserMessageContent}`;
-    context.log(`Sending prompt to the model: ${prompt}`);
-
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
       prompt: ChatPromptTemplate.fromMessages([
