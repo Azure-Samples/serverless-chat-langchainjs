@@ -6,7 +6,7 @@
 @api_host = http://localhost:7071
 
 ### Upload PDF Document
-POST {{api_host}}/api/upload
+POST {{api_host}}/api/documents
 Accept: */*
 Content-Type: multipart/form-data; boundary=Boundary
 
