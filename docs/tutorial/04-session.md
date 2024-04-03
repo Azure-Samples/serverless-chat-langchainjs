@@ -17,16 +17,14 @@ Open the `chat.ts` file and let's make some significant changes to this code.
 - `packages/packages/api/functions/chat.ts`:
 
 ```typescript
-import { HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
+import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { badRequest, serviceUnavailable } from '../utils';
 import { AzureChatOpenAI, AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 import 'dotenv/config';
 
-export async function testChat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
-
+export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
     const requestBody: any = await request.json();
 
@@ -56,6 +54,12 @@ export async function testChat(request: HttpRequest, context: InvocationContext)
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
 }
+
+app.post('chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: chat,
+});
 ```
 
 Let's understand what we did here:
@@ -102,6 +106,12 @@ Agora que já criamos um chat mais dinâmico, vamos implementar o `chain` para q
 
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   };
+
+app.post('chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: chat,
+});
 ```
 
 Let's understand again in each line what we did:
