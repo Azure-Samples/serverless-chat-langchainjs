@@ -68,7 +68,19 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
 
   const stream = async () => {
     for await (const chunk of chunks) {
-      buffer.push(chunk.answer);
+      const responseChunk = {
+        choices: [
+          {
+            index: 0,
+            delta: {
+              content: chunk.answer,
+              role: 'assistant',
+            },
+          },
+        ],
+      };
+
+      buffer.push(JSON.stringify(responseChunk) + '\n');
     }
 
     buffer.push(null);
