@@ -13,8 +13,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
   try {
     const requestBody: any = await request.json();
 
-    const { messages } = requestBody;
-    const { stream } = requestBody;
+    const { messages, stream } = requestBody;
 
     if (!messages || messages.length === 0 || !messages[0].content) {
       return badRequest(new Error('Invalid or missing messages in the request body'));
