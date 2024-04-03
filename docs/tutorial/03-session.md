@@ -45,6 +45,13 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
 }
+
+app.http('post-documents', {
+  route: 'documents',
+  methods: ['POST'],
+  authLevel: 'anonymous',
+  handler: uploadDocuments,
+});
 ```
 
 Let's understand what we did here:
@@ -113,6 +120,13 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   }
 }
+
+app.http('post-documents', {
+  route: 'documents',
+  methods: ['POST'],
+  authLevel: 'anonymous',
+  handler: uploadDocuments,
+});
 ```
 
 Let's understand what we did here:
@@ -206,8 +220,8 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
 }
 
 app.http('post-documents', {
-  route: 'upload',
-  methods: ['GET', 'POST'],
+  route: 'documents',
+  methods: ['POST'],
   authLevel: 'anonymous',
   handler: uploadDocuments,
 });
@@ -250,10 +264,8 @@ Before we test the `upload` API, let's configure the `api.http` file for this re
 - `api/http`
 
 ```http
-(... here are the previous requests)
-
 ### Upload PDF Document
-POST {{api_host}}/api/upload
+POST {{api_host}}/api/documents
 Accept: */*
 Content-Type: multipart/form-data; boundary=Boundary
 
