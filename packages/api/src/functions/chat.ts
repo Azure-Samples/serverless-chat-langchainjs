@@ -45,7 +45,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
 
       return {
         headers: {
-          'Content-Type': 'application/json-lines',
+          'Content-Type': 'application/x-ndjson',
           'Transfer-Encoding': 'chunked',
         },
         body: createStream(responseStream),
