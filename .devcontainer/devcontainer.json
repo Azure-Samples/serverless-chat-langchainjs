@@ -34,7 +34,7 @@
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [4280, 7071],
+  "forwardPorts": [8000, 7071],
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "npm install && npm install -g fuzz-run"
