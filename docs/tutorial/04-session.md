@@ -55,8 +55,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
   }
 }
 
-app.post('chat', {
+app.http('chat', {
   route: 'chat',
+  methods: ['POST'],
   authLevel: 'anonymous',
   handler: chat,
 });
@@ -76,7 +77,7 @@ In this case, we put as the first parameter the type of message we are sending, 
 
 ## Implementing a `chain` for the `chat` API
 
-Agora que já criamos um chat mais dinâmico, vamos implementar o `chain` para que a conversa seja mais fluída e coerente. Para isso, adicione o seguinte código logo após a criação do `questionAnsweringPrompt`:
+Now that we've created a more dynamic chat, let's implement the `chain` so that the conversation is more fluid and coherent. To do this, add the following code right after creating the `questionAnsweringPrompt`:
 
 ```typescript
 (... the previous code ...)
@@ -107,8 +108,9 @@ Agora que já criamos um chat mais dinâmico, vamos implementar o `chain` para q
     return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
   };
 
-app.post('chat', {
+app.http('chat', {
   route: 'chat',
+  methods: ['POST'],
   authLevel: 'anonymous',
   handler: chat,
 });
