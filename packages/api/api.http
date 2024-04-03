@@ -17,15 +17,7 @@ Content-Type: application/pdf
 < ../../data/support.pdf
 --Boundary--
 
-### Create a new question
-#POST {{api_host}}/api/chat
-#Content-Type: application/json
-#
-#{
-#  "question": "How to Search and Book Rentals?"
-#}
 
-### Create a new question
 POST {{api_host}}/api/chat
 Content-Type: application/json
 
@@ -36,9 +28,7 @@ Content-Type: application/json
       "role": "user"
     }
   ],
-  "stream": true,
-  "context": {},
-  "session_state": null
+  "stream": true
 }
 
 ### Retrieve PDF document
