@@ -63,8 +63,9 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
   }
 }
 
-app.post('post-documents', {
+app.http('post-documents', {
   route: 'documents',
+  methods: ['POST'],
   authLevel: 'anonymous',
   handler: uploadDocuments,
 });
