@@ -27,22 +27,12 @@ To find out more about streaming support in Azure Functions v4, you can visit Mi
 
 Well, now that we've understood the importance of using streaming in a chat and how useful it can be, let's learn how we can introduce it into the `chat` API.
 
-The first thing we need to do is enable the new Azure Functions feature, which is streaming support. To do this, open the file `index.ts` and include the following code:
+The first thing we need to do is enable the new Azure Functions feature, which is streaming support. To do this, open the file `chat.ts` and include the following code:
 
-- `index.ts`
-
-```typescript
-app.setup({ enableHttpStream: true });
-```
-
-So the `index.ts` file will look like this:
-
-- `index.ts`
+- `api/functions/chat.ts`
 
 ```typescript
-import { app } from '@azure/functions';
-import { chat } from './functions/chat';
-import { upload } from './functions/upload';
+(... previous code ...)
 
 app.setup({ enableHttpStream: true });
 app.post('chat', {
@@ -50,11 +40,99 @@ app.post('chat', {
   authLevel: 'anonymous',
   handler: chat,
 });
+```
 
-app.post('upload', {
-  route: 'upload',
+So the `chat.ts` file will look like this:
+
+- `api/functions/chat.ts`
+
+```typescript
+import { Readable } from 'node:stream';
+import { Document } from '@langchain/core/documents';
+import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
+import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
+import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
+import { createRetrievalChain } from 'langchain/chains/retrieval';
+import 'dotenv/config';
+import { badRequest, serviceUnavailable } from '../utils';
+
+export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  context.log(`Http function processed request for url "${request.url}"`);
+
+  try {
+    const requestBody: any = await request.json();
+
+    if (!requestBody?.question) {
+      return badRequest(new Error('No question provided'));
+    }
+
+    const { question } = requestBody;
+
+    const embeddings = new AzureOpenAIEmbeddings();
+
+    const prompt = `Question: ${question}`;
+    context.log(`Sending prompt to the model: ${prompt}`);
+
+    const model = new AzureChatOpenAI();
+
+    const questionAnsweringPrompt = ChatPromptTemplate.fromMessages([
+      ['system', "Answer the user's questions based on the below context:\n\n{context}"],
+      ['human', '{input}'],
+    ]);
+
+    const combineDocsChain = await createStuffDocumentsChain({
+      llm: model,
+      prompt: questionAnsweringPrompt,
+    });
+
+    const store = new AzureCosmosDBVectorStore(embeddings, {});
+
+    const chain = await createRetrievalChain({
+      retriever: store.asRetriever(),
+      combineDocsChain,
+    });
+
+    const response = await chain.stream({
+      input: question,
+    });
+
+    return {
+      headers: { 'Content-Type': 'text/plain' },
+      body: createStream(response),
+    };
+  } catch (error: unknown) {
+    const error_ = error as Error;
+    context.error(`Error when processing chat request: ${error_.message}`);
+
+    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+  }
+}
+
+function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
+  const buffer = new Readable({
+    read() {},
+  });
+
+  const stream = async () => {
+    for await (const chunk of chunks) {
+      buffer.push(chunk.answer);
+    }
+
+    buffer.push(null);
+  };
+
+  stream();
+
+  return buffer;
+}
+
+app.setup({ enableHttpStream: true });
+app.post('chat', {
+  route: 'chat',
   authLevel: 'anonymous',
-  handler: upload,
+  handler: chat,
 });
 ```
 
@@ -69,21 +147,18 @@ Open the `chat.ts` file and let's make some significant changes:
 - `chat.ts`
 
 ```typescript
-import { IterableReadableStream } from '@langchain/core/dist/utils/stream';
+import { Readable } from 'node:stream';
 import { Document } from '@langchain/core/documents';
-import { HttpRequest, InvocationContext, HttpResponseInit } from '@azure/functions';
+import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
-import { badRequest, serviceUnavailable, okStreamResponse } from '../utils';
-import { Readable } from 'stream';
+import { badRequest, serviceUnavailable } from '../utils';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  context.log(`Http function processed request for url "${request.url}"`);
-
   try {
     const requestBody: any = await request.json();
 
@@ -135,16 +210,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
   }
 }
 
-function createStream(
-  chunks: IterableReadableStream<
-    {
-      context: Document[];
-      answer: string;
-    } & {
-      [key: string]: unknown;
-    }
-  >,
-) {
+function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
   const buffer = new Readable({
     read() {},
   });
@@ -161,6 +227,13 @@ function createStream(
 
   return buffer;
 }
+
+app.setup({ enableHttpStream: true });
+app.post('chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: chat,
+});
 ```
 
 Several changes here, right? But let's understand what has been changed and included here:
@@ -176,16 +249,7 @@ Before, the `chain` variable was using the `invoke()` method. However, as we now
 After that, we're returning the stream response, using the `createStream()` function.
 
 ```typescript
-function createStream(
-  chunks: IterableReadableStream<
-    {
-      context: Document[];
-      answer: string;
-    } & {
-      [key: string]: unknown;
-    }
-  >,
-) {
+function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
   const buffer = new Readable({
     read() {},
   });
@@ -202,13 +266,19 @@ function createStream(
 
   return buffer;
 }
+
+app.setup({ enableHttpStream: true });
+app.post('chat', {
+  route: 'chat',
+  authLevel: 'anonymous',
+  handler: chat,
+});
 ```
 
-The `createStream()` function is responsible for creating a response stream. It receives as a parameter `chunks`, which is an `IterableReadableStream` that contains the chunks of the response. And for each chunk, it is added to the buffer, which is a read stream. And at the end, the buffer is returned.
+The `createStream()` function is responsible for generating the stream response. It receives an `AsyncIterable` of `{ context: Document[]; answer: string }` as a parameter. And then creates a `Readable` stream, which is an interface for reading data from a stream.
 
 Note that we are importing:
 
-- `IterableReadableStream` from the `@langchain/core/dist/utils/stream` package: which is an iterable stream that can be used to generate stream responses.
 - `Document` from the `@langchain/core/documents` package: which is an interface for interacting with a document.
 - `Readable` from the `node:stream` package: class that belongs to the `stream` module of Node.js, which is an interface for reading data from a stream.
 
