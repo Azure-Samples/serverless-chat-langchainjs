@@ -25,20 +25,18 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
       return badRequest('"file" field not found in form data.');
     }
 
-    const file: Blob = parsedForm.get('file') as Blob;
-    const fileName: string = parsedForm.get('filename') as string;
+    const file = parsedForm.get('file') as Blob;
+    const fileName = parsedForm.get('filename') as string;
 
     const loader = new PDFLoader(file, {
       splitPages: false,
     });
-
     const rawDocument = await loader.load();
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
       chunkOverlap: 100,
     });
-
     const documents = await splitter.splitDocuments(rawDocument);
 
     if (azureOpenAiEndpoint) {

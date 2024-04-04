@@ -20,11 +20,13 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const response = await containerClient.getBlobClient(fileName).download();
+
       fileData = await streamToBuffer(response.readableStreamBody!);
     } else {
       // If no environment variables are set, it means we are running locally
       context.log(`Reading file from local file system: "data/${fileName}"`);
       const filePath = join(__dirname, '../../../../../data', fileName);
+
       fileData = await fs.readFile(filePath);
     }
 
