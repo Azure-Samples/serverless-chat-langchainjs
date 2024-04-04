@@ -5,7 +5,22 @@
 
 @api_host = http://localhost:7071
 
-# Chat with the bot
+### Upload PDF Document
+POST {{api_host}}/api/documents
+Accept: */*
+Content-Type: multipart/form-data; boundary=Boundary
+
+--Boundary
+Content-Disposition: form-data; name="file"; filename="support.pdf"
+Content-Type: application/pdf
+
+< ../../data/support.pdf
+--Boundary--
+
+### Retrieve PDF document
+GET {{api_host}}/api/documents/support.pdf
+
+### Chat with the bot
 POST {{api_host}}/api/chat
 Content-Type: application/json
 
@@ -18,19 +33,3 @@ Content-Type: application/json
   ],
   "stream": true
 }
-
-### Upload PDF Document
-POST {{api_host}}/api/documents
-Accept: */*
-Content-Type: multipart/form-data; boundary=Boundary
-
---Boundary
-Content-Disposition: form-data; name="file"; filename="test.pdf"
-Content-Type: application/pdf
-
-< ../../data/support.pdf
---Boundary--
-
-
-### Retrieve PDF document
-GET {{api_host}}/api/documents/test.pdf
