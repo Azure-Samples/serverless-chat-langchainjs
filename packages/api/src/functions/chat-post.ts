@@ -8,7 +8,7 @@ import { VectorStore } from '@langchain/core/vectorstores';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { ChatOllama } from '@langchain/community/chat_models/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
@@ -16,6 +16,25 @@ import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 import { ChatRequest, ChatResponseChunk } from '../models';
+
+const systemPrompt = `Assistant helps the Consto Real Estate company customers with support questions regarding terms of service, privacy policy, and questions about support requests.
+Be brief in your answers.
+Answer ONLY with the facts listed in the list of sources below. If there isn't enough information below, say you don't know. Do not generate answers that don't use the sources below. If asking a clarifying question to the user would help, ask the question.
+Do not return markdown format. 
+If the question is not in English, answer in the language used in the question.
+Each source has a name followed by colon and the actual information, always include the source name for each fact you use in the response. Use square brackets to reference the source, for example: [info1.txt]. Don't combine sources, list each source separately, for example: [info1.txt][info2.pdf].
+
+Generate 3 very brief follow-up questions that the user would likely ask next.
+Enclose the follow-up questions in double angle brackets. Example:
+<<Am I allowed to invite friends for a party?>>
+<<How can I ask for a refund?>>
+<<What If I break something?>>
+
+Do no repeat questions that have already been asked.
+Make sure the last question ends with ">>
+
+SOURCES:
+{context}`;
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
@@ -51,9 +70,10 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
       prompt: ChatPromptTemplate.fromMessages([
-        ['system', "Answer the user's questions based on the below context:\n\n{context}"],
+        ['system', systemPrompt],
         ['human', '{input}'],
       ]),
+      documentPrompt: PromptTemplate.fromTemplate('{filename}: {page_content}\n'),
     });
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
