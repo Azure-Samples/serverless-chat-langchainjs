@@ -124,7 +124,6 @@ export class ChatComponent extends LitElement {
     try {
       const response = await getCompletion({ ...this.options, messages: this.messages });
       if (this.options.stream) {
-        this.isStreaming = true;
         const chunks = response as AsyncGenerator<ChatResponseChunk>;
         const { messages } = this;
         const message: ChatMessage = {
@@ -133,6 +132,7 @@ export class ChatComponent extends LitElement {
         };
         for await (const chunk of chunks) {
           if (chunk.choices[0].delta.content) {
+            this.isStreaming = true;
             message.content += chunk.choices[0].delta.content;
             this.messages = [...messages, message];
             this.scrollToLastMessage();
