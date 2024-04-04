@@ -260,7 +260,7 @@ export class ChatComponent extends LitElement {
       ${index + 1}. ${citation}
     </button>`;
 
-  protected renderCitationReference = (citation: string, index: number) => html`<sup>[${index}]</sup>`;
+  protected renderCitationReference = (_citation: string, index: number) => html`<sup>[${index}]</sup>`;
 
   protected renderFollowupQuestions = (questions: string[]) =>
     questions.length > 0
