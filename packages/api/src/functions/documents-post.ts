@@ -57,7 +57,10 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(filename);
-      await blockBlobClient.upload(file, file.size);
+      const buffer = await file.arrayBuffer();
+      await blockBlobClient.upload(buffer, file.size, {
+        blobHTTPHeaders: { blobContentType: 'application/pdf' },
+      });
     } else {
       context.log('No Azure Blob Storage connection string set, skipping upload.');
     }
