@@ -22,7 +22,7 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     const parsedForm = await request.formData();
 
     if (!parsedForm.has('file')) {
-      return badRequest(new Error('"file" field not found in form data.'));
+      return badRequest('"file" field not found in form data.');
     }
 
     const file: Blob = parsedForm.get('file') as Blob;
@@ -68,7 +68,7 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     const error_ = error as Error;
     context.error(`Error when processing chat request: ${error_.message}`);
 
-    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+    return serviceUnavailable('Service temporarily unavailable. Please try again later.');
   }
 }
 

@@ -33,7 +33,7 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       body: fileData,
     };
   } catch {
-    return notFound(new Error('Document not found'));
+    return notFound('Document not found');
   }
 }
 

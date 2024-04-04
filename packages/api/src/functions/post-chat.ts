@@ -16,7 +16,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     const { messages, stream } = requestBody;
 
     if (!messages || messages.length === 0 || !messages[0].content) {
-      return badRequest(new Error('Invalid or missing messages in the request body'));
+      return badRequest('Invalid or missing messages in the request body');
     }
 
     const firstUserMessageContent = messages[0].content;
@@ -52,12 +52,12 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       };
     }
 
-    return badRequest(new Error('Stream is not supported'));
+    return badRequest('Stream is not supported');
   } catch (error: unknown) {
     const error_ = error as Error;
     context.error(`Error when processing chat request: ${error_.message}`);
 
-    return serviceUnavailable(new Error('Service temporarily unavailable. Please try again later.'));
+    return serviceUnavailable('Service temporarily unavailable. Please try again later.');
   }
 }
 

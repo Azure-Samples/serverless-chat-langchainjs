@@ -1,46 +1,46 @@
 import { HttpResponseInit } from '@azure/functions';
 
-export function badRequest(error: Error): HttpResponseInit {
+export function badRequest(message: string): HttpResponseInit {
   return {
     status: 400,
     jsonBody: {
-      error: error.message,
+      error: message,
     },
   };
 }
 
-export function notFound(error: Error): HttpResponseInit {
+export function notFound(message: string): HttpResponseInit {
   return {
     status: 404,
     jsonBody: {
-      error: error.message,
+      error: message,
     },
   };
 }
 
-export function serviceUnavailable(error: Error): HttpResponseInit {
+export function serviceUnavailable(message: string): HttpResponseInit {
   return {
     status: 503,
     jsonBody: {
-      error: error.message,
+      error: message,
     },
   };
 }
 
-export function internalServerError(error: Error): HttpResponseInit {
+export function internalServerError(message: string): HttpResponseInit {
   return {
     status: 500,
     jsonBody: {
-      error: error.message,
+      error: message,
     },
   };
 }
 
-export function unauthorized(error: Error): HttpResponseInit {
+export function unauthorized(message: string): HttpResponseInit {
   return {
     status: 401,
     jsonBody: {
-      error: error.message,
+      error: message,
     },
   };
 }
