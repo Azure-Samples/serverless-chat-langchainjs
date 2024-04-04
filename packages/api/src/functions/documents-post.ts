@@ -11,7 +11,7 @@ import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
-import { ollamaEmbeddingsModel } from '../models';
+import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 
 export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -51,16 +51,20 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
       await store.close();
     } else {
       // If no environment variables are set, it means we are running locally
+      context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
       const embeddings = new OllamaEmbeddings({ model: ollamaEmbeddingsModel });
-      await FaissStore.fromDocuments(documents, embeddings, {});
+      const store = await FaissStore.fromDocuments(documents, embeddings, {});
+      await store.save(faissStoreFolder);
     }
 
     if (connectionString && containerName) {
-      // Upload the file to Azure Blob Storage
+      context.log(`Uploading file to blob storage: "${containerName}/${fileName}"`);
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(fileName);
       await blockBlobClient.upload(file, file.size);
+    } else {
+      context.log('No Azure Blob Storage connection string set, skipping upload.');
     }
 
     return ok({ message: 'PDF file uploaded successfully.' });
