@@ -42,11 +42,7 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
 
     if (azureOpenAiEndpoint) {
       const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
-
-      const numberLists = 100;
-      const dimensions = 1536;
-      const similarity = AzureCosmosDBSimilarityType.COS;
-      await store.createIndex(numberLists, dimensions, similarity);
+      await store.createIndex();
       await store.close();
     } else {
       // If no environment variables are set, it means we are running locally
