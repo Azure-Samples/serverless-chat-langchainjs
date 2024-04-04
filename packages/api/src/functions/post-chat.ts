@@ -7,7 +7,7 @@ import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
-import { badRequest, serviceUnavailable } from '../http-response';
+import { badRequest, data, serviceUnavailable } from '../http-response';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
@@ -43,13 +43,10 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
         input: firstUserMessageContent,
       });
 
-      return {
-        headers: {
-          'Content-Type': 'application/x-ndjson',
-          'Transfer-Encoding': 'chunked',
-        },
-        body: createStream(responseStream),
-      };
+      return data(createStream(responseStream), {
+        'Content-Type': 'application/x-ndjson',
+        'Transfer-Encoding': 'chunked',
+      });
     }
 
     return badRequest('Stream is not supported');

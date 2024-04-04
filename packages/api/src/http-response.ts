@@ -27,40 +27,17 @@ export function serviceUnavailable(message: string): HttpResponseInit {
   };
 }
 
-export function internalServerError(message: string): HttpResponseInit {
-  return {
-    status: 500,
-    jsonBody: {
-      error: message,
-    },
-  };
-}
-
-export function unauthorized(message: string): HttpResponseInit {
-  return {
-    status: 401,
-    jsonBody: {
-      error: message,
-    },
-  };
-}
-
-export function noContent(): HttpResponseInit {
-  return {
-    status: 204,
-  };
-}
-
-export function created(body: Record<string, unknown>): HttpResponseInit {
-  return {
-    status: 201,
-    jsonBody: body,
-  };
-}
-
 export function ok(body: Record<string, unknown>): HttpResponseInit {
   return {
     status: 200,
     jsonBody: body,
+  };
+}
+
+export function data(body: ArrayBuffer | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
+  return {
+    status: 200,
+    headers,
+    body,
   };
 }

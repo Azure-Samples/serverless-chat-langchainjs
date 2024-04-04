@@ -5,7 +5,7 @@ import { finished } from 'node:stream/promises';
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
-import { notFound } from '../http-response';
+import { data, notFound } from '../http-response';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -28,10 +28,7 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       fileData = await fs.readFile(filePath);
     }
 
-    return {
-      headers: { 'content-type': 'application/pdf' },
-      body: fileData,
-    };
+    return data(fileData, { 'content-type': 'application/pdf' });
   } catch {
     return notFound('Document not found');
   }
