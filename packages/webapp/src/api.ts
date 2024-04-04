@@ -10,10 +10,6 @@ export async function getCompletion(options: ChatRequestOptions) {
     body: JSON.stringify({
       messages: options.messages,
       stream: options.stream,
-      context: {
-        top: options.top,
-        temperature: options.temperature,
-      },
     }),
   });
 

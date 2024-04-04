@@ -5,7 +5,7 @@ import { finished } from 'node:stream/promises';
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
-import { notFound } from '../utils';
+import { data, notFound } from '../http-response';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
@@ -20,20 +20,22 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const response = await containerClient.getBlobClient(fileName).download();
+
       fileData = await streamToBuffer(response.readableStreamBody!);
     } else {
       // If no environment variables are set, it means we are running locally
       context.log(`Reading file from local file system: "data/${fileName}"`);
       const filePath = join(__dirname, '../../../../../data', fileName);
+
       fileData = await fs.readFile(filePath);
     }
 
-    return {
-      headers: { 'content-type': 'application/pdf' },
-      body: fileData,
-    };
-  } catch {
-    return notFound(new Error('Document not found'));
+    return data(fileData, { 'content-type': 'application/pdf' });
+  } catch (_error: unknown) {
+    const error = _error as Error;
+    context.error(`Error when processing document-get request: ${error.message}`);
+
+    return notFound('Document not found');
   }
 }
 
@@ -46,7 +48,7 @@ async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Ui
   return Buffer.concat(chunks);
 }
 
-app.http('documents', {
+app.http('documents-get', {
   route: 'documents/{fileName}',
   methods: ['GET'],
   authLevel: 'anonymous',

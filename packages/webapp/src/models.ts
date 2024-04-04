@@ -30,9 +30,4 @@ export type ChatRequestOptions = {
   stream: boolean;
   chunkIntervalMs: number;
   apiUrl: string;
-} & ChatRequestOverrides;
-
-export type ChatRequestOverrides = {
-  top?: number;
-  temperature?: number;
 };

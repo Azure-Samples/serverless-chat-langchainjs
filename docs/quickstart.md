@@ -16,7 +16,7 @@ description: Create your own serverless ChatGPT with Retrieval-Augmented-Generat
 ---
 
 <!-- Learn samples onboarding: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main -->
-
+<!-- prettier-ignore -->
 This sample shows how to build a serverless ChatGPT-like experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
 
 <!-- TODO: gif -->
@@ -53,12 +53,11 @@ This application is made from multiple components:
 
 You can run this project directly in your browser by using GitHub Codespaces, which will open a web-based VS Code.
 
-1. [**Fork**](https://github.com/Azure-Samples/langchainjs-quickstart-demo/fork) the project to create your own copy of this repository.
+1. [**Fork**](https://github.com/Azure-Samples/serverless-ai-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Codespaces** tab, and clink on the button **Create codespace on main**.
 <div align="center">
   <img src="./images/codespaces.png" alt="Screenshot showing how to create a new codespace" width="400px" />
 </div>
-
 3. Wait for the Codespace to be created, it should take a few minutes.
 
 ## Deploy on Azure

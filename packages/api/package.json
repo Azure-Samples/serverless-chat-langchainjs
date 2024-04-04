@@ -8,25 +8,22 @@
     "clean": "rimraf dist",
     "prestart": "npm run clean && npm run build",
     "start:host": "npm run prestart && func start",
-    "start": "npm-run-all --parallel start:host watch",
-    "test": "echo \"No tests yet...\""
+    "start": "concurrently npm:start:host npm:watch --raw --kill-others"
   },
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@azure/storage-blob": "^12.17.0",
-    "@langchain/azure-openai": "^0.0.4",
-    "@langchain/community": "^0.0.43",
+    "@langchain/azure-openai": "^0.0.6",
+    "@langchain/community": "^0.0.44",
     "@langchain/core": "^0.1.51",
     "dotenv": "^16.4.5",
-    "langchain": "^0.1.30",
+    "faiss-node": "^0.5.1",
+    "langchain": "^0.1.31",
     "mongodb": "^6.5.0",
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^18.x",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^5.0.0",
-    "typescript": "^4.0.0"
+    "@types/node": "^20.x"
   },
-  "main": "dist/src/**/*.js"
+  "main": "dist/src/functions/*.js"
 }
