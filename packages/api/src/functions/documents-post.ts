@@ -35,8 +35,8 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     rawDocument[0].metadata.filename = filename;
 
     const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 100,
+      chunkSize: 2000,
+      chunkOverlap: 400,
     });
     const documents = await splitter.splitDocuments(rawDocument);
 
