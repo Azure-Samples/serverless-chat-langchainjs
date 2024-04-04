@@ -120,6 +120,9 @@ npm start
 
 This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
+> [!NOTE]
+> While local models usually works well enough to answer the questions, sometimes they may not be able to follow perfectly the advanced formatting instructions for the citations and follow-up questions. This is expected, and a limitation of using smaller local models.
+
 ### Run the sample locally with Azure OpenAI models
 
 First you need to provision the Azure resources needed to run the sample. Follow the instructions in the [Deploy the sample to Azure](#deploy-the-sample-to-azure) section to deploy the sample to Azure, then you'll be able to run the sample locally using the deployed Azure resources.
