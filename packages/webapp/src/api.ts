@@ -13,16 +13,21 @@ export async function getCompletion(options: ChatRequestOptions) {
     }),
   });
 
+  if (response.status > 299 || !response.ok) {
+    let json: ChatResponse | undefined;
+    try {
+      json = await response.json();
+    } catch {}
+
+    const error = json?.error ?? response.statusText;
+    throw new Error(error);
+  }
+
   if (options.stream) {
     return getChunksFromResponse<ChatResponseChunk>(response, options.chunkIntervalMs);
   }
 
-  const json: ChatResponse = await response.json();
-  if (response.status > 299 || !response.ok) {
-    throw new Error(json.error ?? 'Unknown error');
-  }
-
-  return json;
+  return response.json();
 }
 
 export function getCitationUrl(citation: string): string {
