@@ -11,7 +11,8 @@
     "build": "npm run build --workspaces --if-present",
     "build:webapp": "npm run build --workspace=webapp",
     "build:api": "npm run build --workspace=api",
-    "clean": "echo not implemented",
+    "clean": "npm run clean --workspaces --if-present",
+    "upload:docs": "node scripts/upload-documents.js http://localhost:7071",
     "lint": "xo",
     "lint:fix": "xo --fix",
     "format": "prettier --list-different --write .",
@@ -81,6 +82,7 @@
       "import/extensions": "off",
       "n/prefer-global/process": "off",
       "unicorn/prefer-module": "off",
+      "unicorn/no-new-array": "off",
       "unicorn/prevent-abbreviations": [
         "error",
         {

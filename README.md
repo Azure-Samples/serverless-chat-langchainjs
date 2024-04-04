@@ -118,7 +118,15 @@ Then you can start the application by running the commands:
 npm start
 ```
 
-This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+This will start the web app and the API locally. Then we need to upload the PDF documents from the `/data` folder to the API with the command:
+
+```bash
+npm run upload:docs
+```
+
+This only has to be done once, unless you want to add more documents.
+
+You can now open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
 > [!NOTE]
 > While local models usually works well enough to answer the questions, sometimes they may not be able to follow perfectly the advanced formatting instructions for the citations and follow-up questions. This is expected, and a limitation of using smaller local models.
@@ -136,6 +144,8 @@ npm start
 ```
 
 This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+
+Note that the documents are uploaded automatically when deploying the sample to Azure with `azd up`.
 
 > [!TIP]
 > You can switch back to using Ollama models by simply deleting the `src/api/.env` file and starting the application again. To regenerate the `.env` file, you can run `azd env get-values > src/api/.env`.
