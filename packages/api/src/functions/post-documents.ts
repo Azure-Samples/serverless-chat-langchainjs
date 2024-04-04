@@ -10,7 +10,7 @@ import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
-import { badRequest, serviceUnavailable, ok } from '../utils';
+import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel } from '../ollama';
 
 export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
