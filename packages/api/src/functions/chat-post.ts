@@ -15,15 +15,16 @@ import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
+import { ChatRequest, ChatResponseChunk } from '../models';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
   try {
-    const requestBody = (await request.json()) as Record<string, any>;
+    const requestBody = (await request.json()) as ChatRequest;
     const { messages, stream } = requestBody;
 
-    if (!messages || messages.length === 0 || !messages[0].content) {
+    if (!messages || messages.length === 0 || !messages.at(-1)?.content) {
       return badRequest('Invalid or missing messages in the request body');
     }
 
@@ -59,9 +60,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       combineDocsChain,
     });
 
-    const firstUserMessageContent = messages[0].content;
+    const lastUserMessage = messages.at(-1)!.content;
     const responseStream = await chain.stream({
-      input: firstUserMessageContent,
+      input: lastUserMessage,
     });
 
     return data(createStream(responseStream), {
@@ -85,7 +86,7 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
     for await (const chunk of chunks) {
       if (!chunk.answer) continue;
 
-      const responseChunk = {
+      const responseChunk: ChatResponseChunk = {
         choices: [
           {
             index: 0,
