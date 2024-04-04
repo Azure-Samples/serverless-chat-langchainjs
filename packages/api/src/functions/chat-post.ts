@@ -11,18 +11,20 @@ import { badRequest, data, serviceUnavailable } from '../http-response';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   try {
-    const requestBody: any = await request.json();
-
+    const requestBody = (await request.json()) as Record<string, any>;
     const { messages, stream } = requestBody;
 
     if (!messages || messages.length === 0 || !messages[0].content) {
       return badRequest('Invalid or missing messages in the request body');
     }
 
-    const firstUserMessageContent = messages[0].content;
+    if (!stream) {
+      return badRequest('Stream is not supported');
+    }
 
     const embeddings = new AzureOpenAIEmbeddings();
     const model = new AzureChatOpenAI();
+    const store = new AzureCosmosDBVectorStore(embeddings, {});
 
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
@@ -31,25 +33,20 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
         ['human', '{input}'],
       ]),
     });
-
-    const store = new AzureCosmosDBVectorStore(embeddings, {});
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
       combineDocsChain,
     });
 
-    if (stream) {
-      const responseStream = await chain.stream({
-        input: firstUserMessageContent,
-      });
+    const firstUserMessageContent = messages[0].content;
+    const responseStream = await chain.stream({
+      input: firstUserMessageContent,
+    });
 
-      return data(createStream(responseStream), {
-        'Content-Type': 'application/x-ndjson',
-        'Transfer-Encoding': 'chunked',
-      });
-    }
-
-    return badRequest('Stream is not supported');
+    return data(createStream(responseStream), {
+      'Content-Type': 'application/x-ndjson',
+      'Transfer-Encoding': 'chunked',
+    });
   } catch (error: unknown) {
     const error_ = error as Error;
     context.error(`Error when processing chat request: ${error_.message}`);
