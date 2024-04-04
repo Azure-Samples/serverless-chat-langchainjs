@@ -29,7 +29,10 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
     }
 
     return data(fileData, { 'content-type': 'application/pdf' });
-  } catch {
+  } catch (_error: unknown) {
+    const error = _error as Error;
+    context.error(`Error when processing document-get request: ${error.message}`);
+
     return notFound('Document not found');
   }
 }

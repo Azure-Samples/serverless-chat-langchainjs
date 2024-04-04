@@ -69,9 +69,9 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       'Content-Type': 'application/x-ndjson',
       'Transfer-Encoding': 'chunked',
     });
-  } catch (error: unknown) {
-    const error_ = error as Error;
-    context.error(`Error when processing chat request: ${error_.message}`);
+  } catch (_error: unknown) {
+    const error = _error as Error;
+    context.error(`Error when processing chat-post request: ${error.message}`);
 
     return serviceUnavailable('Service temporarily unavailable. Please try again later.');
   }
@@ -98,6 +98,8 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
         ],
       };
 
+      // Format response chunks in Newline delimited JSON
+      // see https://github.com/ndjson/ndjson-spec
       buffer.push(JSON.stringify(responseChunk) + '\n');
     }
 

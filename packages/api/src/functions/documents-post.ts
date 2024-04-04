@@ -68,9 +68,9 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     }
 
     return ok({ message: 'PDF file uploaded successfully.' });
-  } catch (error: unknown) {
-    const error_ = error as Error;
-    context.error(`Error when processing chat request: ${error_.message}`);
+  } catch (_error: unknown) {
+    const error = _error as Error;
+    context.error(`Error when processing document-post request: ${error.message}`);
 
     return serviceUnavailable('Service temporarily unavailable. Please try again later.');
   }
