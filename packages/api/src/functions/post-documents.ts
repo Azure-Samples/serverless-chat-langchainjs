@@ -11,7 +11,7 @@ import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
-import { ollamaEmbeddingsModel } from '../ollama';
+import { ollamaEmbeddingsModel } from '../models';
 
 export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;

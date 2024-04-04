@@ -78,7 +78,7 @@ You may also need to adjust the capacity in `infra/main.bicep` file, depending o
 
 ### Local models
 
-To change the local models used by Ollama, you can edit the file `packages/api/src/ollama.ts`:
+To change the local models used by Ollama, you can edit the file `packages/api/src/models.ts`:
 
 ```typescript
 export const ollamaEmbeddingsModel = 'all-minilm:l6-v2';
