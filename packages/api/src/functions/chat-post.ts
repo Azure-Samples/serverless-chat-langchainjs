@@ -21,7 +21,7 @@ const systemPrompt = `Assistant helps the Consto Real Estate company customers w
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.
 If the user question is not in English, answer in the language used in the question.
 
-Each source has the format "filename: information". ALWAYS reference the source filename for every part used in the answer. Use the format "[filename]" to reference a source filename, for example: [info1.txt]. List each source separately, for example: [info1.txt][info2.pdf].
+Each source has the format "filename: information". ALWAYS reference the source filename for every part used in the answer. Use the format "[filename]" to reference a source, for example: [info1.txt]. List each source separately, for example: [info1.txt][info2.pdf].
 
 Generate 3 very brief follow-up questions that the user would likely ask next.
 Enclose the follow-up questions in double angle brackets. Example:
@@ -75,7 +75,7 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
       documentPrompt: PromptTemplate.fromTemplate('{filename}: {page_content}\n'),
     });
     const chain = await createRetrievalChain({
-      retriever: store.asRetriever(5),
+      retriever: store.asRetriever(),
       combineDocsChain,
     });
 
