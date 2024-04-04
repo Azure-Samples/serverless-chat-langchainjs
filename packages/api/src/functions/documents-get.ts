@@ -43,7 +43,7 @@ async function streamToBuffer(readableStream: NodeJS.ReadableStream): Promise<Ui
   return Buffer.concat(chunks);
 }
 
-app.http('documents', {
+app.http('documents-get', {
   route: 'documents/{fileName}',
   methods: ['GET'],
   authLevel: 'anonymous',

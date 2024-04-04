@@ -89,7 +89,7 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
 }
 
 app.setup({ enableHttpStream: true });
-app.http('chat', {
+app.http('chat-post', {
   route: 'chat',
   methods: ['POST'],
   authLevel: 'anonymous',
