@@ -118,13 +118,24 @@ Then you can start the application by running the commands:
 npm start
 ```
 
-This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+This will start the web app and the API locally. Then we need to upload the PDF documents from the `/data` folder to the API with the command:
+
+```bash
+npm run upload:docs
+```
+
+This only has to be done once, unless you want to add more documents.
+
+You can now open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+
+> [!NOTE]
+> While local models usually works well enough to answer the questions, sometimes they may not be able to follow perfectly the advanced formatting instructions for the citations and follow-up questions. This is expected, and a limitation of using smaller local models.
 
 ### Run the sample locally with Azure OpenAI models
 
 First you need to provision the Azure resources needed to run the sample. Follow the instructions in the [Deploy the sample to Azure](#deploy-the-sample-to-azure) section to deploy the sample to Azure, then you'll be able to run the sample locally using the deployed Azure resources.
 
-Once your deployment is complete, you should see a `.env` file in the `src/api` folder. This file contains the environment variables needed to run the application using Azure resources.
+Once your deployment is complete, you should see a `.env` file in the `packages/api` folder. This file contains the environment variables needed to run the application using Azure resources.
 
 To run the sample, you can then use the same commands as for the Ollama setup:
 
@@ -134,8 +145,10 @@ npm start
 
 This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
+Note that the documents are uploaded automatically when deploying the sample to Azure with `azd up`.
+
 > [!TIP]
-> You can switch back to using Ollama models by simply deleting the `src/api/.env` file and starting the application again. To regenerate the `.env` file, you can run `azd env get-values > src/api/.env`.
+> You can switch back to using Ollama models by simply deleting the `packages/api/.env` file and starting the application again. To regenerate the `.env` file, you can run `azd env get-values > packages/api/.env`.
 
 ### Deploy the sample to Azure
 

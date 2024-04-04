@@ -27,17 +27,11 @@ services:
 hooks:
   postprovision:
     shell: sh
-    run: azd env get-values > src/api/.env
+    run: azd env get-values > packages/api/.env
   postup:
     windows:
       shell: pwsh
-      run: |
-        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/privacy-policy.pdf"
-        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/support.pdf"
-        Invoke-RestMethod -Uri "$env:API_URL/api/documents" -Method Post -InFile "./data/terms-of-service.pdf"
+      run: node scripts/upload-documents.js "$env:API_URL"
     posix:
       shell: sh
-      run: |
-        curl -F "file=@./data/privacy-policy.pdf" "$API_URL/api/documents"
-        curl -F "file=@./data/support.pdf" "$API_URL/api/documents"
-        curl -F "file=@./data/terms-of-service.pdf" "$API_URL/api/documents"
+      run: node scripts/upload-documents.js "$API_URL"

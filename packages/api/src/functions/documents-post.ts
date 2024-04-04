@@ -25,27 +25,24 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
       return badRequest('"file" field not found in form data.');
     }
 
-    const file = parsedForm.get('file') as Blob;
-    const fileName = parsedForm.get('filename') as string;
+    const file = parsedForm.get('file') as File;
+    const filename = file.name;
 
     const loader = new PDFLoader(file, {
       splitPages: false,
     });
     const rawDocument = await loader.load();
+    rawDocument[0].metadata.filename = filename;
 
     const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 100,
+      chunkSize: 2000,
+      chunkOverlap: 400,
     });
     const documents = await splitter.splitDocuments(rawDocument);
 
     if (azureOpenAiEndpoint) {
       const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
-
-      const numberLists = 100;
-      const dimensions = 1536;
-      const similarity = AzureCosmosDBSimilarityType.COS;
-      await store.createIndex(numberLists, dimensions, similarity);
+      await store.createIndex();
       await store.close();
     } else {
       // If no environment variables are set, it means we are running locally
@@ -56,11 +53,14 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     }
 
     if (connectionString && containerName) {
-      context.log(`Uploading file to blob storage: "${containerName}/${fileName}"`);
+      context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
-      const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-      await blockBlobClient.upload(file, file.size);
+      const blockBlobClient = containerClient.getBlockBlobClient(filename);
+      const buffer = await file.arrayBuffer();
+      await blockBlobClient.upload(buffer, file.size, {
+        blobHTTPHeaders: { blobContentType: 'application/pdf' },
+      });
     } else {
       context.log('No Azure Blob Storage connection string set, skipping upload.');
     }

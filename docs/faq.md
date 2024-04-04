@@ -34,9 +34,15 @@ curl -F "file=@data/<your-document.pdf>" http://localhost:7071/api/documents
 Invoke-RestMethod -Uri "http://localhost:7071/api/documents" -Method Post -InFile "./data/<your-document.pdf>"
 ```
 
+You can also use the following command to reupload all PDFs file in the `/data` folder at once:
+
+```bash
+npm run upload:docs
+```
+
 ### For the deployed version
 
-First you need to find the URL of the deployed function. You can either look at the `src/api/.env` file and search for the `API_URI` variable, or run this command to get the URL:
+First you need to find the URL of the deployed function. You can either look at the `packages/api/.env` file and search for the `API_URI` variable, or run this command to get the URL:
 
 ```bash
 azd env get-values | grep API_URI
@@ -50,6 +56,12 @@ curl -F "file=@data/<your-document.pdf>" <your_api_url>/api/documents
 
 # If you're using PowerShell
 Invoke-RestMethod -Uri "<your_api_url>/api/documents" -Method Post -InFile "./data/<your-document.pdf>"
+```
+
+You can also use the following command to reupload all PDFs file in the `/data` folder at once:
+
+```bash
+node scripts/upload-documents.js <your_api_url>
 ```
 
 </details>
