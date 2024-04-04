@@ -42,7 +42,7 @@ npm run upload:docs
 
 ### For the deployed version
 
-First you need to find the URL of the deployed function. You can either look at the `src/api/.env` file and search for the `API_URI` variable, or run this command to get the URL:
+First you need to find the URL of the deployed function. You can either look at the `packages/api/.env` file and search for the `API_URI` variable, or run this command to get the URL:
 
 ```bash
 azd env get-values | grep API_URI
