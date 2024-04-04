@@ -124,15 +124,18 @@ This will start the web app and the API locally. Open the URL `http://localhost:
 
 First you need to provision the Azure resources needed to run the sample. Follow the instructions in the [Deploy the sample to Azure](#deploy-the-sample-to-azure) section to deploy the sample to Azure, then you'll be able to run the sample locally using the deployed Azure resources.
 
-Once your deployment is complete, you can run the following commands to start the application locally:
+Once your deployment is complete, you should see a `.env` file in the `src/api` folder. This file contains the environment variables needed to run the application using Azure resources.
 
-1. Run `azd env get-values > .env` to get the environment variables.
-2. Run `npm start` to start the application.
+To run the sample, you can then use the same commands as for the Ollama setup:
+
+```bash
+npm start
+```
 
 This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
 > [!TIP]
-> You can switch back to using Ollama models by simply deleting the `.env` file and starting the application again.
+> You can switch back to using Ollama models by simply deleting the `src/api/.env` file and starting the application again. To regenerate the `.env` file, you can run `azd env get-values > src/api/.env`.
 
 ### Deploy the sample to Azure
 

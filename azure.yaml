@@ -27,7 +27,7 @@ services:
 hooks:
   postprovision:
     shell: sh
-    run: azd env get-values > .env
+    run: azd env get-values > src/api/.env
   postup:
     windows:
       shell: pwsh

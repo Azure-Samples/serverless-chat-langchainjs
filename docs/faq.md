@@ -36,7 +36,7 @@ Invoke-RestMethod -Uri "http://localhost:7071/api/documents" -Method Post -InFil
 
 ### For the deployed version
 
-First you need to find the URL of the deployed function. You can either look at the `.env` file at the root of the project and search for the `API_URI` variable, or run this command to get the URL:
+First you need to find the URL of the deployed function. You can either look at the `src/api/.env` file and search for the `API_URI` variable, or run this command to get the URL:
 
 ```bash
 azd env get-values | grep API_URI
