@@ -58,7 +58,7 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts,json,md,yaml,yml,html,css}": "prettier --write",
+    "*.{js,ts,md,yaml,yml,html,css}": "prettier --write",
     "*.{js,ts}": "xo --fix",
     "packages/webapp/src/components/*.{js,ts}": "npx lit-analyzer"
   },
