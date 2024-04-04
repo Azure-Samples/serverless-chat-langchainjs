@@ -2,14 +2,23 @@ import { Readable } from 'node:stream';
 import { Document } from '@langchain/core/documents';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
+import { Embeddings } from '@langchain/core/embeddings';
+import { BaseChatModel } from '@langchain/core/language_models/chat_models';
+import { VectorStore } from '@langchain/core/vectorstores';
+import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
+import { ChatOllama } from '@langchain/community/chat_models/ollama';
+import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
+import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 
 export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
+
   try {
     const requestBody = (await request.json()) as Record<string, any>;
     const { messages, stream } = requestBody;
@@ -19,12 +28,24 @@ export async function chat(request: HttpRequest, context: InvocationContext): Pr
     }
 
     if (!stream) {
-      return badRequest('Stream is not supported');
+      return badRequest('Only stream mode is supported');
     }
 
-    const embeddings = new AzureOpenAIEmbeddings();
-    const model = new AzureChatOpenAI();
-    const store = new AzureCosmosDBVectorStore(embeddings, {});
+    let embeddings: Embeddings;
+    let model: BaseChatModel;
+    let store: VectorStore;
+
+    if (azureOpenAiEndpoint) {
+      embeddings = new AzureOpenAIEmbeddings();
+      model = new AzureChatOpenAI();
+      store = new AzureCosmosDBVectorStore(embeddings, {});
+    } else {
+      // If no environment variables are set, it means we are running locally
+      context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
+      embeddings = new OllamaEmbeddings({ model: ollamaEmbeddingsModel });
+      model = new ChatOllama({ model: ollamaChatModel });
+      store = await FaissStore.load(faissStoreFolder, embeddings);
+    }
 
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
@@ -62,6 +83,8 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
 
   const stream = async () => {
     for await (const chunk of chunks) {
+      if (!chunk.answer) continue;
+
       const responseChunk = {
         choices: [
           {
