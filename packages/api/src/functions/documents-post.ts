@@ -25,13 +25,14 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
       return badRequest('"file" field not found in form data.');
     }
 
-    const file = parsedForm.get('file') as Blob;
-    const fileName = parsedForm.get('filename') as string;
+    const file = parsedForm.get('file') as File;
+    const filename = file.name;
 
     const loader = new PDFLoader(file, {
       splitPages: false,
     });
     const rawDocument = await loader.load();
+    rawDocument[0].metadata.filename = filename;
 
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
@@ -56,10 +57,10 @@ export async function uploadDocuments(request: HttpRequest, context: InvocationC
     }
 
     if (connectionString && containerName) {
-      context.log(`Uploading file to blob storage: "${containerName}/${fileName}"`);
+      context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
-      const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+      const blockBlobClient = containerClient.getBlockBlobClient(filename);
       await blockBlobClient.upload(file, file.size);
     } else {
       context.log('No Azure Blob Storage connection string set, skipping upload.');
