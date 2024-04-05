@@ -10,7 +10,7 @@ products:
   - azure
   - azure-openai
   - ai-services
-urlFragment: serverless-ai-langchainjs
+urlFragment: serverless-chat-langchainjs
 name: Serverless ChatGPT with RAG using LangChain.js
 description: Create your own serverless ChatGPT with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure.
 ---
@@ -53,7 +53,7 @@ This application is made from multiple components:
 
 You can run this project directly in your browser by using GitHub Codespaces, which will open a web-based VS Code.
 
-1. [**Fork**](https://github.com/Azure-Samples/serverless-ai-langchainjs/fork) the project to create your own copy of this repository.
+1. [**Fork**](https://github.com/Azure-Samples/serverless-chat-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Codespaces** tab, and clink on the button **Create codespace on main**.
 <div align="center">
   <img src="./images/codespaces.png" alt="Screenshot showing how to create a new codespace" width="400px" />
@@ -116,4 +116,4 @@ You can find answers to frequently asked questions in the [FAQ](./faq.md).
 
 ## Troubleshooting
 
-If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-ai-langchainjs/issues) in this repository.
+If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-chat-langchainjs/issues) in this repository.

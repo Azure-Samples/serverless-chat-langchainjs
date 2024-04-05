@@ -5,12 +5,12 @@
 
 # Serverless ChatGPT with RAG using LangChain.js
 
-[![Open project in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat-square&logo=github)](https://codespaces.new/Azure-Samples/serverless-ai-langchainjs?hide_repo_select=true&ref=main)
+[![Open project in GitHub Codespaces](https://img.shields.io/badge/Codespaces-Open-blue?style=flat-square&logo=github)](https://codespaces.new/Azure-Samples/serverless-chat-langchainjs?hide_repo_select=true&ref=main)
 ![Node version](https://img.shields.io/badge/Node.js->=20-grass?style=flat-square)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-orange?style=flat-square)](LICENSE)
 
-<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/Azure-Samples/serverless-ai-langchainjs/build?style=flat-square)](https://github.com/Azure-Samples/serverless-ai-langchainjs/actions) -->
+<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/Azure-Samples/serverless-chat-langchainjs/build?style=flat-square)](https://github.com/Azure-Samples/serverless-chat-langchainjs/actions) -->
 <!-- [![Watch how to use this sample on YouTube](https://img.shields.io/badge/YouTube-Watch-d95652.svg?style=flat-square&logo=youtube)]() -->
 
 :star: If you like this sample, star it on GitHub — it helps a lot!
@@ -69,7 +69,7 @@ You need to install following tools to work on your local machine:
 
 Then you can get the project code:
 
-1. [**Fork**](https://github.com/Azure-Samples/serverless-ai-langchainjs/fork) the project to create your own copy of this repository.
+1. [**Fork**](https://github.com/Azure-Samples/serverless-chat-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
 <div align="center">
   <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="400px" />
@@ -80,7 +80,7 @@ Then you can get the project code:
 
 You can run this project directly in your browser by using GitHub Codespaces, which will open a web-based VS Code:
 
-[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=blue&logo=github)](https://codespaces.new/Azure-Samples/serverless-ai-langchainjs?hide_repo_select=true&ref=main)
+[![Open in GitHub Codespaces](https://img.shields.io/static/v1?style=for-the-badge&label=GitHub+Codespaces&message=Open&color=blue&logo=github)](https://codespaces.new/Azure-Samples/serverless-chat-langchainjs?hide_repo_select=true&ref=main)
 
 ### Use a VSCode dev container
 
@@ -88,7 +88,7 @@ A similar option to Codespaces is VS Code Dev Containers, that will open the pro
 
 You will also need to have [Docker](https://www.docker.com/products/docker-desktop) installed on your machine to run the container.
 
-[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/serverless-ai-langchainjs)
+[![Open in Dev Containers](https://img.shields.io/static/v1?style=for-the-badge&label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Azure-Samples/serverless-chat-langchainjs)
 
 ## Run the sample
 
@@ -203,7 +203,7 @@ You can find answers to frequently asked questions in the [FAQ](./docs/faq.md).
 
 ## Troubleshooting
 
-If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./docs/troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-ai-langchainjs/issues) in this repository.
+If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./docs/troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-chat-langchainjs/issues) in this repository.
 
 ## Contributing
 
