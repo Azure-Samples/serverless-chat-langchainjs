@@ -26,8 +26,12 @@ services:
 
 hooks:
   postprovision:
-    shell: sh
-    run: azd env get-values > packages/api/.env
+    windows:
+      shell: pwsh
+      run: azd env get-values > packages/api/.env
+    posix:
+      shell: sh
+      run: azd env get-values > packages/api/.env
   postup:
     windows:
       shell: pwsh
