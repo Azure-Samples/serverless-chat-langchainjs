@@ -2,10 +2,7 @@ import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/fu
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import {
-  AzureCosmosDBVectorStore,
-  AzureCosmosDBSimilarityType,
-} from '@langchain/community/vectorstores/azure_cosmosdb';
+import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
@@ -13,7 +10,7 @@ import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 
-export async function uploadDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
@@ -78,5 +75,5 @@ app.http('documents-post', {
   route: 'documents',
   methods: ['POST'],
   authLevel: 'anonymous',
-  handler: uploadDocuments,
+  handler: postDocuments,
 });
