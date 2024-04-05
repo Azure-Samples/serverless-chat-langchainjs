@@ -35,7 +35,7 @@ Make sure the last question ends with ">>".
 SOURCES:
 {context}`;
 
-export async function chat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+export async function postChat(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
   try {
@@ -135,5 +135,5 @@ app.http('chat-post', {
   route: 'chat',
   methods: ['POST'],
   authLevel: 'anonymous',
-  handler: chat,
+  handler: postChat,
 });
