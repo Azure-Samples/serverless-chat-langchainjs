@@ -13,11 +13,11 @@
 <!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/Azure-Samples/serverless-ai-langchainjs/build?style=flat-square)](https://github.com/Azure-Samples/serverless-ai-langchainjs/actions) -->
 <!-- [![Watch how to use this sample on YouTube](https://img.shields.io/badge/YouTube-Watch-d95652.svg?style=flat-square&logo=youtube)]() -->
 
-<!-- TODO: gif demo -->
-
 :star: If you like this sample, star it on GitHub — it helps a lot!
 
 [Overview](#overview) • [Get started](#get-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
+
+![Animation showing the chat app in action](./docs/images/demo.gif)
 
 </div>
 
