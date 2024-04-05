@@ -4,10 +4,10 @@
   "description": "Azure Functions API for the serverless ChatGPT RAG sample",
   "main": "dist/src/functions/*.js",
   "scripts": {
-    "build:ts": "tsc",
+    "build": "tsc",
     "watch": "tsc -w",
     "clean": "rimraf dist",
-    "prestart": "npm run clean && npm run build:ts",
+    "prestart": "npm run clean && npm run build",
     "start:host": "func start",
     "start": "concurrently npm:start:host npm:watch --raw --kill-others"
   },
@@ -26,6 +26,7 @@
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^20.x"
+    "@types/node": "^20.x",
+    "typescript": "^5.4.4"
   }
 }
