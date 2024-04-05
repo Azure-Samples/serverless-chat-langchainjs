@@ -1,7 +1,8 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "a sample api demonstrating how to use Azure Functions with Azure OpenAI and LangChain.js",
+  "description": "Azure Functions API for the serverless ChatGPT RAG sample",
+  "main": "dist/src/functions/*.js",
   "scripts": {
     "build:ts": "tsc",
     "watch": "tsc -w",
@@ -10,6 +11,8 @@
     "start:host": "func start",
     "start": "concurrently npm:start:host npm:watch --raw --kill-others"
   },
+  "author": "Microsoft",
+  "license": "MIT",
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@azure/storage-blob": "^12.17.0",
@@ -24,6 +27,5 @@
   },
   "devDependencies": {
     "@types/node": "^20.x"
-  },
-  "main": "dist/src/functions/*.js"
+  }
 }
