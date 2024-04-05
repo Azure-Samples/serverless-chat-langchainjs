@@ -193,7 +193,8 @@ Here are some resources to learn more about the technologies used in this sample
 - [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)
 - [Ask YouTube: LangChain.js + Azure Quickstart sample](https://github.com/Azure-Samples/langchainjs-quickstart-demo)
 - [Revolutionize your Enterprise Data with ChatGPT: Next-gen Apps w/ Azure OpenAI and AI Search](https://aka.ms/entgptsearchblog)
-- [Find more Azure AI samples](https://github.com/Azure-Samples/azureai-samples)
+
+You can also find [more Azure AI samples here](https://github.com/Azure-Samples/azureai-samples).
 
 <!-- TODO: write blog post and link it here -->
 
