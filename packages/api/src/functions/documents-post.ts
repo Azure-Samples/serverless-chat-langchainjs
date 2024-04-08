@@ -25,18 +25,21 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     const file = parsedForm.get('file') as File;
     const filename = file.name;
 
+    // Extract text from the PDF
     const loader = new PDFLoader(file, {
       splitPages: false,
     });
     const rawDocument = await loader.load();
     rawDocument[0].metadata.filename = filename;
 
+    // Split the text into smaller chunks
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1500,
       chunkOverlap: 100,
     });
     const documents = await splitter.splitDocuments(rawDocument);
 
+    // Generate embeddings and save in database
     if (azureOpenAiEndpoint) {
       const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
       await store.createIndex();
@@ -50,6 +53,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     }
 
     if (connectionString && containerName) {
+      // Upload the PDF file to Azure Blob Storage
       context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);
