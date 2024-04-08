@@ -1,6 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+// This script uploads all PDF files from the 'data' folder to the ingestion API.
+// It does a Node.js equivalent of this bash script:
+// ```
+// for file in data/*.pdf; do
+//   curl -X POST -F "file=@$file" <api_url>/api/documents
+// done
+// ```
 async function uploadDocuments(apiUrl, dataFolder) {
   try {
     const files = await fs.readdir(dataFolder);

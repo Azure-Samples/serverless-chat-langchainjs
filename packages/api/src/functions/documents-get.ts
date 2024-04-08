@@ -16,6 +16,7 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
     let fileData: Uint8Array;
 
     if (connectionString && containerName) {
+      // Retrieve the file from Azure Blob Storage
       context.log(`Reading blob from: "${containerName}/${fileName}"`);
       const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
       const containerClient = blobServiceClient.getContainerClient(containerName);

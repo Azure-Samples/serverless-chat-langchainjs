@@ -55,6 +55,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     let store: VectorStore;
 
     if (azureOpenAiEndpoint) {
+      // Initialize models and vector database
       embeddings = new AzureOpenAIEmbeddings();
       model = new AzureChatOpenAI();
       store = new AzureCosmosDBVectorStore(embeddings, {});
@@ -66,6 +67,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
       store = await FaissStore.load(faissStoreFolder, embeddings);
     }
 
+    // Create the chain that combines the prompt with the documents
     const combineDocsChain = await createStuffDocumentsChain({
       llm: model,
       prompt: ChatPromptTemplate.fromMessages([
@@ -74,6 +76,8 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
       ]),
       documentPrompt: PromptTemplate.fromTemplate('{filename}: {page_content}\n'),
     });
+
+    // Create the chain to retrieve the documents from the database
     const chain = await createRetrievalChain({
       retriever: store.asRetriever(),
       combineDocsChain,
@@ -96,6 +100,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
   }
 }
 
+// Transform the response chunks into a JSON stream
 function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
   const buffer = new Readable({
     read() {},
