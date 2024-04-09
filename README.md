@@ -65,8 +65,9 @@ You need to install following tools to work on your local machine:
 - [Node.js LTS](https://nodejs.org/download/)
 - [Azure Developer CLI](https://aka.ms/azure-dev/install)
 - [Git](https://git-scm.com/downloads)
-<!-- - [Powershell 7+ (pwsh)](https://github.com/powershell/powershell) - For Windows users only.
-  - **Important**: Ensure you can run `pwsh.exe` from a PowerShell command. If this fails, you likely need to upgrade PowerShell. -->
+- [PowerShell 7+](https://github.com/powershell/powershell) _(for Windows users only)_
+  - **Important**: Ensure you can run `pwsh.exe` from a PowerShell command. If this fails, you likely need to upgrade PowerShell.
+  - Instead of Powershell, you can also use Git Bash or WSL to run the Azure Developer CLI commands.
 
 Then you can get the project code:
 
