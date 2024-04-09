@@ -399,6 +399,7 @@ export class ChatComponent extends LitElement {
     }
     svg {
       fill: currentColor;
+      width: 100%;
     }
     button {
       font-size: 1rem;
