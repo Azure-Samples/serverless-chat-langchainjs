@@ -2,7 +2,7 @@
 
 Welcome to the tutorial _Create a Serverless ChatGPT with RAG using LangChain.js and TypeScript_.
 
-This tutorial will guide you through creating a serverless a ChatGPT and RAG (Retrieval-Augmented Generation) application using **[LangChain.js](https://js.langchain.com/docs/get_started/introduction)**, **[Azure Functions](https://learn.microsoft.com/azure/azure-functions/)**, **[Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/)**, **[Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/)**, and **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/)**.
+This tutorial will guide you through creating a serverless a ChatGPT and RAG (Retrieval-Augmented Generation) application using **[LangChain.js](https://js.langchain.com/docs/get_started/introduction)**, **[Azure Functions](https://learn.microsoft.com/azure/azure-functions/)**, **[Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)**, **[Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/)**, and **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/)**.
 
 The chatbot will be able to answer questions based on a set of enterprise documents uploaded from a fictional company called _Contoso Real Estate_.
 
@@ -18,6 +18,8 @@ The FrontEnd side of the application will already be provided, so you can focus 
 
 You can follow this tutorial in two ways: locally or using Codespaces.
 
+> It is highly recommended to use Codespaces for this tutorial. Codespaces is a cloud-based tool that enables you to run development environments without installing any tools on your computer. This way, you can focus on the development process without worrying about the environment setup.
+
 ### Locally
 
 If you choose to use a local environment, you will need to install:
@@ -29,13 +31,15 @@ If you choose to use a local environment, you will need to install:
 - [Git](https://git-scm.com/downloads)
 - [Azure Developer CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 
+> If you're a Windows user, you'll need to install [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4), [Git Bash](https://git-scm.com/downloads) or [WSL2](https://learn.microsoft.com/windows/wsl/install) to run the bash commands.
+
 ### Codespaces
 
 If you decide to continue using **[Codespaces](https://github.com/features/codespaces)**, you can follow the steps described in the `README.md` file at the root of the project.
 
 > **Note:** If you are using Codespaces, you don't need to install any of the prerequisites mentioned above. Codespaces already has all the necessary tools installed. Codespaces can be used for free for up to 60 hours per month, and this is renewed every month.
 
-## Overview do Projeto
+## Project Overview
 
 Building AI applications can be complex and time-consuming, but using LangChain.js and Azure serverless technologies allows to greatly simplify the process. This application is a chatbot that uses a set of enterprise documents to generate responses to user queries.
 
@@ -77,7 +81,7 @@ Now let's examine the application flow based on the application architecture ima
 
 - A user interacts with the chat interface in the web app
 - The web app sends the user's query to the Serverless API via HTTP calls
-- The Serverless API interacts with Azure OpenAI Service to generate a response, using the data from Azure Cosmos DB.
+- The Serverless API interacts with Azure OpenAI Service to generate a response, using the data from Azure Cosmos DB for MongoDB vCore.
 - If there's a need to reference the original documents, Azure Blob Storage is used to retrieve the PDF documents.
 - The generated response is then sent back to the web app and displayed to the user.
 
@@ -105,7 +109,7 @@ start:webapp
 
 > At this point, don't worry about the other scripts in the `package.json` file at the root of the project. They will be used throughout the tutorial.
 
-1. Open your browser and go to `http://localhost:8000`. The application will be displayed, as shown in the image below:
+3. Open your browser and go to `http://localhost:8000`. The application will be displayed, as shown in the image below:
 
 ![FrontEnd application](./images/application-webapp.png)
 
