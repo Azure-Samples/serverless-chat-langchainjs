@@ -16,6 +16,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
   try {
+    // Get the uploaded file from the request
     const parsedForm = await request.formData();
 
     if (!parsedForm.has('file')) {
