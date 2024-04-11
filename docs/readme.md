@@ -19,7 +19,7 @@ description: Create your own serverless ChatGPT with Retrieval-Augmented-Generat
 <!-- prettier-ignore -->
 This sample shows how to build a serverless ChatGPT-like experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
 
-<!-- TODO: gif -->
+![Animation showing the chat app in action](./docs/images/demo.gif)
 
 ## Overview
 
@@ -98,6 +98,10 @@ To clean up all the Azure resources created by this sample:
 
 The resource group and all the resources will be deleted.
 
+## Troubleshooting
+
+If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-chat-langchainjs/issues) in this repository.
+
 ## Next steps
 
 Here are some resources to learn more about the technologies used in this sample:
@@ -111,11 +115,3 @@ Here are some resources to learn more about the technologies used in this sample
 - [Revolutionize your Enterprise Data with ChatGPT: Next-gen Apps w/ Azure OpenAI and AI Search](https://aka.ms/entgptsearchblog)
 
 You can also find [more Azure AI samples here](https://github.com/Azure-Samples/azureai-samples).
-
-## FAQ
-
-You can find answers to frequently asked questions in the [FAQ](./faq.md).
-
-## Troubleshooting
-
-If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-chat-langchainjs/issues) in this repository.
