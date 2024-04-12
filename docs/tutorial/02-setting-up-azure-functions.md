@@ -1,23 +1,23 @@
 # Setting Up the Serverless Environment using Azure Functions
 
-This section explains how to configure the development environment to create the API for the ChatGPT application. We'll use Azure Functions in its 4.x version and witht the programming model in version 4.
+This section explains how to configure the development environment to create the API for the ChatGPT application. We'll use Azure Functions in its 4.x version and with the programming model version 4.
 
 ## Prerequisites for this section
 
 At this point, don't forget to install **[Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local?tabs=windows%2Ccsharp%2Cbash)** if you're developing locally on your machine. If you're using **[Codespaces](https://github.com/features/codespaces)**, the environment will already be set up for you!
 
-To make ir easier to create new functions and project configurations, we recommend installing the **[Azure Functions extension for Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)**.
+To make it easier to create new functions and project configurations, we recommend installing the **[Azure Functions extension for Visual Studio Code extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)**.
 
 ## What is Azure Functions?
 
-**[Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript)** is a serverless computing service. It allows us to run code on demand without requiring a server infrastructure. You can execute your code in response to many events, including data changes, message trigger, HTTP calls, and even timers.
+**[Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript)** is a **[serverless computing service](https://azure.microsoft.com/resources/cloud-computing-dictionary/what-is-serverless-computing)**. It allows us to run code on demand without requiring a server infrastructure. You can execute your code in response to many events, including data changes, message trigger, HTTP calls, and even timers.
 
 ## What is Azure Functions v4 programming model for Node?
 
 Azure Functions v4 is the latest version of the Node.js programming model for Azure Functions. It comes with a bunch of new features and improvements, such as:
 
 - Flexible folder structure
-- Being able to define `function.json` directly in the function's in the code
+- Being able to define `function.json` directly in the code.
 - New HTTP trigger types
 - Improved IntelliSense
 - Timer Trigger (TypeScript)
@@ -249,6 +249,8 @@ This tutorial explains how to configure the development environment to create fu
 
 Additionally, we configured the project to run the functions we created. And finally we created the `chat-post`, `documents-post`, and `documents-get` functions for the project.
 
-We will now start to develop the logic for each function so that we can integrate with ChatGPT (FrontEnd side). In the next section, we will start developing the `chat-post` function for integration with ChatGPT.
+Before we proceed with developing the functions, it's important to grasp a fundamental concept for those building ChatGPT applications: Retrieval-Augmented Generation (RAG).
 
-**[⬅️ Back: Introduction](01-introduction.md)** | **[Next: Developing the `chat-post` function ➡️ ](./03-developing-chat-post-function.md)**
+We will talk about RAG in the next section.
+
+**[⬅️ Back: Introduction](01-introduction.md)** | **[Next: Understanding the RAG (Retrieval Augmented Generation) architecture ➡️ ](./03-understanding-rag.md)**
