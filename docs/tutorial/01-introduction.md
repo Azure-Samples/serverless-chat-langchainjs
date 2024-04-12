@@ -121,4 +121,4 @@ start:webapp
 
 In the next section, we will start to create the API using Azure Functions. See you there!
 
-▶ **[Next Step: Setting Up the Serverless Environment using Azure Functions](./02-setting-up-azure-functions.md)**
+**[Next Step: Setting Up the Serverless Environment using Azure Functions ➡️](./02-setting-up-azure-functions.md)**
