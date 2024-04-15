@@ -40,8 +40,11 @@
   ],
   "author": "Microsoft",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
+    "azure-functions-core-tools": "^4.0.5611",
     "concurrently": "^8.2.2",
     "lint-staged": "^15.2.2",
     "prettier": "^3.0.3",
@@ -65,7 +68,9 @@
   "xo": {
     "space": true,
     "prettier": true,
-    "envs": ["node"],
+    "envs": [
+      "node"
+    ],
     "rules": {
       "@typescript-eslint/triple-slash-reference": "off",
       "@typescript-eslint/naming-convention": "off",
@@ -102,7 +107,9 @@
     "bracketSpacing": true,
     "overrides": [
       {
-        "files": ["*.json"],
+        "files": [
+          "*.json"
+        ],
         "options": {
           "parser": "json"
         }
