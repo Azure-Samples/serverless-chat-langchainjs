@@ -81,4 +81,4 @@ The RAG architecture is a powerful tool for improving the accuracy and relevance
 
 Now that we have a clear understanding of the RAG architecture, we can begin developing the functions for integration with ChatGPT on the FrontEnd side. In the next section, we will start developing the `chat-post` function or the `chat` API for integration with ChatGPT.
 
-**[⬅️ Back: Setting Up the Serverless Environment using Azure Functions](02-setting-up-azure-functions.md)** | **[Next: Developing the `chat` API ➡️ ](./04-developing-chat-api.md)**
+**[⬅️ Back: Setting Up the Serverless Environment using Azure Functions](02-setting-up-azure-functions.md)** | **[Next: Developing the `chat` API ➡️ ](./04-preparing-understanding-language-models.md)**
