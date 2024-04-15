@@ -44,7 +44,6 @@
     "packages/*"
   ],
   "devDependencies": {
-    "azure-functions-core-tools": "^4.0.5611",
     "concurrently": "^8.2.2",
     "lint-staged": "^15.2.2",
     "prettier": "^3.0.3",
