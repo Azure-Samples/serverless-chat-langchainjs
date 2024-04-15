@@ -40,7 +40,9 @@
   ],
   "author": "Microsoft",
   "license": "MIT",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "concurrently": "^8.2.2",
     "lint-staged": "^15.2.2",
@@ -65,7 +67,9 @@
   "xo": {
     "space": true,
     "prettier": true,
-    "envs": ["node"],
+    "envs": [
+      "node"
+    ],
     "rules": {
       "@typescript-eslint/triple-slash-reference": "off",
       "@typescript-eslint/naming-convention": "off",
@@ -102,7 +106,9 @@
     "bracketSpacing": true,
     "overrides": [
       {
-        "files": ["*.json"],
+        "files": [
+          "*.json"
+        ],
         "options": {
           "parser": "json"
         }
