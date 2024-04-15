@@ -19,7 +19,7 @@ description: Create your own serverless ChatGPT with Retrieval-Augmented-Generat
 <!-- prettier-ignore -->
 This sample shows how to build a serverless ChatGPT-like experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
 
-![Animation showing the chat app in action](./docs/images/demo.gif)
+![Animation showing the chat app in action](./images/demo.gif)
 
 ## Overview
 
