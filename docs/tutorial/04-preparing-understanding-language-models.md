@@ -1,4 +1,4 @@
-# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Local Installation of Ollama with Mistram 7B
+# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Local Installation of Ollama with Mistral 7B
 
 This section we will cover the language models used in the project. Throughout the tutorial, we will also learn how to generate the environment variables needed to use the Azure Services, including the **[Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)**.
 
