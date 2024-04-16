@@ -10,7 +10,9 @@ Here's an example of the application in action:
 
 ![ChatGPT with RAG](../../docs/images/demo.gif)
 
-The goal of the tutorial is to provide you with a hands-on experience building a serverless application using Azure Services and LangChain.js. You'll be guided through each step of the process from setting up the environment to deploying the application.
+This tutorial will teach you how to build a serverless application using Azure Functions and LangChain.js.
+
+LangChain.js is important because it makes it easy to create language models and integrate them into applications. It also makes it easy to develop AI-driven chatbots. You'll learn how to set up the environment and deploy the application.
 
 The frontend of the application is provided so that you can focus on the backend code and technologies.
 
@@ -44,7 +46,7 @@ If you choose to use a local environment, you will need to install:
 
 ## Project Overview
 
-Building AI applications can be complex and time-consuming. By using LangChain.js and Azure serverless technologies, you can greatly simplify the process. This application is a chatbot that uses a set of enterprise documents to generate AI responses to user queries.
+Building AI applications can be complex and time-consuming. By using LangChain.js and Azure Functions including Serverless technologies, you can greatly simplify the process. These tools streamline the development by managing infrastructure concerns and scaling automatically, allowing you to focus more on building the chatbot functionality and less on the underlying system architecture. This application is a chatbot that uses a set of enterprise documents to generate AI responses to user queries.
 
 The code sample includes sample data to make trying the application quick and easy, but feel free to replace it with your own. You'll use a fictitious company called Contoso Real Estate, and the experience allows its customers to ask support questions about the usage of the company's products. The sample data includes a set of documents that describes the company's terms of service, privacy policy, and support guide.
 
@@ -65,7 +67,7 @@ To understand the architecture of the project, let's break it down into its indi
 
    - When a user submits a query through the web app, it is sent via HTTP to an API built using Azure Functions.
    - The API uses LangChain.js to process the query.
-   - The API handles the logic of ingesting enterprise documents and generating responses to the chat queries.
+   - The API handles the logic of corporate documents and generates answers to chat queries.
    - The code for this functionality will be shown later in the tutorial and is located in the `packages/api` folder.
 
 3. **Database:**
@@ -86,7 +88,7 @@ Let's examine the application flow based on the architecture diagram:
 - A user interacts with the chat interface in the web app
 - The web app sends the user's query to the Serverless API via HTTP calls
 - The Serverless API interacts with Azure OpenAI Service to generate a response, using the data from Azure Cosmos DB for MongoDB vCore.
-- If there's a need to reference the original documents, Azure Blob Storage is used to retrieve the PDF documents.
+- If there's a need to reference the documents, Azure Blob Storage is used to retrieve the PDF documents.
 - The generated response is then sent back to the web app and displayed to the user.
 
 The architecture is based on the RAG (Retrieval-Augmented Generation) architecture. This architecture combines the ability to retrieve information from a database with the ability to generate text from a language model. You'll learn more about RAG later in the tutorial.
@@ -108,7 +110,7 @@ npm install
 2. To run the project, with only FrontEnd, execute the following command:
 
 ```bash
-start:webapp
+npm run start:webapp
 ```
 
 > At this point, don't worry about the other scripts in the `package.json` file at the root of the project. They will be used throughout the tutorial.

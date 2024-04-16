@@ -31,25 +31,21 @@ Azure Functions v4 is the latest version of the Node.js programming model for Az
 
 After following the steps above and forking the repository in the `starter` branch, you should do the following steps:
 
-1. Open the `packages` folder and create a new folder called `api`
+| Step | Description                                                                                                                                                                                     |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Open the `packages` folder and create a new folder called `api`.                                                                                                                                |
+| 2    | To use the Azure Functions extension in Visual Studio Code, press `Ctrl + Shift + P` (for Windows users) or `Cmd + Shift + P` (for Mac users) and type `Azure Functions: Create New Project...` |
+| 3    | Select the `api` folder we just created and click `Select`.                                                                                                                                     |
+| 4    | Select the programming language `TypeScript`.                                                                                                                                                   |
+| 5    | Select a TypeScript programming model `Model V4`.                                                                                                                                               |
+| 6    | Select a template for your project's first function `HTTP trigger`.                                                                                                                             |
+| 7    | Enter a name for the function `chat-post`.                                                                                                                                                      |
 
-2. To use the Azure Functions extension in Visual Studio Code, press `Ctrl + Shift + P` (for Windows users) or `Cmd + Shift + P` (for Mac users) and type `Azure Functions: Create New Project...`
-
-3. Select the `api` folder we just created and click `Select`
-
-4. Select the programming language `TypeScript`
-
-5. Select a TypeScript programming model `Model V4`
-
-6. Select a template for your project's first function `HTTP trigger`
-
-7. Enter a name for the function `chat-post`
-
-> **Note:** when we create a new project, it may take some time to install all the project dependencies and structure. Wait until the process is complete.
-
-8. After creating the project, you will see a similar folder and file structure:
+After creating the project, you will see a similar folder and file structure:
 
 ![Azure Functions Project Structure](./images/azure-functions-project-structure.png)
+
+> **Note:** when we create a new project, it may take some time to install all the project dependencies and structure. Wait until the process is complete.
 
 Note that the project structure differs significantly from the programming model 3.x versin. Let's take a moment to understand the structure of this new programming model version:
 

@@ -1,4 +1,4 @@
-# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Local Installation of Ollama with Mistral 7B
+# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Installing Ollama with Mistral 7B
 
 This section we will cover the language models used in the project. Throughout the tutorial, we will also learn how to generate the environment variables needed to use the Azure Services, including the **[Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)**.
 
@@ -6,7 +6,7 @@ We will also teach you how to use **[Ollama](https://ollama.com/)** with **[Mist
 
 ## Models to be used in the project
 
-We will teach you how to uise two different language models: GPT-3.5 Turbo integrated with Azure OpenAI Service and Ollama with Mistral 7B. Let's take a look at eac of them.
+We will teach you how to uise two different language models: GPT-3.5 Turbo integrated with _Azure OpenAI Service_ (on Azure) and _Ollama with Mistral 7B_ (if you decide to use a model locally). Let's take a look at each of them.
 
 ### GPT-3.5 Turbo Integrated with Azure OpenAI Service
 
