@@ -12,21 +12,21 @@ We will teach you how to uise two different language models: GPT-3.5 Turbo integ
 
 ![Azure OpenAI Service Page](./images/azure-openai-page.png)
 
-OpenAI has developed GPT-3.5 Turbo, an improved version of the already impressive GPT-3.5. This model provides faster and more accurate responses, making it a reliable tool for companies and developers who need to generate text or perform other tasks related to Natural Language Processing (NLP).
+OpenAI has developed GPT-3.5 Turbo, an improved version of the already impressive GPT-3.5. This model provides faster and more correct responses, making it a reliable tool for companies and developers who need to generate text or perform other tasks related to Natural Language Processing (NLP).
 
-You have the option to use either **[OpenAI Service](https://openai.com/)** or **[Azure OpenAI Service](https://azure.microsoft.com/products/ai-services/openai-service)**. For this tutorial, we will be using Azure OpenAI Service, a version of OpenAI Service hosted on the Azure platform
+You have the choice to use either **[OpenAI Service](https://openai.com/)** or **[Azure OpenAI Service](https://azure.microsoft.com/products/ai-services/openai-service)**. For this tutorial, we will be using Azure OpenAI Service, a version of OpenAI Service hosted on the Azure platform.
 
-Azure OpenAI Service provides REST API access in many programming languages, including Python, Node.js, and C#. Additionally, it offers advanced language models like GPT-4, GPT-4-Turbo with Vision, which are versatible and adaptable to various tasks such as content generation, summarization, image recognition, semantic search, and text-to-code translation.
+Azure OpenAI Service provides REST API access in many programming languages, including Python, Node.js, and C#. Additionally, it offers advanced language models like GPT-4, GPT-4-Turbo with Vision, which are versatile and adaptable to various tasks such as content generation, summarization, image recognition, semantic search, and text-to-code translation.
 
 ### Ollama with Mistral 7B
 
 ![Ollama Page](./images/ollama-page.png)
 
-**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Mistral 7B model has 7 billion parameters and is designed to be effective, efficient in terms of cost and scability, unlike OpenAI's proprietary model.
+**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Mistral 7B model has 7 billion parameters and is designed to be effective, efficient in terms of cost and scalability, unlike OpenAI's proprietary model.
 
-Ollama's openness encourages innovation and collaboration within the developer community. Users can adapt the model to their specific needs, experiment with new ideas, or integrate the model in ways that proprietary services might not allow.
+Ollama's openness encourages innovation and collaboration within the developer community. Users can adapt the model to their specific needs, experiment with innovative ideas, or integrate the model in ways that proprietary services might not allow.
 
-Additionally, utilizing an open-source language model can decrease expenses, which is a crucial factor for projects with restricted budgets or for those who only wish to experiment with language models.
+Additionally, using an open-source language model can decrease expenses, which is a crucial factor for projects with restricted budgets or for those who only wish to experiment with language models.
 
 ![Mistral 7B Page](./images/mistral-7b-page.png)
 
@@ -38,15 +38,15 @@ To use the Azure OpenAI Service, you need an Azure account. If you don't have on
 
 > **Note:** if you decide to use the Azure OpenAI Service, you must fill out a request form to access the service. You can request access to the service by filling out the form [here](https://aka.ms/oaiapply).
 
-After creating your Azure account and being approved for the Azure OpenAI Service, we will proceed as follows:
+After creating your Azure account and being approved of the Azure OpenAI Service, we will continue as follows:
 
-> **Note:** Instead of Powershell, you can also use Git Bash or WSL to run the Azure Developer CLI commands.
+> **Note:** Instead of PowerShell, you can also use Git Bash or WSL to run the Azure Developer CLI commands.
 
 1. Return to the `main` branch of the project repository.
 2. Open a terminal at the root of the project.
 3. To deploy the application to Azure, run the command **run azd**. This will provision Azure resources, deploy the sample, and build the search index based on the files found in the **./data** folder.
 4. You will be prompted to select a base location for the resources. If you don't know which one to choose, you can select **eastus2**.
-5. By default, the OpenAI resource will be deployed to **eastus2**. You can set a different location with **azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>**. Currently only a short list of locations is accepted. That location list is based on the **[OpenAI model availability table](https://learn.microsoft.com/pt-br/azure/ai-services/openai/concepts/models#standard-deployment-model-availability)** and may become outdated as availability changes.
+5. By default, the OpenAI resource will be deployed to **eastus2**. You can set a different location with **azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>**. Currently only a brief list of locations is accepted. That location list is based on the **[OpenAI model availability table](https://learn.microsoft.com/pt-br/azure/ai-services/openai/concepts/models#standard-deployment-model-availability)** and may become outdated as availability changes.
 
 The deployment process will only take a few minutes. Afterward, the URL of the web app will appear in the terminal.
 
@@ -58,15 +58,15 @@ To check the resources created, go to the Azure portal and look for a resource g
 
 ![Azure Services for the Application](./images/services-azure-portal.png)
 
-The templates used to deploy the resources can be found in the `infra` folder, where we utilized Infrastructure as Code to set up the resources.
+The templates used to deploy the resources can be found in the `infra` folder, where we used Infrastructure as Code to set up the resources.
 
-You will notive that an `.env` file has been created in the `.azure` folder. Copy the contents of the `.env` file to your local machine, keep it a safe place, and return to the `starter` branch and create an `.env` file inside the `api` folder with the same content. Why? Because we will neede these credentials to use throughout the tutorial.
+You will notice that an `.env` file has been created in the `.azure` folder. Copy the contents of the `.env` file to your local machine, keep it in a safe place, and return to the `starter` branch and create an `.env` file inside the `api` folder with the same content. Why? Because we will need these credentials to use throughout the tutorial.
 
 > **Note:** if you want to simply browse the project code and see it in action, go to the `main` branch where the entire application is ready and follow the steps described in the article [Build a serverless Chat Application with RAG using LangChain.js](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/build-a-serverless-chatgpt-with-rag-using-langchain-js/ba-p/4111041), written by **[Yohan Lasorsa](https://twitter.com/sinedied)**.
 
 ## Installing Ollama and Local Models
 
-Before installing Ollama, please note that it requires some prerequisites. Specially, you will need free space and recommended RAM memory for running LLM locally.
+Before installing Ollama, please note that it requires some prerequisites. Especially, you will need free space and recommended RAM memory for running LLM locally.
 
 #### Memory requirements
 
@@ -74,7 +74,7 @@ Before installing Ollama, please note that it requires some prerequisites. Speci
 - _13b models generally require at least 16GB of RAM_
 - _70b models generally require at least 64GB of RAM_
 
-> **Note:** If you encounter problems with higher quantization levels, try using the q4 model. Alternatively, close any other memory-intensive programs.
+> **Note:** If you meet problems with higher quantization levels, try using the q4 model. Alternatively, close any other memory-intensive programs.
 
 > **Note:** Ollama is available for different operating systems, including Linux, MacOS, and Windows. For more information on installing Ollama, check the official project documentation [here](https://ollama.com/download).
 
@@ -95,7 +95,7 @@ After downloading the models, you can verify the proper functioning of the Ollam
 ollama run mistral
 ```
 
-An invitation will be sent to your terminal, allowing you to directly communicate with the AI model in a chat-like format similar to Chat Application.
+An invitation will be sent to your terminal, allowing you to directly communicate with the AI model in a chat-like format like Chat Application.
 
 ![Ollama Mistral](./images/ollama-mistra-cli.png)
 
