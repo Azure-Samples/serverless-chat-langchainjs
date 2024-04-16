@@ -40,6 +40,8 @@ To use the Azure OpenAI Service, you need an Azure account. If you don't have on
 
 After creating your Azure account and being approved for the Azure OpenAI Service, we will proceed as follows:
 
+> **Note:** Instead of Powershell, you can also use Git Bash or WSL to run the Azure Developer CLI commands.
+
 1. Return to the `main` branch of the project repository.
 2. Open a terminal at the root of the project.
 3. To deploy the application to Azure, run the command **run azd**. This will provision Azure resources, deploy the sample, and build the search index based on the files found in the **./data** folder.
