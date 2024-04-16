@@ -11,13 +11,13 @@ products:
   - azure-openai
   - ai-services
 urlFragment: serverless-chat-langchainjs
-name: Serverless ChatGPT with RAG using LangChain.js
-description: Create your own serverless ChatGPT with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure.
+name: Serverless AI Chat with RAG using LangChain.js
+description: Build your own serverless AI Chat with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure.
 ---
 
 <!-- Learn samples onboarding: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main -->
 <!-- prettier-ignore -->
-This sample shows how to build a serverless ChatGPT-like experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
+This sample shows how to build a serverless AI chat experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/) as the vector database. You can use it as a starting point for building more complex AI applications.
 
 ![Animation showing the chat app in action](./images/demo.gif)
 
@@ -111,7 +111,7 @@ Here are some resources to learn more about the technologies used in this sample
 - [Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)
 - [Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)
 - [Ask YouTube: LangChain.js + Azure Quickstart sample](https://github.com/Azure-Samples/langchainjs-quickstart-demo)
-- [ChatGPT + Enterprise data with Azure OpenAI and Azure AI Search](https://github.com/Azure-Samples/azure-search-openai-javascript)
-- [Revolutionize your Enterprise Data with ChatGPT: Next-gen Apps w/ Azure OpenAI and AI Search](https://aka.ms/entgptsearchblog)
+- [Chat + Enterprise data with Azure OpenAI and Azure AI Search](https://github.com/Azure-Samples/azure-search-openai-javascript)
+- [Revolutionize your Enterprise Data with Chat: Next-gen Apps w/ Azure OpenAI and AI Search](https://aka.ms/entgptsearchblog)
 
 You can also find [more Azure AI samples here](https://github.com/Azure-Samples/azureai-samples).

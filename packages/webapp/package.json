@@ -1,7 +1,7 @@
 {
   "name": "webapp",
   "version": "1.0.0",
-  "description": "Web app for the serverless ChatGPT RAG sample",
+  "description": "Web app for the serverless AI Chat RAG sample",
   "private": true,
   "type": "module",
   "scripts": {

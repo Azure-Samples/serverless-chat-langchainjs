@@ -1,7 +1,7 @@
 {
   "name": "serverless-chat-langchainjs",
   "version": "1.0.0",
-  "description": "Create your own serverless ChatGPT with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure",
+  "description": "Build your own serverless AI chat with Retrieval-Augmented-Generation using LangChain.js, TypeScript and Azure",
   "private": true,
   "type": "module",
   "scripts": {
@@ -28,7 +28,7 @@
   },
   "keywords": [
     "langchainjs",
-    "chatgpt",
+    "chatbot",
     "retrieval-augmented-generation",
     "serverless",
     "typescript",
