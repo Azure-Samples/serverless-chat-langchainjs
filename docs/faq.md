@@ -80,7 +80,7 @@ You can use the environment variables to change the chat and embeddings models u
 Run these commands:
 
 ```bash
-azd env set AZURE_OPENAI_CHATGPT_MODEL gpt-4
+azd env set AZURE_OPENAI_API_MODEL gpt-4
 azd env set AZURE_OPENAI_API_MODEL_VERSION  0125-preview
 azd env set AZURE_OPENAI_API_EMBEDDINGS_MODEL text-embedding-3-large
 azd env set AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION 1
