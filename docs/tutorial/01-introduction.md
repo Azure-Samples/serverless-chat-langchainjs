@@ -1,14 +1,14 @@
-# Tutorial - Create a Serverless ChatGPT with RAG using LangChain.js and TypeScript
+# Tutorial - Create a Serverless Chat Application with RAG using LangChain.js and TypeScript
 
-Welcome to the tutorial _Create a Serverless ChatGPT with RAG using LangChain.js and TypeScript_.
+Welcome to the tutorial _Create a Serverless Chat Application with RAG using LangChain.js and TypeScript_.
 
-This tutorial will guide you through creating a serverless a ChatGPT and RAG (Retrieval-Augmented Generation) application using **[LangChain.js](https://js.langchain.com/docs/get_started/introduction)**, **[Azure Functions](https://learn.microsoft.com/azure/azure-functions/)**, **[Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)**, **[Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/)**, and **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/)**.
+This tutorial will guide you through creating a serverless a Chat Application and RAG (Retrieval-Augmented Generation) application using **[LangChain.js](https://js.langchain.com/docs/get_started/introduction)**, **[Azure Functions](https://learn.microsoft.com/azure/azure-functions/)**, **[Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)**, **[Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/)**, and **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/)**.
 
 The chatbot will be able to answer questions based on a set of enterprise documents uploaded from a fictional company called _Contoso Real Estate_.
 
 Here's an example of the application in action:
 
-![ChatGPT with RAG](../../docs/images/demo.gif)
+![Chat Application with RAG](../../docs/images/demo.gif)
 
 This tutorial will teach you how to build a serverless application using Azure Functions and LangChain.js.
 
@@ -54,7 +54,7 @@ The code sample includes sample data to make trying the application quick and ea
 
 The architecture of the project is shown in the following diagram:
 
-![ChatGPT with RAG](../../docs/images/architecture.drawio.png)
+![Chat Application with RAG](../../docs/images/architecture.drawio.png)
 
 To understand the architecture of the project, let's break it down into its individual components:
 

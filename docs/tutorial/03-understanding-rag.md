@@ -1,6 +1,6 @@
 # Understanding the RAG (Retrieval Augmented Generation) architecture
 
-In this section, we'll understand what the RAG (Retrieval Augmented Generation) architecture is, how it works, and why it's important for integration with ChatGPT.
+In this section, we'll understand what the RAG (Retrieval Augmented Generation) architecture is, how it works, and why it's important for integration with Chat Application.
 
 ## What is RAG (Retrieval Augmented Generation)?
 
@@ -39,11 +39,11 @@ Implement the standard RAG architecture following this flow. It should include:
    - **How it works:** With the most relevant passages retrieved, the generator's task is to produce a final response, synthesizing and expressing this information in natural language.
    - **Mechanisms:** The generator, which is typically a model like GPT, BART, or T5, uses both the query and the relevant documents identified by retriever to create its response. It is important to note that the generator relies on the retriever to identify the relevant documents.
 
-## Why is RAG architecture important for integration with ChatGPT?
+## Why is RAG architecture important for integration with Chat Application?
 
-The RAG architecture is useful for ChatGPT in business contexts. It allows for flexible and efficient integration with various databases, improving the relevance and accuracy of generated responses while customizing the application to meet specific business needs.
+The RAG architecture is useful for Chat Application in business contexts. It allows for flexible and efficient integration with various databases, improving the relevance and accuracy of generated responses while customizing the application to meet specific business needs.
 
-Here are some advantages of integrating RAG architecture with ChatGPT:
+Here are some advantages of integrating RAG architecture with Chat Application:
 
 ### Adapting the RAG Architecture to different Enterprise Databases
 
@@ -53,7 +53,7 @@ Examples of data types that can be integrated:
 
 1. **Textual documents:** Internal documents, analysis reports, procedure manuals, and technical documentation. RAG can retrieve relevant information from these documents to answer specific questions that require detailed knowledge contained therein.
 
-2. **Relational Databases:** Structured data such as customer records, financial transactions and inventory records. Although traditionally not the main focus of LLMs, by integrating RAG, ChatGPT can extract and use information from tables and databases to enrich its answers or perform specific analyses.
+2. **Relational Databases:** Structured data such as customer records, financial transactions and inventory records. Although traditionally not the main focus of LLMs, by integrating RAG, Chat Application can extract and use information from tables and databases to enrich its answers or perform specific analyses.
 
 3. **Social media data and customer feedback:** Comments and reviews that can be used to better understand market trends, consumer sentiment, and to answer questions related to customer service.
 
@@ -77,8 +77,8 @@ RAG has significant implications in many fields:
 
 ## Next Steps
 
-The RAG architecture is a powerful tool for improving the accuracy and relevance of ChatGPT's responses. It makes ChatGPT a more effective solution for business scenarios and other contexts where access to specific information is essential.
+The RAG architecture is a powerful tool for improving the accuracy and relevance of Chat Application's responses. It makes Chat Application a more effective solution for business scenarios and other contexts where access to specific information is essential.
 
-Now that we have a clear understanding of the RAG architecture, we can begin developing the functions for integration with ChatGPT on the FrontEnd side. In the next section, we will start developing the `chat-post` function or the `chat` API for integration with ChatGPT.
+Now that we have a clear understanding of the RAG architecture, we can begin developing the functions for integration with Chat Application on the FrontEnd side. In the next section, we will start developing the `chat-post` function or the `chat` API for integration with Chat Application.
 
 **[⬅️ Back: Setting Up the Serverless Environment using Azure Functions](02-setting-up-azure-functions.md)** | **[Next: Developing the `chat` API ➡️ ](./04-preparing-understanding-language-models.md)**

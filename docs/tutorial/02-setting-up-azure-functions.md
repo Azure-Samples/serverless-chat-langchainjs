@@ -1,6 +1,6 @@
 # Setting Up the Serverless Environment using Azure Functions
 
-This section explains how to configure the development environment to create the API for the ChatGPT application. We'll use Azure Functions in its 4.x version and with the programming model version 4.
+This section explains how to configure the development environment to create the API for the Chat Application application. We'll use Azure Functions in its 4.x version and with the programming model version 4.
 
 ## Prerequisites for this section
 
@@ -241,11 +241,11 @@ If that happened, congratulations! The environment has been set up correctly!
 
 ## Next Steps
 
-This tutorial explains how to configure the development environment to create functions for the ChatGPT project using Functions version 4.x and the programming model v4 for Node.js.
+This tutorial explains how to configure the development environment to create functions for the Chat Application project using Functions version 4.x and the programming model v4 for Node.js.
 
 Additionally, we configured the project to run the functions we created. And finally we created the `chat-post`, `documents-post`, and `documents-get` functions for the project.
 
-Before we proceed with developing the functions, it's important to grasp a fundamental concept for those building ChatGPT applications: Retrieval-Augmented Generation (RAG).
+Before we proceed with developing the functions, it's important to grasp a fundamental concept for those building Chat Application applications: Retrieval-Augmented Generation (RAG).
 
 We will talk about RAG in the next section.
 

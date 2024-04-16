@@ -62,7 +62,7 @@ The templates used to deploy the resources can be found in the `infra` folder, w
 
 You will notive that an `.env` file has been created in the `.azure` folder. Copy the contents of the `.env` file to your local machine, keep it a safe place, and return to the `starter` branch and create an `.env` file inside the `api` folder with the same content. Why? Because we will neede these credentials to use throughout the tutorial.
 
-> **Note:** if you want to simply browse the project code and see it in action, go to the `main` branch where the entire application is ready and follow the steps described in the article [Build a serverless ChatGPT with RAG using LangChain.js](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/build-a-serverless-chatgpt-with-rag-using-langchain-js/ba-p/4111041), written by **[Yohan Lasorsa](https://twitter.com/sinedied)**.
+> **Note:** if you want to simply browse the project code and see it in action, go to the `main` branch where the entire application is ready and follow the steps described in the article [Build a serverless Chat Application with RAG using LangChain.js](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/build-a-serverless-chatgpt-with-rag-using-langchain-js/ba-p/4111041), written by **[Yohan Lasorsa](https://twitter.com/sinedied)**.
 
 ## Installing Ollama and Local Models
 
@@ -95,7 +95,7 @@ After downloading the models, you can verify the proper functioning of the Ollam
 ollama run mistral
 ```
 
-An invitation will be sent to your terminal, allowing you to directly communicate with the AI model in a chat-like format similar to ChatGPT.
+An invitation will be sent to your terminal, allowing you to directly communicate with the AI model in a chat-like format similar to Chat Application.
 
 ![Ollama Mistral](./images/ollama-mistra-cli.png)
 
