@@ -107,6 +107,6 @@ After to finish to test the Ollama server, you can stop it by pressing **Ctrl+D*
 
 This tutorial covers language models that will be used in the project. Choose the best model to suit your needs. To use the Azure OpenAI Service, follow the instructions to set up the service in Azure. To use Ollama with Mistral 7B, follow the instructions to install Ollama and the local models.
 
-We can now begin developing the functions for integration with ChatGPT since everything is prepared. In the following section, we will start working on the 'chat-post' function or the 'chat' API for integration with ChatGPT.
+To begin developing the application, we first need to create some configuration files for the project. We'll cover this in the next section!
 
-**[⬅️ Back: Understanding the RAG (Retrieval Augmented Generation) architecture](03-understanding-rag.md)** | **[Next: Developing the `chat` API ➡️ ](./05-developing-chat-api.md)**
+**[⬅️ Back: Understanding the RAG (Retrieval Augmented Generation) architecture](03-understanding-rag.md)** | **[Next: Developing the `chat` API ➡️ ](./05-config-files-app.md)**
