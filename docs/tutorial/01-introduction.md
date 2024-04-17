@@ -8,7 +8,7 @@ The chatbot will be able to answer questions based on a set of enterprise docume
 
 Here's an example of the application in action:
 
-![ChatGPT with RAG](../../docs/images/demo.gif)
+![AI Chat with RAG](../../docs/images/demo.gif)
 
 The goal of the tutorial is to provide you with a hands-on experience building a serverless application using Azure Services and LangChain.js. You'll be guided through each step of the process from setting up the environment to deploying the application.
 
@@ -52,7 +52,7 @@ The code sample includes sample data to make trying the application quick and ea
 
 The architecture of the project is shown in the following diagram:
 
-![ChatGPT with RAG](../../docs/images/architecture.drawio.png)
+![AI Chat with RAG](../../docs/images/architecture.drawio.png)
 
 To understand the architecture of the project, let's break it down into its individual components:
 

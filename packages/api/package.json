@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "Azure Functions API for the serverless ChatGPT RAG sample",
+  "description": "Azure Functions API for the serverless AI Chat RAG sample",
   "main": "dist/src/functions/*.js",
   "scripts": {
     "build": "tsc",
