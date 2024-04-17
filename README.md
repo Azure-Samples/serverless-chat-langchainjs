@@ -32,7 +32,7 @@ This sample shows how to build a serverless ChatGPT-like experience with Retriev
 
 Building AI applications can be complex and time-consuming, but using LangChain.js and Azure serverless technologies allows to greatly simplify the process. This application is a chatbot that uses a set of enterprise documents to generate responses to user queries.
 
-We provide sample data to make this sample ready to try, but feel free to replace it with your own. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents, in .pdf and markdown format, that describes its terms of service, privacy policy and a support guide.
+We provide sample data to make this sample ready to try, but feel free to replace it with your own. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describes its terms of service, privacy policy and a support guide.
 
 <div align="center">
   <img src="./docs/images/architecture.drawio.png" alt="Application architecture" width="640px" />
@@ -101,7 +101,7 @@ There are multiple ways to run this sample: locally using Ollama or Azure OpenAI
 
 ### Run the sample locally with Ollama
 
-If you have a machine with enough resources (sufficient disk space), you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
+If you have a machine with enough resources, you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
 
 ```bash
 ollama pull mistral
@@ -159,7 +159,7 @@ Note that the documents are uploaded automatically when deploying the sample to 
 
 #### Azure prerequisites
 
-- **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free) to get free Azure credits to get started.
+- **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free) to get free Azure credits to get started. If you're a student, you can also get free credits with [Azure for Students](https://aka.ms/azureforstudents).
 - **Azure subscription with access enabled for the Azure OpenAI service**. You can request access with [this form](https://aka.ms/oaiapply).
 
 #### Deploy the sample
