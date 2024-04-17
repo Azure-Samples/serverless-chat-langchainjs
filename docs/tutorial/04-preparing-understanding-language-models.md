@@ -6,7 +6,7 @@ We will also teach you how to use **[Ollama](https://ollama.com/)** with **[Mist
 
 ## Models to be used in the project
 
-We will teach you how to uise two different language models: GPT-3.5 Turbo integrated with _Azure OpenAI Service_ (on Azure) and _Ollama with Mistral 7B_ (if you decide to use a model locally). Let's take a look at each of them.
+We will teach you how to use two different language models: GPT-3.5 Turbo integrated with _Azure OpenAI Service_ (on Azure) and _Ollama with Mistral 7B_ (if you decide to use a model locally). Let's take a look at each of them.
 
 ### GPT-3.5 Turbo Integrated with Azure OpenAI Service
 
@@ -22,7 +22,7 @@ Azure OpenAI Service provides REST API access in many programming languages, inc
 
 ![Ollama Page](./images/ollama-page.png)
 
-**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Mistral 7B model has 7 billion parameters and is designed to be effective, efficient in terms of cost and scalability, unlike OpenAI's proprietary model.
+**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Mistral 7B model has 7 billion parameters and is designed to be effective, efficient in terms of cost and scability.
 
 Ollama's openness encourages innovation and collaboration within the developer community. Users can adapt the model to their specific needs, experiment with innovative ideas, or integrate the model in ways that proprietary services might not allow.
 
@@ -42,11 +42,13 @@ After creating your Azure account and being approved of the Azure OpenAI Service
 
 > **Note:** Instead of PowerShell, you can also use Git Bash or WSL to run the Azure Developer CLI commands.
 
-1. Return to the `main` branch of the project repository.
-2. Open a terminal at the root of the project.
-3. To deploy the application to Azure, run the command **run azd**. This will provision Azure resources, deploy the sample, and build the search index based on the files found in the **./data** folder.
-4. You will be prompted to select a base location for the resources. If you don't know which one to choose, you can select **eastus2**.
-5. By default, the OpenAI resource will be deployed to **eastus2**. You can set a different location with **azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>**. Currently only a brief list of locations is accepted. That location list is based on the **[OpenAI model availability table](https://learn.microsoft.com/pt-br/azure/ai-services/openai/concepts/models#standard-deployment-model-availability)** and may become outdated as availability changes.
+| Step | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1    | Return to the `main` branch of the project repository.                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 2    | Open a terminal at the root of the project.                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| 3    | To deploy the application to Azure, run the command **run azd**. This will provision Azure resources, deploy the sample, and build the search index based on the files found in the **./data** folder.                                                                                                                                                                                                                                                                   |
+| 4    | You will be prompted to select a base location for the resources. If you don't know which one to choose, you can select **eastus2**.                                                                                                                                                                                                                                                                                                                                     |
+| 5    | By default, the OpenAI resource will be deployed to **eastus2**. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a brief list of locations is accepted. That location list is based on the **[OpenAI model availability table](https://learn.microsoft.com/pt-br/azure/ai-services/openai/concepts/models#standard-deployment-model-availability)** and may become outdated as availability changes. |
 
 The deployment process will only take a few minutes. Afterward, the URL of the web app will appear in the terminal.
 
@@ -60,13 +62,11 @@ To check the resources created, go to the Azure portal and look for a resource g
 
 The templates used to deploy the resources can be found in the `infra` folder, where we used Infrastructure as Code to set up the resources.
 
-You will notice that an `.env` file has been created in the `.azure` folder. Copy the contents of the `.env` file to your local machine, keep it in a safe place, and return to the `starter` branch and create an `.env` file inside the `api` folder with the same content. Why? Because we will need these credentials to use throughout the tutorial.
-
-> **Note:** if you want to simply browse the project code and see it in action, go to the `main` branch where the entire application is ready and follow the steps described in the article [Build a serverless Chat Application with RAG using LangChain.js](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/build-a-serverless-chatgpt-with-rag-using-langchain-js/ba-p/4111041), written by **[Yohan Lasorsa](https://twitter.com/sinedied)**.
+> **Note:** if you want to simply browse the project code and see it in action, go to the `main` branch where the entire application is ready and follow the steps described in the article [Build a serverless AI Chat with RAG using LangChain.js](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/build-a-serverless-chatgpt-with-rag-using-langchain-js/ba-p/4111041), written by **[Yohan Lasorsa](https://twitter.com/sinedied)**.
 
 ## Installing Ollama and Local Models
 
-Before installing Ollama, please note that it requires some prerequisites. Especially, you will need free space and recommended RAM memory for running LLM locally.
+Before installing Ollama, please ensure you meet the prerequisites, which include sufficient free space, recommended amounts of RAM, and a fast CPU or GPU. For more details about running LLM locally, see **[here](open-webui/open-webui#736)**.
 
 #### Memory requirements
 
@@ -74,9 +74,11 @@ Before installing Ollama, please note that it requires some prerequisites. Espec
 - _13b models generally require at least 16GB of RAM_
 - _70b models generally require at least 64GB of RAM_
 
-> **Note:** If you meet problems with higher quantization levels, try using the q4 model. Alternatively, close any other memory-intensive programs.
+> **Note:** If you encounter issues with higher quantization levels, consider using the q4 model or close any other memory-intensive programs.
 
-> **Note:** Ollama is available for different operating systems, including Linux, MacOS, and Windows. For more information on installing Ollama, check the official project documentation [here](https://ollama.com/download).
+> **Note:** Ollama supports various operating systems such as Linux, MacOS, and Windows. For installation details, visit the official project documentation **[here](https://ollama.com/download)**.
+
+> **Note:** Ollama cannot be used in Codespaces. It must be installed on a local machine for use.
 
 To begin, download the necessary models for this project by running the following commands in your terminal:
 
@@ -95,7 +97,7 @@ After downloading the models, you can verify the proper functioning of the Ollam
 ollama run mistral
 ```
 
-An invitation will be sent to your terminal, allowing you to directly communicate with the AI model in a chat-like format like Chat Application.
+An invite will be displayed in your terminal, allowing you to directly communicate with the AI model in a chat-like format.
 
 ![Ollama Mistral](./images/ollama-mistra-cli.png)
 

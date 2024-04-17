@@ -1,31 +1,31 @@
-# Tutorial - Create a Serverless Chat Application with RAG using LangChain.js and TypeScript
+# Tutorial - Create a Serverless AI Chat with RAG using LangChain.js and TypeScript
 
-Welcome to the tutorial _Create a Serverless Chat Application with RAG using LangChain.js and TypeScript_.
+Welcome to the tutorial _Create a Serverless AI Chat with RAG using LangChain.js and TypeScript_.
 
-This tutorial will guide you through creating a serverless a Chat Application and RAG (Retrieval-Augmented Generation) application using **[LangChain.js](https://js.langchain.com/docs/get_started/introduction)**, **[Azure Functions](https://learn.microsoft.com/azure/azure-functions/)**, **[Azure Cosmos DB for MongoDB vCore](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)**, **[Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/)**, and **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/)**.
+This tutorial will guide you through creating a serverless a AI Chat and RAG (Retrieval-Augmented Generation) application using LangChain.js, Azure Functions, Azure Cosmos DB for MongoDB vCore, Azure Blob Storage, and Azure Static Web Apps.
 
-The chatbot will be able to answer questions based on a set of enterprise documents uploaded from a fictional company called _Contoso Real Estate_.
+The chatbot you're building can answer questions based on a set of enterprise documents uploaded from a fictional company called _Contoso Real Estate_.
 
 Here's an example of the application in action:
 
-![Chat Application with RAG](../../docs/images/demo.gif)
+![AI Chat with RAG](../../docs/images/demo.gif)
 
 This tutorial will teach you how to build a serverless application using Azure Functions and LangChain.js.
 
-LangChain.js is important because it makes it easy to create language models and integrate them into applications. It also makes it easy to develop AI-driven chatbots. You'll learn how to set up the environment and deploy the application.
+LangChain.js is a library used for building AI apps. It integrates LLMs, large language models like GPT, Claude-2 and more. It also makes it easy to develop AI-driven chatbots. Next, you'll learn how to set up the environment and deploy the application.
 
 The front end of the application is provided so that you can focus on the backend code and technologies.
 
 ## Prerequisites
 
-You can follow tutorial and run the application using one of the following options:
+You can run the application in the tutorial using one of the following options:
 
 - Run the application locally on your machine.
 - Run the application using Codespaces.
 
-> It is highly recommended to use Codespaces for this tutorial. Codespaces is a cloud-based tool that enables you to run development environments without installing any tools on your computer. This way, you can focus on the development process without worrying about the environment setup.
-
 ### Run using Codespaces
+
+> It is highly recommended to use Codespaces for this tutorial. Codespaces is a cloud-based tool that enables you to run development environments without installing any tools on your computer. This way, you can focus on the development process without worrying about the environment setup.
 
 If you decide to continue using **[Codespaces](https://github.com/features/codespaces)**, you can follow the steps described in the README.md file at the root of the project.
 
@@ -33,7 +33,7 @@ If you decide to continue using **[Codespaces](https://github.com/features/codes
 
 ### Run Locally
 
-If you choose to use a local environment, you will need to install:
+If you choose to use a local environment, you'll need to install:
 
 - [Node.js](https://nodejs.org/en/download/)
 - [TypeScript](https://www.typescriptlang.org/download)
@@ -42,7 +42,7 @@ If you choose to use a local environment, you will need to install:
 - [Git](https://git-scm.com/downloads)
 - [Azure Developer CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 
-> If you are a Windows user, you will need to install [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4), [Git Bash](https://git-scm.com/downloads) or [WSL2](https://learn.microsoft.com/windows/wsl/install) to run the bash commands.
+> If you are a Windows user, you'll need to install [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4), [Git Bash](https://git-scm.com/downloads) or [WSL2](https://learn.microsoft.com/windows/wsl/install) to run the bash commands.
 
 ## Project Overview
 
@@ -54,20 +54,20 @@ The code sample includes sample data to make trying the application quick and ea
 
 The architecture of the project is shown in the following diagram:
 
-![Chat Application with RAG](../../docs/images/architecture.drawio.png)
+![AI Chat with RAG](../../docs/images/architecture.drawio.png)
 
 To understand the architecture of the project, let's break it down into its individual components:
 
 1. **Web App:**
 
-   - The user interface for the chatbot is a web application built with **[Lit](https://lit.dev/)** (a library for building web components) and hosted using **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview)**. It makes a chat interface for users to interact with and ask questions.
+   - The user interface for the chatbot is a web application built with **[Lit](https://lit.dev/)** (a library for building web components) and hosted using **[Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview)**. It provides a chat interface for users they can use to ask questions.
    - The code is in the `packages/webapp` folder.
 
 2. **Serverless API:**
 
    - When a user sends a query through the web app, it is sent via HTTP to an API built using Azure Functions.
    - The API uses LangChain.js to process the query.
-   - The API manages the logic of corporate documents and generates answers to chat queries.
+   - The API manages the logic of corporate documents and responds with answers to chat queries.
    - The code for this functionality will be shown later in the tutorial and is in the `packages/api` folder.
 
 3. **Database:**
@@ -81,7 +81,7 @@ To understand the architecture of the project, let's break it down into its indi
 
 5. **Azure OpenAI Service:**
 
-   - This service is where the AI Model (a Large Language Model or LLM) is hosted. The model can understand and generating natural language. This is used to embed text chunks or generate answers based on the vector search from the database.
+   - This service is where the AI Model (a Large Language Model or LLM) is hosted. The model can understand and generate natural language. This is used to embed text chunks or generate answers based on the vector search from the database.
 
 Let's examine the application flow based on the architecture diagram:
 
@@ -120,6 +120,22 @@ npm run start:webapp
 ![FrontEnd application](./images/application-webapp.png)
 
 ## Next Steps
+
+Here are some additional resources for you to delve into:
+
+- **[Azure Functions Documentation](https://learn.microsoft.com/azure/azure-functions/)**
+- **[Azure Cosmos DB for MongoDB vCore Documentation](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/)**
+- **[Azure Blob Storage Documentation](https://learn.microsoft.com/azure/storage/blobs/)**
+- **[Azure Static Web Apps Documentation](https://learn.microsoft.com/azure/static-web-apps/)**
+- **[LangChain.js Documentation](https://js.langchain.com/docs/get_started/introduction)**
+- **[OpenAI API Documentation](https://platform.openai.com/docs/introduction)**
+- **[Lit Documentation](https://lit.dev/)**
+- **[TypeScript Documentation](https://www.typescriptlang.org/docs/)**
+- **[Node.js Documentation](https://nodejs.org/en/docs/)**
+- **[Visual Studio Code Documentation](https://code.visualstudio.com/docs)**
+- **[Git Documentation](https://git-scm.com/doc)**
+- **[Azure Developer CLI Documentation](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)**
+- **[PowerShell Documentation](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4)**
 
 In the next section, we will start to create the API using Azure Functions. See you there!
 
