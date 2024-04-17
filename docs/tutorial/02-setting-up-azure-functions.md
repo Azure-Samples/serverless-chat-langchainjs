@@ -117,7 +117,7 @@ Why? Because we cannot define a function in the same way as `chat-post` was crea
 
 So, the `chat-post` function will look like this:
 
-- `packages/src/functions/chat-post`
+- `packages/src/functions/chat-post.ts`
 
 ```typescript
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
