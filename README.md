@@ -54,7 +54,7 @@ We use the [HTTP protocol for AI chat apps](https://github.com/Azure-Samples/ai-
 
 There are multiple ways to get started with this project.
 
-The quickest way to use [GitHub Codespaces](#use-github-codespaces) that provides a preconfigured environment for you. Alternatively, you can [set up your local environment](#use-your-local-environment) following the instructions below.
+The quickest way is to use [GitHub Codespaces](#use-github-codespaces) that provides a preconfigured environment for you. Alternatively, you can [set up your local environment](#use-your-local-environment) following the instructions below.
 
 > [!IMPORTANT]
 > If you want to run this sample entirely locally using Ollama, you have to follow the instructions in the [local environment](#use-your-local-environment) section.
@@ -75,10 +75,11 @@ Then you can get the project code:
 
 1. [**Fork**](https://github.com/Azure-Samples/serverless-chat-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Local** tab, and copy the URL of your forked repository.
+
 <div align="center">
   <img src="./docs/images/clone-url.png" alt="Screenshot showing how to copy the repository URL" width="400px" />
 </div>
-3. Open a terminal and run this command to clone the repo: `git clone <your-repo-url>`
+3. Open a terminal and run this command to clone the repo: <code> git clone &lt;your-repo-url&gt; </code>
 
 ### Use GitHub Codespaces
 
@@ -116,13 +117,13 @@ After that you have to install the NPM dependencies:
 npm install
 ```
 
-Then you can start the application by running the commands:
+Then you can start the application by running the following command which will start the web app and the API locally:
 
 ```bash
 npm start
 ```
 
-This will start the web app and the API locally. Then we need to upload the PDF documents from the `/data` folder to the API with the command:
+Then, open a new terminal running concurrently and run the following command to upload the PDF documents from the `/data` folder to the API:
 
 ```bash
 npm run upload:docs
@@ -141,13 +142,13 @@ First you need to provision the Azure resources needed to run the sample. Follow
 
 Once your deployment is complete, you should see a `.env` file in the `packages/api` folder. This file contains the environment variables needed to run the application using Azure resources.
 
-To run the sample, you can then use the same commands as for the Ollama setup:
+To run the sample, you can then use the same commands as for the Ollama setup. This will start the web app and the API locally:
 
 ```bash
 npm start
 ```
 
-This will start the web app and the API locally. Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+Open the URL `http://localhost:8000` in your browser to start chatting with the bot.
 
 Note that the documents are uploaded automatically when deploying the sample to Azure with `azd up`.
 
@@ -159,7 +160,6 @@ Note that the documents are uploaded automatically when deploying the sample to 
 #### Azure prerequisites
 
 - **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free) to get free Azure credits to get started. If you're a student, you can also get free credits with [Azure for Students](https://aka.ms/azureforstudents).
-
 - **Azure subscription with access enabled for the Azure OpenAI service**. You can request access with [this form](https://aka.ms/oaiapply).
 
 #### Deploy the sample
