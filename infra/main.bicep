@@ -52,11 +52,17 @@ param embeddingsDeploymentCapacity int = 30
 
 param blobContainerName string = 'files'
 
+// Id of the user or app to assign application roles
+param principalId string = ''
+
+// Differentiates between automated and manual deployments
+param isContinuousDeployment bool // Set in main.parameters.json
+
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
-var finalOpenAiApiKey = empty(openAiKey) ? openAi.outputs.apiKey : openAiKey
+var storageUrl = 'https://${storage.outputs.name}.blob.core.windows.net'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -96,7 +102,7 @@ module api './core/host/functions.bicep' = {
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
       AZURE_COSMOSDB_CONNECTION_STRING: cosmos.outputs.connectionString
-      AZURE_STORAGE_CONNECTION_STRING: storage.outputs.connectionString
+      AZURE_STORAGE_URL: storageUrl
       AZURE_STORAGE_CONTAINER_NAME: blobContainerName
      }
   }
@@ -182,6 +188,34 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
+// Managed identity roles assignation
+// ---------------------------------------------------------------------------
+
+// User roles
+module openAiRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
+module storageRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
+  scope: resourceGroup
+  name: 'storage-contrib-role-user'
+  params: {
+    principalId: principalId
+    // Storage Blob Data Contributor
+    roleDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+    principalType: 'User'
+  }
+}
+
+// System roles
+module storageRoleApi 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'storage-role-api'
+  params: {
+    principalId: api.outputs.identityPrincipalId
+    // Storage Blob Data Contributor
+    roleDefinitionId: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
@@ -194,8 +228,7 @@ output AZURE_OPENAI_API_MODEL_VERSION string = chatModelVersion
 output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingsDeploymentName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
-output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
-output AZURE_STORAGE_CONNECTION_STRING string = storage.outputs.connectionString
+output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 
 output API_URL string = api.outputs.uri

@@ -11,6 +11,9 @@
     "location": {
       "value": "${AZURE_LOCATION}"
     },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION=eastus2}"
     },
@@ -37,6 +40,9 @@
     },
     "mongoDbSkuName": {
       "value": "${AZURE_MONGODB_SKU=Free}"
+    },
+    "isContinuousDeployment": {
+      "value": "${CI=false}"
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Readable } from 'node:stream';
 import { Document } from '@langchain/core/documents';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
+import { DefaultAzureCredential } from '@azure/identity';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';

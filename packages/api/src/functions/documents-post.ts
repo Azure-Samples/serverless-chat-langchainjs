@@ -6,12 +6,13 @@ import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azur
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
+import { DefaultAzureCredential } from '@azure/identity';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const storageUrl = process.env.AZURE_STORAGE_URL;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
@@ -53,10 +54,13 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       await store.save(faissStoreFolder);
     }
 
-    if (connectionString && containerName) {
+    if (storageUrl && containerName) {
       // Upload the PDF file to Azure Blob Storage
       context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
-      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+      // Use the current user identity to authenticate
+      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
+      const credentials = new DefaultAzureCredential();
+      const blobServiceClient = new BlobServiceClient(storageUrl, credentials);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(filename);
       const buffer = await file.arrayBuffer();
