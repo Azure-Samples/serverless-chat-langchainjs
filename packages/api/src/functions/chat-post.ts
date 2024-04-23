@@ -1,7 +1,6 @@
 import { Readable } from 'node:stream';
 import { Document } from '@langchain/core/documents';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
-import { DefaultAzureCredential } from '@azure/identity';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
@@ -17,6 +16,7 @@ import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 import { ChatRequest, ChatResponseChunk } from '../models';
+import { getCredentials } from '../security';
 
 const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Answer only in plain text format.
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.
@@ -56,9 +56,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     let store: VectorStore;
 
     if (azureOpenAiEndpoint) {
-      // Use the current user identity to authenticate
-      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
-      const credentials = new DefaultAzureCredential();
+      const credentials = getCredentials();
       // Initialize models and vector database
       embeddings = new AzureOpenAIEmbeddings({ credentials });
       model = new AzureChatOpenAI({ credentials });

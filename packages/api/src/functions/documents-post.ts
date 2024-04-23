@@ -6,10 +6,10 @@ import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azur
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
-import { DefaultAzureCredential } from '@azure/identity';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
+import { getCredentials } from '../security';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;
@@ -43,9 +43,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
 
     // Generate embeddings and save in database
     if (azureOpenAiEndpoint) {
-      // Use the current user identity to authenticate
-      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
-      const credentials = new DefaultAzureCredential();
+      const credentials = getCredentials();
       const embeddings = new AzureOpenAIEmbeddings({ credentials });
       const store = await AzureCosmosDBVectorStore.fromDocuments(documents, embeddings, {});
       await store.createIndex();
@@ -61,9 +59,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     if (storageUrl && containerName) {
       // Upload the PDF file to Azure Blob Storage
       context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
-      // Use the current user identity to authenticate
-      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
-      const credentials = new DefaultAzureCredential();
+      const credentials = getCredentials();
       const blobServiceClient = new BlobServiceClient(storageUrl, credentials);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(filename);

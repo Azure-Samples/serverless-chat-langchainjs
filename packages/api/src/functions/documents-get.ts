@@ -3,10 +3,10 @@ import fs from 'node:fs/promises';
 import { join } from 'node:path';
 import { finished } from 'node:stream/promises';
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
-import { DefaultAzureCredential } from '@azure/identity';
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
 import { data, notFound } from '../http-response';
+import { getCredentials } from '../security';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;
@@ -20,9 +20,7 @@ async function getDocument(request: HttpRequest, context: InvocationContext): Pr
       // Retrieve the file from Azure Blob Storage
       context.log(`Reading blob from: "${containerName}/${fileName}"`);
 
-      // Use the current user identity to authenticate
-      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
-      const credentials = new DefaultAzureCredential();
+      const credentials = getCredentials();
       const blobServiceClient = new BlobServiceClient(storageUrl, credentials);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const response = await containerClient.getBlobClient(fileName).download();
