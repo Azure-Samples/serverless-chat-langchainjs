@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@azure/functions": "^4.0.0",
+    "@azure/identity": "^4.1.0",
     "@azure/storage-blob": "^12.17.0",
     "@langchain/azure-openai": "^0.0.7",
     "@langchain/community": "^0.0.48",
