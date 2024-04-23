@@ -253,6 +253,7 @@ output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
 output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
+output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
 
 output API_URL string = api.outputs.uri
 output WEBAPP_URL string = webapp.outputs.uri

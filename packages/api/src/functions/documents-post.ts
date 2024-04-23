@@ -13,7 +13,6 @@ import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;
-  const safeConnectionString = process.env.AZURE_COSMOSDB_SAFE_CONNECTION_STRING;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
