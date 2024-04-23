@@ -27,8 +27,6 @@ param mongoDbSkuName string = 'Free'
 param openAiLocation string // Set in main.parameters.json
 param openAiSkuName string = 'S0'
 param openAiUrl string = ''
-@secure()
-param openAiKey string = ''
 
 // Location is not relevant here as it's only for the built-in api
 // which is not used here. Static Web App is a global service otherwise
@@ -62,7 +60,6 @@ var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
-var finalOpenAiApiKey = empty(openAiKey) ? '' : openAiKey
 var storageUrl = 'https://${storage.outputs.name}.blob.core.windows.net'
 
 // Organize resources in a resource group
@@ -97,8 +94,8 @@ module api './core/host/functions.bicep' = {
     runtimeVersion: '20'
     appServicePlanId: appServicePlan.outputs.id
     storageAccountName: storage.outputs.name
+    managedIdentity: true
     appSettings: {
-      AZURE_OPENAI_API_KEY: finalOpenAiApiKey
       AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
@@ -107,6 +104,7 @@ module api './core/host/functions.bicep' = {
       AZURE_STORAGE_CONTAINER_NAME: blobContainerName
      }
   }
+  dependsOn: empty(openAiUrl) ? [] : [openAi]
 }
 
 // Compute plan for the Azure Functions API
@@ -244,7 +242,6 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
 output AZURE_OPENAI_API_ENDPOINT string = finalOpenAiUrl
-output AZURE_OPENAI_API_KEY string = finalOpenAiApiKey
 output AZURE_OPENAI_API_DEPLOYMENT_NAME string = chatDeploymentName
 output AZURE_OPENAI_API_MODEL string = chatModelName
 output AZURE_OPENAI_API_MODEL_VERSION string = chatModelVersion

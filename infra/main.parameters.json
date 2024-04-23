@@ -17,12 +17,6 @@
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION=eastus2}"
     },
-    "openAiUrl": {
-      "value": "${OPENAI_URL}"
-    },
-    "openAiKey": {
-      "value": "${OPENAI_KEY}"
-    },
     "chatModelName": {
       "value": "${AZURE_OPENAI_API_MODEL=gpt-35-turbo}"
     },
