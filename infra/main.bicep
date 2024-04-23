@@ -62,6 +62,7 @@ var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
+var finalOpenAiApiKey = empty(openAiKey) ? '' : openAiKey
 var storageUrl = 'https://${storage.outputs.name}.blob.core.windows.net'
 
 // Organize resources in a resource group
@@ -162,6 +163,7 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
     sku: {
       name: openAiSkuName
     }
+    disableLocalAuth: true
     deployments: [
       {
         name: chatDeploymentName
@@ -193,6 +195,16 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
 
 // User roles
 module openAiRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
+  scope: resourceGroup
+  name: 'openai-role-user'
+  params: {
+    principalId: principalId
+    // Cognitive Services OpenAI User
+    roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
+    principalType: 'User'
+  }
+}
+
 module storageRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
   scope: resourceGroup
   name: 'storage-contrib-role-user'
@@ -205,6 +217,17 @@ module storageRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment)
 }
 
 // System roles
+module openAiRoleApi 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'openai-role-api'
+  params: {
+    principalId: api.outputs.identityPrincipalId
+    // Cognitive Services OpenAI User
+    roleDefinitionId: '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 module storageRoleApi 'core/security/role.bicep' = {
   scope: resourceGroup
   name: 'storage-role-api'

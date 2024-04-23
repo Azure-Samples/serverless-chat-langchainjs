@@ -20,6 +20,7 @@ param networkAcls object = empty(allowedIpRules) ? {
   ipRules: allowedIpRules
   defaultAction: 'Deny'
 }
+param disableLocalAuth bool = false
 
 resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: name
@@ -30,6 +31,7 @@ resource account 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
     customSubDomainName: customSubDomainName
     publicNetworkAccess: publicNetworkAccess
     networkAcls: networkAcls
+    disableLocalAuth: disableLocalAuth
   }
   sku: sku
 }
@@ -51,4 +53,3 @@ resource deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01
 output endpoint string = account.properties.endpoint
 output id string = account.id
 output name string = account.name
-output apiKey string = account.listKeys().key1

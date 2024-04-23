@@ -56,9 +56,12 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     let store: VectorStore;
 
     if (azureOpenAiEndpoint) {
+      // Use the current user identity to authenticate
+      // (no secrets needed, just use 'azd auth login' locally, and managed identity when deployed on Azure).
+      const credentials = new DefaultAzureCredential();
       // Initialize models and vector database
-      embeddings = new AzureOpenAIEmbeddings();
-      model = new AzureChatOpenAI();
+      embeddings = new AzureOpenAIEmbeddings({ credentials });
+      model = new AzureChatOpenAI({ credentials });
       store = new AzureCosmosDBVectorStore(embeddings, {});
     } else {
       // If no environment variables are set, it means we are running locally
