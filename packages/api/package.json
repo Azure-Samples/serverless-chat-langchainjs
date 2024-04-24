@@ -18,7 +18,7 @@
     "@azure/identity": "^4.1.0",
     "@azure/storage-blob": "^12.17.0",
     "@langchain/azure-openai": "^0.0.7",
-    "@langchain/community": "^0.0.48",
+    "@langchain/community": "^0.0.51",
     "@langchain/core": "^0.1.51",
     "dotenv": "^16.4.5",
     "faiss-node": "^0.5.1",
