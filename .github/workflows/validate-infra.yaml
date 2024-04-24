@@ -29,7 +29,7 @@ jobs:
           tools: templateanalyzer
 
       - name: Upload alerts to Security tab
-        if: github.repository == 'Azure-Samples/azure-search-openai-javascript'
+        if: github.repository_owner == 'Azure-Samples'
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: ${{ steps.msdo.outputs.sarifFile }}
