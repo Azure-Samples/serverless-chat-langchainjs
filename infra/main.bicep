@@ -14,8 +14,11 @@ param webappName string = 'webapp'
 param apiServiceName string = 'api'
 param appServicePlanName string = ''
 param storageAccountName string = ''
-param cosmosAccountName string = ''
-param mongoDbSkuName string = 'Free'
+param searchServiceName string = ''
+
+// The free tier does not support managed identity (required) or semantic search (optional)
+@allowed(['basic', 'standard', 'standard2', 'standard3', 'storage_optimized_l1', 'storage_optimized_l2'])
+param searchServiceSkuName string
 
 @description('Location for the OpenAI resource group')
 @allowed(['australiaeast', 'canadaeast', 'eastus', 'eastus2', 'francecentral', 'japaneast', 'northcentralus', 'swedencentral', 'switzerlandnorth', 'uksouth', 'westeurope'])
@@ -60,7 +63,8 @@ var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
-var storageUrl = 'https://${storage.outputs.name}.blob.core.windows.net'
+var storageUrl = 'https://${storage.outputs.name}.blob.${environment().suffixes.storage}'
+var searchUrl = 'https://${search.outputs.name}.search.windows.net'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -99,7 +103,7 @@ module api './core/host/functions.bicep' = {
       AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
-      AZURE_COSMOSDB_CONNECTION_STRING: cosmos.outputs.connectionString
+      AZURE_AISEARCH_ENDPOINT: searchUrl
       AZURE_STORAGE_URL: storageUrl
       AZURE_STORAGE_CONTAINER_NAME: blobContainerName
      }
@@ -136,18 +140,6 @@ module storage './core/storage/storage-account.bicep' = {
         publicAccess: 'Container'
       }
     ]
-  }
-}
-
-module cosmos 'core/database/cosmos-mongo-db-vcore.bicep' = {
-  name: 'cosmos-mongo'
-  scope: resourceGroup
-  params: {
-    accountName: !empty(cosmosAccountName) ? cosmosAccountName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-    administratorLogin: 'admin${resourceToken}'
-    skuName: mongoDbSkuName
-    location: location
-    tags: tags
   }
 }
 
@@ -188,6 +180,26 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
+module search 'core/search/search-services.bicep' = {
+  name: 'search'
+  scope: resourceGroup
+  params: {
+    name: !empty(searchServiceName) ? searchServiceName : '${abbrs.searchSearchServices}-${resourceToken}'
+    location: location
+    tags: tags
+    disableLocalAuth: true
+    authOptions: {
+      aadOrApiKey: {
+        aadAuthFailureMode: 'http401WithBearerChallenge'
+      }
+    }
+    sku: {
+      name: searchServiceSkuName
+    }
+    semanticSearch: 'free'
+  }
+}
+
 // Managed identity roles assignation
 // ---------------------------------------------------------------------------
 
@@ -214,6 +226,28 @@ module storageRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment)
   }
 }
 
+module searchIndexContribRoleUser 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'search-index-contrib-role-user'
+  params: {
+    principalId: principalId
+    // Search Index Data Contributor
+    roleDefinitionId: '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
+    principalType: 'ServicePrincipal'
+  }
+}
+
+module searchContribRoleIndexerUser 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'search-contrib-role-user'
+  params: {
+    principalId: principalId
+    // Search Service Contributor
+    roleDefinitionId: '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 // System roles
 module openAiRoleApi 'core/security/role.bicep' = {
   scope: resourceGroup
@@ -237,6 +271,28 @@ module storageRoleApi 'core/security/role.bicep' = {
   }
 }
 
+module searchIndexContribRoleApi 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'search-index-contrib-role-api'
+  params: {
+    principalId: api.outputs.identityPrincipalId
+    // Search Index Data Contributor
+    roleDefinitionId: '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
+    principalType: 'ServicePrincipal'
+  }
+}
+
+module searchContribRoleIndexerApi 'core/security/role.bicep' = {
+  scope: resourceGroup
+  name: 'search-contrib-role-api'
+  params: {
+    principalId: api.outputs.identityPrincipalId
+    // Search Service Contributor
+    roleDefinitionId: '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
+    principalType: 'ServicePrincipal'
+  }
+}
+
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
@@ -250,7 +306,7 @@ output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
 output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
 output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
-output AZURE_COSMOSDB_CONNECTION_STRING string = cosmos.outputs.connectionString
+output AZURE_AISEARCH_ENDPOINT string = searchUrl
 
 output API_URL string = api.outputs.uri
 output WEBAPP_URL string = webapp.outputs.uri

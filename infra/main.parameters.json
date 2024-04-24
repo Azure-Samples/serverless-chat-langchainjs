@@ -32,8 +32,8 @@
     "webappLocation": {
       "value": "${AZURE_WEBAPP_LOCATION=eastus2}"
     },
-    "mongoDbSkuName": {
-      "value": "${AZURE_MONGODB_SKU=Free}"
+    "searchServiceSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=standard}"
     },
     "isContinuousDeployment": {
       "value": "${CI=false}"
