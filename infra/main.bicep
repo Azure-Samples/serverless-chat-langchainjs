@@ -184,7 +184,7 @@ module search 'core/search/search-services.bicep' = {
   name: 'search'
   scope: resourceGroup
   params: {
-    name: !empty(searchServiceName) ? searchServiceName : '${abbrs.searchSearchServices}-${resourceToken}'
+    name: !empty(searchServiceName) ? searchServiceName : '${abbrs.searchSearchServices}${resourceToken}'
     location: location
     tags: tags
     disableLocalAuth: true
@@ -233,7 +233,7 @@ module searchIndexContribRoleUser 'core/security/role.bicep' = {
     principalId: principalId
     // Search Index Data Contributor
     roleDefinitionId: '8ebe5a00-799e-43f5-93ac-243d3dce84a7'
-    principalType: 'ServicePrincipal'
+    principalType: 'User'
   }
 }
 
@@ -244,7 +244,7 @@ module searchContribRoleIndexerUser 'core/security/role.bicep' = {
     principalId: principalId
     // Search Service Contributor
     roleDefinitionId: '7ca78c08-252a-4471-8644-bb5ff32d4ba0'
-    principalType: 'ServicePrincipal'
+    principalType: 'User'
   }
 }
 
