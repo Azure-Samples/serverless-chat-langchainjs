@@ -188,11 +188,7 @@ module search 'core/search/search-services.bicep' = {
     location: location
     tags: tags
     disableLocalAuth: true
-    authOptions: {
-      aadOrApiKey: {
-        aadAuthFailureMode: 'http401WithBearerChallenge'
-      }
-    }
+    authOptions: null
     sku: {
       name: searchServiceSkuName
     }
