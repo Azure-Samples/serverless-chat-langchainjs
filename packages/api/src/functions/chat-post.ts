@@ -76,7 +76,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
         ['system', systemPrompt],
         ['human', '{input}'],
       ]),
-      documentPrompt: PromptTemplate.fromTemplate('{filename}: {page_content}\n'),
+      documentPrompt: PromptTemplate.fromTemplate('{source}: {page_content}\n'),
     });
 
     // Create the chain to retrieve the documents from the database
