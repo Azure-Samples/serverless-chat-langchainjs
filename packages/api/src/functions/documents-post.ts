@@ -2,7 +2,7 @@ import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/fu
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
+import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
@@ -45,9 +45,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     if (azureOpenAiEndpoint) {
       const credentials = getCredentials();
       const embeddings = new AzureOpenAIEmbeddings({ credentials });
-      const store = await AzureCosmosDBVectorStore.fromDocuments(documents, embeddings, {});
-      await store.createIndex();
-      await store.close();
+      await AzureAISearchVectorStore.fromDocuments(documents, embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
