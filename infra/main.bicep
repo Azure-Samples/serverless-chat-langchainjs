@@ -135,11 +135,10 @@ module storage './core/storage/storage-account.bicep' = {
     location: location
     tags: tags
     allowBlobPublicAccess: false
-    allowSharedKeyAccess: false
     containers: [
       {
         name: blobContainerName
-        publicAccess: 'Container'
+        publicAccess: 'None'
       }
     ]
   }
@@ -194,7 +193,6 @@ module search 'core/search/search-services.bicep' = {
     sku: {
       name: searchServiceSkuName
     }
-    semanticSearch: 'free'
   }
 }
 
