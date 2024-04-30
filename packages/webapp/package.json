@@ -14,11 +14,14 @@
   "author": "Microsoft",
   "license": "MIT",
   "dependencies": {
+    "@microsoft/ai-chat-protocol": "^1.0.0-alpha.20240418.1",
     "lit": "^3.0.0"
   },
   "devDependencies": {
     "lit-analyzer": "^2.0.1",
     "vite": "^5.0.12"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
