@@ -18,11 +18,11 @@ import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../con
 import { ChatRequest, ChatResponseChunk } from '../models';
 import { getCredentials } from '../security';
 
-const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Answer only in plain text format.
+const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Format the answer in plain text.
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.
 If the user question is not in English, answer in the language used in the question.
 
-Each source has the format "filename: information". ALWAYS reference the source filename for every part used in the answer. Use the format "[filename]" to reference a source, for example: [info1.txt]. List each source separately, for example: [info1.txt][info2.pdf].
+Each source has the format "[filename]: information". ALWAYS reference the source filename for every part used in the answer. Use the format "[filename]" to reference a source, for example: [info1.txt]. List each source separately, for example: [info1.txt][info2.pdf].
 
 Generate 3 very brief follow-up questions that the user would likely ask next.
 Enclose the follow-up questions in double angle brackets. Example:
@@ -59,13 +59,20 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
       const credentials = getCredentials();
       // Initialize models and vector database
       embeddings = new AzureOpenAIEmbeddings({ credentials });
-      model = new AzureChatOpenAI({ credentials });
+      model = new AzureChatOpenAI({
+        // Controls randomness. 0 = deterministic, 1 = maximum randomness
+        temperature: 0.7,
+        credentials,
+      });
       store = new AzureAISearchVectorStore(embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
       embeddings = new OllamaEmbeddings({ model: ollamaEmbeddingsModel });
-      model = new ChatOllama({ model: ollamaChatModel });
+      model = new ChatOllama({
+        temperature: 0.7,
+        model: ollamaChatModel,
+      });
       store = await FaissStore.load(faissStoreFolder, embeddings);
     }
 
@@ -76,12 +83,12 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
         ['system', systemPrompt],
         ['human', '{input}'],
       ]),
-      documentPrompt: PromptTemplate.fromTemplate('{source}: {page_content}\n'),
+      documentPrompt: PromptTemplate.fromTemplate('[{source}]: {page_content}\n'),
     });
 
     // Create the chain to retrieve the documents from the database
     const chain = await createRetrievalChain({
-      retriever: store.asRetriever(),
+      retriever: store.asRetriever(3),
       combineDocsChain,
     });
 
