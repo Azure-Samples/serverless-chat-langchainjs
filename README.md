@@ -165,6 +165,10 @@ Note that the documents are uploaded automatically when deploying the sample to 
   - Your Azure account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [Role Based Access Control Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview), [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner). If you don't have subscription-level permissions, you must be granted [RBAC](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) for an existing resource group and [deploy to that existing group](docs/deploy_existing.md#resource-group).
   - Your Azure account also needs `Microsoft.Resources/deployments/write` permissions on the subscription level.
 
+#### Cost estimation
+
+See the [cost estimation](./docs/cost.md) details for running this sample on Azure.
+
 #### Deploy the sample
 
 1. Open a terminal and navigate to the root of the project.
