@@ -6,19 +6,22 @@ import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/fu
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
 import { data, notFound } from '../http-response';
+import { getCredentials } from '../security';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const storageUrl = process.env.AZURE_STORAGE_URL;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const { fileName } = request.params;
 
   try {
     let fileData: Uint8Array;
 
-    if (connectionString && containerName) {
+    if (storageUrl && containerName) {
       // Retrieve the file from Azure Blob Storage
       context.log(`Reading blob from: "${containerName}/${fileName}"`);
-      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+
+      const credentials = getCredentials();
+      const blobServiceClient = new BlobServiceClient(storageUrl, credentials);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const response = await containerClient.getBlobClient(fileName).download();
 

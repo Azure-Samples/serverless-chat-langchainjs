@@ -10,12 +10,13 @@ import { ChatOllama } from '@langchain/community/chat_models/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
-import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
+import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
 import { ChatRequest, ChatResponseChunk } from '../models';
+import { getCredentials } from '../security';
 
 const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Answer only in plain text format.
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.
@@ -55,10 +56,11 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     let store: VectorStore;
 
     if (azureOpenAiEndpoint) {
+      const credentials = getCredentials();
       // Initialize models and vector database
-      embeddings = new AzureOpenAIEmbeddings();
-      model = new AzureChatOpenAI();
-      store = new AzureCosmosDBVectorStore(embeddings, {});
+      embeddings = new AzureOpenAIEmbeddings({ credentials });
+      model = new AzureChatOpenAI({ credentials });
+      store = new AzureAISearchVectorStore(embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
@@ -74,7 +76,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
         ['system', systemPrompt],
         ['human', '{input}'],
       ]),
-      documentPrompt: PromptTemplate.fromTemplate('{filename}: {page_content}\n'),
+      documentPrompt: PromptTemplate.fromTemplate('{source}: {page_content}\n'),
     });
 
     // Create the chain to retrieve the documents from the database

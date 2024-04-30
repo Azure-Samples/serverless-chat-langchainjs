@@ -11,14 +11,11 @@
     "location": {
       "value": "${AZURE_LOCATION}"
     },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
     "openAiLocation": {
       "value": "${AZURE_OPENAI_LOCATION=eastus2}"
-    },
-    "openAiUrl": {
-      "value": "${OPENAI_URL}"
-    },
-    "openAiKey": {
-      "value": "${OPENAI_KEY}"
     },
     "chatModelName": {
       "value": "${AZURE_OPENAI_API_MODEL=gpt-35-turbo}"
@@ -35,8 +32,11 @@
     "webappLocation": {
       "value": "${AZURE_WEBAPP_LOCATION=eastus2}"
     },
-    "mongoDbSkuName": {
-      "value": "${AZURE_MONGODB_SKU=Free}"
+    "searchServiceSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=basic}"
+    },
+    "isContinuousDeployment": {
+      "value": "${CI=false}"
     }
   }
 }

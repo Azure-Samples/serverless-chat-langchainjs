@@ -2,16 +2,17 @@ import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/fu
 import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { AzureCosmosDBVectorStore } from '@langchain/community/vectorstores/azure_cosmosdb';
+import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
+import { getCredentials } from '../security';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+  const storageUrl = process.env.AZURE_STORAGE_URL;
   const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME;
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
@@ -31,7 +32,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       splitPages: false,
     });
     const rawDocument = await loader.load();
-    rawDocument[0].metadata.filename = filename;
+    rawDocument[0].metadata.source = filename;
 
     // Split the text into smaller chunks
     const splitter = new RecursiveCharacterTextSplitter({
@@ -42,9 +43,9 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
 
     // Generate embeddings and save in database
     if (azureOpenAiEndpoint) {
-      const store = await AzureCosmosDBVectorStore.fromDocuments(documents, new AzureOpenAIEmbeddings(), {});
-      await store.createIndex();
-      await store.close();
+      const credentials = getCredentials();
+      const embeddings = new AzureOpenAIEmbeddings({ credentials });
+      await AzureAISearchVectorStore.fromDocuments(documents, embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
@@ -53,10 +54,11 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       await store.save(faissStoreFolder);
     }
 
-    if (connectionString && containerName) {
+    if (storageUrl && containerName) {
       // Upload the PDF file to Azure Blob Storage
       context.log(`Uploading file to blob storage: "${containerName}/${filename}"`);
-      const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+      const credentials = getCredentials();
+      const blobServiceClient = new BlobServiceClient(storageUrl, credentials);
       const containerClient = blobServiceClient.getContainerClient(containerName);
       const blockBlobClient = containerClient.getBlockBlobClient(filename);
       const buffer = await file.arrayBuffer();

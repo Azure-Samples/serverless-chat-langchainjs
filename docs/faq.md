@@ -7,7 +7,7 @@ Retrieval-Augmented Generation (RAG) is a method used in artificial intelligence
 
 At its core, RAG involves two main components:
 
-- **Retriever**: Think "_like a search engine_", finding relevant information from a knowledgebase, usually a vector database. In this sample, we're using Azure CosmosDB for MongoDB vCore as our vector database.
+- **Retriever**: Think "_like a search engine_", finding relevant information from a knowledgebase, usually a vector database. In this sample, we're using Azure AI Search as our vector database.
 
 - **Generator**: Acts like a writer, taking the prompt and information retrieved to create a response. We're using here a Large Language Model (LLM) for this task.
 

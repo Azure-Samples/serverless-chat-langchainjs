@@ -15,14 +15,15 @@
   "license": "MIT",
   "dependencies": {
     "@azure/functions": "^4.0.0",
+    "@azure/identity": "^4.1.0",
+    "@azure/search-documents": "^12.0.0",
     "@azure/storage-blob": "^12.17.0",
-    "@langchain/azure-openai": "^0.0.7",
-    "@langchain/community": "^0.0.48",
-    "@langchain/core": "^0.1.51",
+    "@langchain/azure-openai": "^0.0.8",
+    "@langchain/community": "^0.0.53",
+    "@langchain/core": "^0.1.61",
     "dotenv": "^16.4.5",
     "faiss-node": "^0.5.1",
-    "langchain": "^0.1.31",
-    "mongodb": "^6.5.0",
+    "langchain": "^0.1.36",
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {

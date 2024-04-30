@@ -35,7 +35,7 @@
     "azure",
     "azure-functions",
     "azure-static-web-apps",
-    "azure-cosmos-db",
+    "azure-ai-search",
     "mongodb"
   ],
   "author": "Microsoft",
