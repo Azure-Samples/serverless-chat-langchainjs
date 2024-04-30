@@ -21,7 +21,7 @@
       "value": "${AZURE_OPENAI_API_MODEL=gpt-35-turbo}"
     },
     "chatModelVersion": {
-      "value": "${AZURE_OPENAI_API_MODEL_VERSION=0125}"
+      "value": "${AZURE_OPENAI_API_MODEL_VERSION=0613}"
     },
     "embeddingsModelName": {
       "value": "${AZURE_OPENAI_API_EMBEDDINGS_MODEL=text-embedding-ada-002}"
