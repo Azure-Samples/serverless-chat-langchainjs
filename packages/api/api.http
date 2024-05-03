@@ -21,7 +21,7 @@ Content-Type: application/pdf
 GET {{api_host}}/api/documents/support.pdf
 
 ### Chat with the bot
-POST {{api_host}}/api/chat
+POST {{api_host}}/api/chat/stream
 Content-Type: application/json
 
 {
@@ -31,5 +31,4 @@ Content-Type: application/json
       "role": "user"
     }
   ],
-  "stream": true
 }

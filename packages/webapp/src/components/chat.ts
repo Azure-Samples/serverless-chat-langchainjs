@@ -3,8 +3,8 @@ import { map } from 'lit/directives/map.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { type ChatRequestOptions, type ChatResponse, type ChatMessage, type ChatResponseChunk } from '../models.js';
-import { getCitationUrl, getCompletion } from '../api.js';
+import { AIChatCompletionDelta, AIChatMessage } from '@microsoft/ai-chat-protocol';
+import { type ChatRequestOptions, getCitationUrl, getCompletion } from '../api.js';
 import { type ParsedMessage, parseMessageIntoHtml } from '../message-parser.js';
 import sendSvg from '../../assets/send.svg?raw';
 import questionSvg from '../../assets/question.svg?raw';
@@ -35,7 +35,6 @@ export type ChatComponentOptions = ChatRequestOptions & {
 };
 
 export const defaultOptions: ChatComponentOptions = {
-  stream: true,
   chunkIntervalMs: 30,
   apiUrl: '',
   enablePromptSuggestions: true,
@@ -78,7 +77,7 @@ export class ChatComponent extends LitElement {
   options: ChatComponentOptions = defaultOptions;
 
   @property() question = '';
-  @property({ type: Array }) messages: ChatMessage[] = [];
+  @property({ type: Array }) messages: AIChatMessage[] = [];
   @state() protected hasError = false;
   @state() protected isLoading = false;
   @state() protected isStreaming = false;
@@ -122,26 +121,20 @@ export class ChatComponent extends LitElement {
     this.isLoading = true;
     this.scrollToLastMessage();
     try {
-      const response = await getCompletion({ ...this.options, messages: this.messages });
-      if (this.options.stream) {
-        const chunks = response as AsyncGenerator<ChatResponseChunk>;
-        const { messages } = this;
-        const message: ChatMessage = {
-          content: '',
-          role: 'assistant',
-        };
-        for await (const chunk of chunks) {
-          if (chunk.choices[0].delta.content) {
-            this.isStreaming = true;
-            message.content += chunk.choices[0].delta.content;
-            this.messages = [...messages, message];
-            this.scrollToLastMessage();
-          }
+      const response = getCompletion({ ...this.options, messages: this.messages });
+      const chunks = response as AsyncGenerator<AIChatCompletionDelta>;
+      const { messages } = this;
+      const message: AIChatMessage = {
+        content: '',
+        role: 'assistant',
+      };
+      for await (const chunk of chunks) {
+        if (chunk.delta.content) {
+          this.isStreaming = true;
+          message.content += chunk.delta.content;
+          this.messages = [...messages, message];
+          this.scrollToLastMessage();
         }
-      } else {
-        const chatResponse = response as ChatResponse;
-        this.messages = [...this.messages, chatResponse.choices[0].message];
-        this.scrollToLastMessage();
       }
 
       this.isLoading = false;

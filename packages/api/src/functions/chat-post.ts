@@ -1,6 +1,7 @@
 import { Readable } from 'node:stream';
-import { Document } from '@langchain/core/documents';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
+import { AIChatCompletionRequest, AIChatCompletionDelta } from '@microsoft/ai-chat-protocol';
+import { Document } from '@langchain/core/documents';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
 import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
@@ -15,7 +16,6 @@ import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
-import { ChatRequest, ChatResponseChunk } from '../models';
 import { getCredentials } from '../security';
 
 const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Format the answer in plain text.
@@ -40,15 +40,11 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
 
   try {
-    const requestBody = (await request.json()) as ChatRequest;
-    const { messages, stream } = requestBody;
+    const requestBody = (await request.json()) as AIChatCompletionRequest;
+    const { messages } = requestBody;
 
     if (!messages || messages.length === 0 || !messages.at(-1)?.content) {
       return badRequest('Invalid or missing messages in the request body');
-    }
-
-    if (!stream) {
-      return badRequest('Only stream mode is supported');
     }
 
     let embeddings: Embeddings;
@@ -119,16 +115,11 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
     for await (const chunk of chunks) {
       if (!chunk.answer) continue;
 
-      const responseChunk: ChatResponseChunk = {
-        choices: [
-          {
-            index: 0,
-            delta: {
-              content: chunk.answer,
-              role: 'assistant',
-            },
-          },
-        ],
+      const responseChunk: AIChatCompletionDelta = {
+        delta: {
+          content: chunk.answer,
+          role: 'assistant',
+        },
       };
 
       // Format response chunks in Newline delimited JSON
@@ -146,7 +137,7 @@ function createStream(chunks: AsyncIterable<{ context: Document[]; answer: strin
 
 app.setup({ enableHttpStream: true });
 app.http('chat-post', {
-  route: 'chat',
+  route: 'chat/stream',
   methods: ['POST'],
   authLevel: 'anonymous',
   handler: postChat,

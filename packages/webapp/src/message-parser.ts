@@ -1,16 +1,16 @@
 import { type HTMLTemplateResult, html, nothing } from 'lit';
-import { type ChatMessage, type ChatMessageContext } from './models.js';
+import { AIChatMessage } from '@microsoft/ai-chat-protocol';
 
 export type ParsedMessage = {
   html: HTMLTemplateResult;
   citations: string[];
   followupQuestions: string[];
   role: string;
-  context?: ChatMessageContext;
+  context?: Record<string, unknown>;
 };
 
 export function parseMessageIntoHtml(
-  message: ChatMessage,
+  message: AIChatMessage,
   renderCitationReference: (citation: string, index: number) => HTMLTemplateResult,
 ): ParsedMessage {
   if (message.role === 'user') {
