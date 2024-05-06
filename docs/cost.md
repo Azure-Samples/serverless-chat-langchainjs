@@ -1,7 +1,7 @@
 ## Cost estimation
 
 Pricing varies per region and usage, so it isn't possible to predict exact costs for your usage.
-However, you can use the [Azure pricing calculator](https://azure.com/e/a5769032546440dc98285eaba6bd5423) for the resources below to get an estimate.
+However, you can use the [Azure pricing calculator](https://azure.com/e/c504007c9f024699a37f5d947dbb1e79) for the resources below to get an estimate.
 
 - Azure Functions: Consumption plan, Free for the first 1M executions. Pricing per execution and memory used. [Pricing](https://azure.microsoft.com/pricing/details/functions/)
 - Azure Static Web Apps: Free tier, 100GB bandwidth. Pricing per GB served. [Pricing](https://azure.microsoft.com/pricing/details/app-service/static/)
