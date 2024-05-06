@@ -18,10 +18,10 @@
       "value": "${AZURE_OPENAI_LOCATION=eastus2}"
     },
     "chatModelName": {
-      "value": "${AZURE_OPENAI_API_MODEL=gpt-35-turbo}"
+      "value": "${AZURE_OPENAI_API_MODEL=gpt-4}"
     },
     "chatModelVersion": {
-      "value": "${AZURE_OPENAI_API_MODEL_VERSION=0613}"
+      "value": "${AZURE_OPENAI_API_MODEL_VERSION=turbo-2024-04-09}"
     },
     "embeddingsModelName": {
       "value": "${AZURE_OPENAI_API_EMBEDDINGS_MODEL=text-embedding-ada-002}"
