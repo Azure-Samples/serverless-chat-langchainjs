@@ -45,7 +45,7 @@ param webappLocation string // Set in main.parameters.json
 param chatModelName string // Set in main.parameters.json
 param chatDeploymentName string = chatModelName
 param chatModelVersion string // Set in main.parameters.json
-param chatDeploymentCapacity int = 30
+param chatDeploymentCapacity int = 15
 param embeddingsModelName string // Set in main.parameters.json
 param embeddingsModelVersion string // Set in main.parameters.json
 param embeddingsDeploymentName string = embeddingsModelName
