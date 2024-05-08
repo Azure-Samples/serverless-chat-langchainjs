@@ -92,8 +92,9 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     const responseStream = await chain.stream({
       input: lastUserMessage,
     });
+    const jsonStream = Readable.from(createJsonStream(responseStream));
 
-    return data(createStream(responseStream), {
+    return data(jsonStream, {
       'Content-Type': 'application/x-ndjson',
       'Transfer-Encoding': 'chunked',
     });
@@ -106,33 +107,21 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
 }
 
 // Transform the response chunks into a JSON stream
-function createStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
-  const buffer = new Readable({
-    read() {},
-  });
+async function* createJsonStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
+  for await (const chunk of chunks) {
+    if (!chunk.answer) continue;
 
-  const stream = async () => {
-    for await (const chunk of chunks) {
-      if (!chunk.answer) continue;
+    const responseChunk: AIChatCompletionDelta = {
+      delta: {
+        content: chunk.answer,
+        role: 'assistant',
+      },
+    };
 
-      const responseChunk: AIChatCompletionDelta = {
-        delta: {
-          content: chunk.answer,
-          role: 'assistant',
-        },
-      };
-
-      // Format response chunks in Newline delimited JSON
-      // see https://github.com/ndjson/ndjson-spec
-      buffer.push(JSON.stringify(responseChunk) + '\n');
-    }
-
-    buffer.push(null);
-  };
-
-  stream();
-
-  return buffer;
+    // Format response chunks in Newline delimited JSON
+    // see https://github.com/ndjson/ndjson-spec
+    yield JSON.stringify(responseChunk) + '\n';
+  }
 }
 
 app.setup({ enableHttpStream: true });
