@@ -10,9 +10,7 @@ export type ChatRequestOptions = {
 
 export async function* getCompletion(options: ChatRequestOptions) {
   const apiUrl = options.apiUrl || apiBaseUrl;
-  const client = new AIChatProtocolClient(`${apiUrl}/api/chat`, {
-    allowInsecureConnection: true,
-  });
+  const client = new AIChatProtocolClient(`${apiUrl}/api/chat`);
   const result = await client.getStreamedCompletion(options.messages);
 
   for await (const response of result) {
