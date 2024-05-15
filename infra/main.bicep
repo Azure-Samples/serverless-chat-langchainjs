@@ -30,6 +30,7 @@ param searchServiceSkuName string
 param openAiLocation string // Set in main.parameters.json
 param openAiSkuName string = 'S0'
 param openAiUrl string = ''
+param openAiApiVersion string // Set in main.parameters.json
 
 // Location is not relevant here as it's only for the built-in api
 // which is not used here. Static Web App is a global service otherwise
@@ -100,7 +101,8 @@ module api './core/host/functions.bicep' = {
     storageAccountName: storage.outputs.name
     managedIdentity: true
     appSettings: {
-      AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
+      AZURE_OPENAI_API_INSTANCE_NAME: openAi.outputs.name
+      AZURE_OPENAI_API_VERSION: openAiApiVersion
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
       AZURE_AISEARCH_ENDPOINT: searchUrl
@@ -294,12 +296,10 @@ output AZURE_TENANT_ID string = tenant().tenantId
 output AZURE_RESOURCE_GROUP string = resourceGroup.name
 
 output AZURE_OPENAI_API_ENDPOINT string = finalOpenAiUrl
+output AZURE_OPENAI_API_INSTANCE_NAME string = openAi.outputs.name
+output AZURE_OPENAI_API_VERSION string = openAiApiVersion
 output AZURE_OPENAI_API_DEPLOYMENT_NAME string = chatDeploymentName
-output AZURE_OPENAI_API_MODEL string = chatModelName
-output AZURE_OPENAI_API_MODEL_VERSION string = chatModelVersion
 output AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME string = embeddingsDeploymentName
-output AZURE_OPENAI_API_EMBEDDINGS_MODEL string = embeddingsModelName
-output AZURE_OPENAI_API_EMBEDDINGS_MODEL_VERSION string = embeddingsModelVersion
 output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 output AZURE_AISEARCH_ENDPOINT string = searchUrl

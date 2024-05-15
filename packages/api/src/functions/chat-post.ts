@@ -2,7 +2,7 @@ import { Readable } from 'node:stream';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
 import { AIChatCompletionRequest, AIChatCompletionDelta } from '@microsoft/ai-chat-protocol';
 import { Document } from '@langchain/core/documents';
-import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/azure-openai';
+import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/openai';
 import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { VectorStore } from '@langchain/core/vectorstores';
@@ -16,7 +16,7 @@ import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
-import { getCredentials } from '../security';
+import { getAzureOpenAiTokenProvider, getCredentials } from '../security';
 
 const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Answer only plain text, DO NOT use Markdown.
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.
@@ -53,12 +53,14 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
 
     if (azureOpenAiEndpoint) {
       const credentials = getCredentials();
+      const azureADTokenProvider = getAzureOpenAiTokenProvider();
+
       // Initialize models and vector database
-      embeddings = new AzureOpenAIEmbeddings({ credentials });
+      embeddings = new AzureOpenAIEmbeddings({ azureADTokenProvider });
       model = new AzureChatOpenAI({
         // Controls randomness. 0 = deterministic, 1 = maximum randomness
         temperature: 0.7,
-        credentials,
+        azureADTokenProvider,
       });
       store = new AzureAISearchVectorStore(embeddings, { credentials });
     } else {

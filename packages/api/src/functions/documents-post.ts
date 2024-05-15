@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
-import { AzureOpenAIEmbeddings } from '@langchain/azure-openai';
+import { AzureOpenAIEmbeddings } from '@langchain/openai';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
@@ -9,7 +9,7 @@ import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { badRequest, serviceUnavailable, ok } from '../http-response';
 import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
-import { getCredentials } from '../security';
+import { getAzureOpenAiTokenProvider, getCredentials } from '../security';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;
@@ -44,7 +44,10 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     // Generate embeddings and save in database
     if (azureOpenAiEndpoint) {
       const credentials = getCredentials();
-      const embeddings = new AzureOpenAIEmbeddings({ credentials });
+      const azureADTokenProvider = getAzureOpenAiTokenProvider();
+
+      // Initialize embeddings model and vector database
+      const embeddings = new AzureOpenAIEmbeddings({ azureADTokenProvider });
       await AzureAISearchVectorStore.fromDocuments(documents, embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
