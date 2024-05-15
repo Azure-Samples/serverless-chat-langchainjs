@@ -27,9 +27,7 @@ Building AI applications can be complex and time-consuming, but using LangChain.
 
 We provide sample data to make this sample ready to try, but feel free to replace it with your own. We use a fictitious company called _Contoso Real Estate_, and the experience allows its customers to ask support questions about the usage of its products. The sample data includes a set of documents that describes its terms of service, privacy policy and a support guide.
 
-<div align="center">
-  <img src="./images/architecture.drawio.png" alt="Application architecture" width="640px" />
-</div>
+![Application architecture](./images/architecture.drawio.png)
 
 This application is made from multiple components:
 
@@ -58,9 +56,7 @@ You can run this project directly in your browser by using GitHub Codespaces, wh
 
 1. [**Fork**](https://github.com/Azure-Samples/serverless-chat-langchainjs/fork) the project to create your own copy of this repository.
 2. On your forked repository, select the **Code** button, then the **Codespaces** tab, and clink on the button **Create codespace on main**.
-<div align="center">
-  <img src="./images/codespaces.png" alt="Screenshot showing how to create a new codespace" width="400px" />
-</div>
+   ![Screenshot showing how to create a new codespace](./images/codespaces.png)
 3. Wait for the Codespace to be created, it should take a few minutes.
 
 ## Deploy on Azure
@@ -73,9 +69,7 @@ You can run this project directly in your browser by using GitHub Codespaces, wh
 
 The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
 
-<div align="center">
-  <img src="./images/azd-up.png" alt="Screenshot of the azd up command result" width="600px" />
-</div>
+![Screenshot of the azd up command result](./images/azd-up.png)
 
 You can now open the web app in your browser and start chatting with the bot.
 
