@@ -31,7 +31,7 @@ async function uploadDocuments(apiUrl, dataFolder) {
     }
     /* eslint-enable no-await-in-loop */
   } catch (error) {
-    console.error(error);
+    console.error(`Could not upload documents: ${error.message}`);
   }
 }
 

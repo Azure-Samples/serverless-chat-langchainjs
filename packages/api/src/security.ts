@@ -1,4 +1,6 @@
-import { DefaultAzureCredential } from '@azure/identity';
+import { DefaultAzureCredential, getBearerTokenProvider } from '@azure/identity';
+
+const azureOpenAiScope = 'https://cognitiveservices.azure.com/.default';
 
 let credentials: DefaultAzureCredential | undefined;
 
@@ -8,4 +10,8 @@ export function getCredentials(): DefaultAzureCredential {
   // and managed identity when deployed on Azure.
   credentials ||= new DefaultAzureCredential();
   return credentials;
+}
+
+export function getAzureOpenAiTokenProvider() {
+  return getBearerTokenProvider(getCredentials(), azureOpenAiScope);
 }
