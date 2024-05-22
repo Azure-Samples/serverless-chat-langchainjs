@@ -171,6 +171,18 @@ See the [cost estimation](./docs/cost.md) details for running this sample on Azu
 
 #### Deploy the sample
 
+Before deploying the application to Azure, it's essential to upload the PDF documents to Azure Blob Storage to ensure the application has the necessary data to function correctly in chat. This step should be executed after provisioning Azure services and before deploying the application with `azd up` command.
+
+To upload documents, run the following command from the root of the project:
+
+```bash
+npm run upload:docs
+```
+
+This command will upload the documents from the `./data` folder to the Azure Blob Storage account created during the deployment.
+
+To deploy the application to Azure, follow these steps:
+
 1. Open a terminal and navigate to the root of the project.
 2. Authenticate with Azure by running `azd auth login`.
 3. Run `azd up` to deploy the application to Azure. This will provision Azure resources, deploy this sample, and build the search index based on the files found in the `./data` folder.
@@ -193,18 +205,6 @@ To clean up all the Azure resources created by this sample:
 2. When asked if you are sure you want to continue, enter `y`
 
 The resource group and all the resources will be deleted.
-
-## Uploading Documents to Azure Blob Storage
-
-Before deploying the application to Azure, it's essential to upload the PDF documents to Azure Blob Storage to ensure the application has the necessary data to function correctly. This step should be executed after provisioning Azure services and before deploying the application with `azd up`.
-
-To upload documents, run the following command:
-
-```bash
-npm run upload:docs
-```
-
-This command is intended for local development and assumes the API is running locally on `http://localhost:7071`. For more details on the upload process, check the `scripts/upload-documents.js` script.
 
 ## Resources
 
