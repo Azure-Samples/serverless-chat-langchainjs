@@ -194,6 +194,18 @@ To clean up all the Azure resources created by this sample:
 
 The resource group and all the resources will be deleted.
 
+## Uploading Documents to Azure Blob Storage
+
+Before deploying the application to Azure, it's essential to upload the PDF documents to Azure Blob Storage to ensure the application has the necessary data to function correctly. This step should be executed after provisioning Azure services and before deploying the application with `azd up`.
+
+To upload documents, run the following command:
+
+```bash
+npm run upload:docs
+```
+
+This command is intended for local development and assumes the API is running locally on `http://localhost:7071`. For more details on the upload process, check the `scripts/upload-documents.js` script.
+
 ## Resources
 
 Here are some resources to learn more about the technologies used in this sample:
