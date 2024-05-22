@@ -26,12 +26,17 @@ async function uploadDocuments(apiUrl, dataFolder) {
         });
 
         const responseData = await response.json();
-        console.log(responseData);
+        if (response.ok) {
+          console.log(responseData);
+        } else {
+          throw new Error(responseData.error);
+        }
       }
     }
     /* eslint-enable no-await-in-loop */
   } catch (error) {
     console.error(`Could not upload documents: ${error.message}`);
+    process.exitCode = -1;
   }
 }
 
