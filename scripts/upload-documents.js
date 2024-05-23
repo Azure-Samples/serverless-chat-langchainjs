@@ -10,7 +10,9 @@ import path from 'node:path';
 // ```
 async function uploadDocuments(apiUrl, dataFolder) {
   try {
+    const uploadUrl = `${apiUrl}/api/documents`;
     const files = await fs.readdir(dataFolder);
+    console.log(`Uploading documents to: ${uploadUrl}`);
 
     /* eslint-disable no-await-in-loop */
     for (const file of files) {
@@ -20,14 +22,14 @@ async function uploadDocuments(apiUrl, dataFolder) {
         const formData = new FormData();
         formData.append('file', new File(blobParts, file));
 
-        const response = await fetch(`${apiUrl}/api/documents`, {
+        const response = await fetch(uploadUrl, {
           method: 'post',
           body: formData,
         });
 
         const responseData = await response.json();
         if (response.ok) {
-          console.log(responseData);
+          console.log(`${file}: ${responseData.message}`);
         } else {
           throw new Error(responseData.error);
         }
