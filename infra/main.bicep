@@ -102,6 +102,7 @@ module api './core/host/functions.bicep' = {
     managedIdentity: true
     appSettings: {
       AZURE_OPENAI_API_INSTANCE_NAME: openAi.outputs.name
+      AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
       AZURE_OPENAI_API_VERSION: openAiApiVersion
       AZURE_OPENAI_API_DEPLOYMENT_NAME: chatDeploymentName
       AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME: embeddingsDeploymentName
