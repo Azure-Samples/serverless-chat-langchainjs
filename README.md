@@ -1,3 +1,24 @@
+---
+page_type: sample
+languages:
+- azdeveloper
+- typescript
+- javascript
+- html
+- bicep
+products:
+- azure
+- azure-openai
+- azure-functions
+- ai-services
+- static-web-apps
+- azure-blob-storage
+urlFragment: serverless-chat-langchainjs
+name: Serverless AI Chat with RAG using LangChain.js
+description: Using LangChain.js and Azure with TypeScript, build your own serverless AI Chat with Retrieval-Augmented-Generation.
+---
+<!-- YAML front-matter schema: https://review.learn.microsoft.com/en-us/help/contribute/samples/process/onboarding?branch=main#supported-metadata-fields-for-readmemd -->
+
 <!-- prettier-ignore -->
 <div align="center">
 
