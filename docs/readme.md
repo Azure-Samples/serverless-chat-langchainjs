@@ -84,7 +84,7 @@ Our API is composed of two main endpoints:
 The `/documents` endpoint is used to ingest the documents after the application is deployed by uploading the PDFs, using either `curl` commands or the Node.js script we built (have a look at the `postup` hook in the `azure.yaml` file).
 
 The web app is a simple chat interface that sends the user queries to the `/chat` endpoint and displays the responses.
-We use the [HTTP protocol for AI chat apps](https://github.com/Azure-Samples/ai-chat-app-protocol) to communicate between the web app and the API.
+We use the [HTTP protocol for AI chat apps](https://aka.ms/chatprotocol) to communicate between the web app and the API.
 
 ## Clean up
 
