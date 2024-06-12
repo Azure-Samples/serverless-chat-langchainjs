@@ -83,7 +83,7 @@ Before installing Ollama, please ensure you meet the prerequisites, which includ
 To begin, download the necessary models for this project by running the following commands in your terminal:
 
 ```bash
-ollama pull mistral
+ollama pull mistral:v0.2
 ollama pull all-minilm:l6-v2
 ```
 
@@ -94,7 +94,7 @@ We will use the Mistral 7B model, a powerful language model, and the All-MiniLM 
 After downloading the models, you can verify the proper functioning of the Ollama server by executing the following command:
 
 ```bash
-ollama run mistral
+ollama run mistral:v0.2
 ```
 
 An invite will be displayed in your terminal, allowing you to directly communicate with the AI model in a chat-like format.

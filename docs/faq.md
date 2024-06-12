@@ -94,7 +94,7 @@ To change the local models used by Ollama, you can edit the file `packages/api/s
 
 ```typescript
 export const ollamaEmbeddingsModel = 'all-minilm:l6-v2';
-export const ollamaChatModel = 'mistral';
+export const ollamaChatModel = 'mistral:v0.2';
 ```
 
 You can see the complete list of available models at https://ollama.ai/models.

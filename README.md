@@ -104,7 +104,7 @@ There are multiple ways to run this sample: locally using Ollama or Azure OpenAI
 If you have a machine with enough resources, you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
 
 ```bash
-ollama pull mistral
+ollama pull mistral:v0.2
 ollama pull all-minilm:l6-v2
 ```
 
