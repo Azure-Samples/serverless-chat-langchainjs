@@ -1,4 +1,5 @@
-import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
+import fs from 'node:fs/promises';
+import { type HttpRequest, type HttpResponseInit, type InvocationContext, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/openai';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
@@ -53,8 +54,15 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
       const embeddings = new OllamaEmbeddings({ model: ollamaEmbeddingsModel });
-      const store = await FaissStore.fromDocuments(documents, embeddings, {});
-      await store.save(faissStoreFolder);
+      const folderExists = await checkFolderExists(faissStoreFolder);
+      if (folderExists) {
+        const store = await FaissStore.load(faissStoreFolder, embeddings);
+        await store.addDocuments(documents);
+        await store.save(faissStoreFolder);
+      } else {
+        const store = await FaissStore.fromDocuments(documents, embeddings, {});
+        await store.save(faissStoreFolder);
+      }
     }
 
     if (storageUrl && containerName) {
@@ -78,6 +86,15 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     context.error(`Error when processing document-post request: ${error.message}`);
 
     return serviceUnavailable('Service temporarily unavailable. Please try again later.');
+  }
+}
+
+async function checkFolderExists(folderPath: string): Promise<boolean> {
+  try {
+    const stats = await fs.stat(folderPath);
+    return stats.isDirectory();
+  } catch {
+    return false;
   }
 }
 
