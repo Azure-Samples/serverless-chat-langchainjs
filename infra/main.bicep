@@ -147,6 +147,19 @@ module storage './core/storage/storage-account.bicep' = {
   }
 }
 
+// Monitor application with Azure Monitor
+module monitoring './core/monitor/monitoring.bicep' = {
+  name: 'monitoring'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
+    applicationInsightsName: '${abbrs.insightsComponents}${resourceToken}'
+    applicationInsightsDashboardName: '${abbrs.portalDashboards}${resourceToken}'
+  }
+}
+
 module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   name: 'openai'
   scope: resourceGroup
