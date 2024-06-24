@@ -99,6 +99,45 @@ You will also need to have [Docker](https://www.docker.com/products/docker-deskt
 
 There are multiple ways to run this sample: locally using Ollama or Azure OpenAI models, or by deploying it to Azure.
 
+### Deploy the sample to Azure
+
+#### Azure prerequisites
+
+- **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free) to get free Azure credits to get started. If you're a student, you can also get free credits with [Azure for Students](https://aka.ms/azureforstudents).
+- **Azure subscription with access enabled for the Azure OpenAI service**. You can request access with [this form](https://aka.ms/oaiapply).
+- **Azure account permissions**:
+  - Your Azure account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [Role Based Access Control Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview), [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner). If you don't have subscription-level permissions, you must be granted [RBAC](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) for an existing resource group and [deploy to that existing group](docs/deploy_existing.md#resource-group).
+  - Your Azure account also needs `Microsoft.Resources/deployments/write` permissions on the subscription level.
+
+#### Cost estimation
+
+See the [cost estimation](./docs/cost.md) details for running this sample on Azure.
+
+#### Deploy the sample
+
+1. Open a terminal and navigate to the root of the project.
+2. Authenticate with Azure by running `azd auth login`.
+3. Run `azd up` to deploy the application to Azure. This will provision Azure resources, deploy this sample, and build the search index based on the files found in the `./data` folder.
+   - You will be prompted to select a base location for the resources. If you're unsure of which location to choose, select `eastus2`.
+   - By default, the OpenAI resource will be deployed to `eastus2`. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a short list of locations is accepted. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and may become outdated as availability changes.
+
+The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
+
+<div align="center">
+  <img src="./docs/images/azd-up.png" alt="Screenshot of the azd up command result" width="600px" />
+</div>
+
+You can now open the web app in your browser and start chatting with the bot.
+
+#### Clean up
+
+To clean up all the Azure resources created by this sample:
+
+1. Run `azd down --purge`
+2. When asked if you are sure you want to continue, enter `y`
+
+The resource group and all the resources will be deleted.
+
 ### Run the sample locally with Ollama
 
 If you have a machine with enough resources, you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
@@ -154,45 +193,6 @@ Note that the documents are uploaded automatically when deploying the sample to 
 
 > [!TIP]
 > You can switch back to using Ollama models by simply deleting the `packages/api/.env` file and starting the application again. To regenerate the `.env` file, you can run `azd env get-values > packages/api/.env`.
-
-### Deploy the sample to Azure
-
-#### Azure prerequisites
-
-- **Azure account**. If you're new to Azure, [get an Azure account for free](https://azure.microsoft.com/free) to get free Azure credits to get started. If you're a student, you can also get free credits with [Azure for Students](https://aka.ms/azureforstudents).
-- **Azure subscription with access enabled for the Azure OpenAI service**. You can request access with [this form](https://aka.ms/oaiapply).
-- **Azure account permissions**:
-  - Your Azure account must have `Microsoft.Authorization/roleAssignments/write` permissions, such as [Role Based Access Control Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview), [User Access Administrator](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#user-access-administrator), or [Owner](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#owner). If you don't have subscription-level permissions, you must be granted [RBAC](https://learn.microsoft.com/azure/role-based-access-control/built-in-roles#role-based-access-control-administrator-preview) for an existing resource group and [deploy to that existing group](docs/deploy_existing.md#resource-group).
-  - Your Azure account also needs `Microsoft.Resources/deployments/write` permissions on the subscription level.
-
-#### Cost estimation
-
-See the [cost estimation](./docs/cost.md) details for running this sample on Azure.
-
-#### Deploy the sample
-
-1. Open a terminal and navigate to the root of the project.
-2. Authenticate with Azure by running `azd auth login`.
-3. Run `azd up` to deploy the application to Azure. This will provision Azure resources, deploy this sample, and build the search index based on the files found in the `./data` folder.
-   - You will be prompted to select a base location for the resources. If you're unsure of which location to choose, select `eastus2`.
-   - By default, the OpenAI resource will be deployed to `eastus2`. You can set a different location with `azd env set AZURE_OPENAI_RESOURCE_GROUP_LOCATION <location>`. Currently only a short list of locations is accepted. That location list is based on the [OpenAI model availability table](https://learn.microsoft.com/azure/ai-services/openai/concepts/models#standard-deployment-model-availability) and may become outdated as availability changes.
-
-The deployment process will take a few minutes. Once it's done, you'll see the URL of the web app in the terminal.
-
-<div align="center">
-  <img src="./docs/images/azd-up.png" alt="Screenshot of the azd up command result" width="600px" />
-</div>
-
-You can now open the web app in your browser and start chatting with the bot.
-
-#### Clean up
-
-To clean up all the Azure resources created by this sample:
-
-1. Run `azd down --purge`
-2. When asked if you are sure you want to continue, enter `y`
-
-The resource group and all the resources will be deleted.
 
 ## Resources
 
