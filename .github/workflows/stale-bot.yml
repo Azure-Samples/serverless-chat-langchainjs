@@ -19,3 +19,16 @@ jobs:
           close-pr-message: 'This PR was closed because it has been stalled for 7 days with no activity.'
           days-before-issue-stale: 60
           days-before-pr-stale: 60
+
+      - name: Run Microsoft Security DevOps Analysis
+        uses: microsoft/security-devops-action@preview
+        id: msdo
+        continue-on-error: true
+        with:
+          tools: templateanalyzer
+
+      - name: Upload alerts to Security tab
+        if: github.repository_owner == 'Azure-Samples'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}
