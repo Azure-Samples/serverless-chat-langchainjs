@@ -50,6 +50,13 @@ This application is made from multiple components:
 
 We use the [HTTP protocol for AI chat apps](https://aka.ms/chatprotocol) to communicate between the web app and the API.
 
+## Features
+
+- **Serverless Architecture**: Utilizes Azure Functions and Azure Static Web Apps for a fully serverless deployment.
+- **Retrieval-Augmented Generation (RAG)**: Combines the power of Azure AI Search and LangChain.js to provide relevant and accurate responses.
+- **Scalable and Cost-Effective**: Leverages Azure's serverless offerings to provide a scalable and cost-effective solution.
+- **Local Development**: Supports local development using Ollama for testing without any cloud costs.
+
 ## Get started
 
 There are multiple ways to get started with this project.
@@ -217,6 +224,10 @@ You can find answers to frequently asked questions in the [FAQ](./docs/faq.md).
 ## Troubleshooting
 
 If you have any issue when running or deploying this sample, please check the [troubleshooting guide](./docs/troubleshooting.md). If you can't find a solution to your problem, please [open an issue](https://github.com/Azure-Samples/serverless-chat-langchainjs/issues) in this repository.
+
+## Guidance
+
+For more detailed guidance on how to use this sample, please refer to the [tutorial](./docs/tutorial/01-introduction.md).
 
 ## Contributing
 
