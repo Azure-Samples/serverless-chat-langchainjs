@@ -225,7 +225,7 @@ module storageRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment)
   }
 }
 
-module searchIndexContribRoleUser 'core/security/role.bicep' = {
+module searchIndexContribRoleUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
   scope: resourceGroup
   name: 'search-index-contrib-role-user'
   params: {
@@ -236,7 +236,7 @@ module searchIndexContribRoleUser 'core/security/role.bicep' = {
   }
 }
 
-module searchContribRoleIndexerUser 'core/security/role.bicep' = {
+module searchContribRoleIndexerUser 'core/security/role.bicep' = if (!isContinuousDeployment) {
   scope: resourceGroup
   name: 'search-contrib-role-user'
   params: {
