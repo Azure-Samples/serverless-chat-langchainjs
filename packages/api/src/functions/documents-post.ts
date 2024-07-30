@@ -8,9 +8,9 @@ import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
 import { BlobServiceClient } from '@azure/storage-blob';
-import { badRequest, serviceUnavailable, ok } from '../http-response';
-import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
-import { getAzureOpenAiTokenProvider, getCredentials } from '../security';
+import { badRequest, serviceUnavailable, ok } from '../http-response.js';
+import { ollamaEmbeddingsModel, faissStoreFolder } from '../constants.js';
+import { getAzureOpenAiTokenProvider, getCredentials } from '../security.js';
 
 export async function postDocuments(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;
