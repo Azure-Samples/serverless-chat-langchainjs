@@ -20,6 +20,7 @@
     "@azure/storage-blob": "^12.17.0",
     "@langchain/community": "~0.2.1",
     "@langchain/core": "~0.2.0",
+    "@langchain/ollama": "^0.0.2",
     "@langchain/openai": "^0.2.5",
     "@microsoft/ai-chat-protocol": "^1.0.0-alpha.20240418.1",
     "dotenv": "^16.4.5",

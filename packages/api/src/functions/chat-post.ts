@@ -7,7 +7,7 @@ import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { VectorStore } from '@langchain/core/vectorstores';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
-import { ChatOllama } from '@langchain/community/chat_models/ollama';
+import { ChatOllama } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
