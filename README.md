@@ -136,6 +136,10 @@ The deployment process will take a few minutes. Once it's done, you'll see the U
 
 You can now open the web app in your browser and start chatting with the bot.
 
+##### Enhance security
+
+When deploying the sample in an enterprise context, you may want to enforce tighter security restrictions to protect your data and resources. See the [enhance security](./docs/enhance-security.md) guide for more information.
+
 #### Clean up
 
 To clean up all the Azure resources created by this sample:
