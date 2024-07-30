@@ -38,6 +38,9 @@
     "searchServiceSkuName": {
       "value": "${AZURE_SEARCH_SERVICE_SKU=basic}"
     },
+    "useVnet": {
+      "value": "${USE_VNET=false}"
+    },
     "isContinuousDeployment": {
       "value": "${CI=false}"
     }

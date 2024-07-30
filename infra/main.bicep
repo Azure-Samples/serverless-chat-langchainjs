@@ -57,6 +57,9 @@ param blobContainerName string = 'files'
 // Id of the user or app to assign application roles
 param principalId string = ''
 
+// Enable enhanced security with VNet integration
+param useVnet bool // Set in main.parameters.json
+
 // Differentiates between automated and manual deployments
 param isContinuousDeployment bool // Set in main.parameters.json
 
@@ -86,21 +89,21 @@ module webapp './core/host/staticwebapp.bicep' = {
 }
 
 // The application backend API
-module api './core/host/functions.bicep' = {
+module api './app/api.bicep' = {
   name: 'api'
   scope: resourceGroup
   params: {
     name: '${abbrs.webSitesFunctions}api-${resourceToken}'
     location: location
     tags: union(tags, { 'azd-service-name': apiServiceName })
-    allowedOrigins: [webapp.outputs.uri]
-    alwaysOn: false
-    runtimeName: 'node'
-    runtimeVersion: '20'
     appServicePlanId: appServicePlan.outputs.id
+    allowedOrigins: [webapp.outputs.uri]
     storageAccountName: storage.outputs.name
-    managedIdentity: true
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    virtualNetworkSubnetId: useVnet ? vnet.outputs.appSubnetID : ''
+    staticWebAppName: webapp.outputs.name
     appSettings: {
+      APPINSIGHTS_INSTRUMENTATIONKEY: monitoring.outputs.applicationInsightsInstrumentationKey
       AZURE_OPENAI_API_INSTANCE_NAME: openAi.outputs.name
       AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
       AZURE_OPENAI_API_VERSION: openAiApiVersion
@@ -122,10 +125,14 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
     name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
     location: location
     tags: tags
-    sku: {
+    sku: useVnet ? {
+      name: 'FC1'
+      tier: 'FlexConsumption'
+    } : {
       name: 'Y1'
       tier: 'Dynamic'
     }
+    reserved: useVnet ? true : null
   }
 }
 
@@ -138,12 +145,42 @@ module storage './core/storage/storage-account.bicep' = {
     location: location
     tags: tags
     allowBlobPublicAccess: false
-    containers: [
+    allowSharedKeyAccess: !useVnet
+    containers: concat([
       {
         name: blobContainerName
         publicAccess: 'None'
       }
-    ]
+    ], useVnet ? [
+      // Deployment storage container
+      {
+        name: 'api'
+      }
+    ] : [])
+    networkAcls: useVnet ? {
+      defaultAction: 'Deny'
+      bypass: 'AzureServices'
+      virtualNetworkRules: [
+        {
+          id: vnet.outputs.appSubnetID
+          action: 'Allow'
+        }
+      ]
+    } : {
+      bypass: 'AzureServices'
+      defaultAction: 'Allow'
+    }
+  }
+}
+
+// Virtual network for Azure Functions API
+module vnet './app/vnet.bicep' = if (useVnet) {
+  name: 'vnet'
+  scope: resourceGroup
+  params: {
+    name: '${abbrs.networkVirtualNetworks}${resourceToken}'
+    location: location
+    tags: tags
   }
 }
 
@@ -318,5 +355,5 @@ output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 output AZURE_AISEARCH_ENDPOINT string = searchUrl
 
-output API_URL string = api.outputs.uri
+output API_URL string = useVnet ? api.outputs.uri : ''
 output WEBAPP_URL string = webapp.outputs.uri
