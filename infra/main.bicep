@@ -85,6 +85,13 @@ module webapp './core/host/staticwebapp.bicep' = {
     name: !empty(webappName) ? webappName : '${abbrs.webStaticSites}web-${resourceToken}'
     location: webappLocation
     tags: union(tags, { 'azd-service-name': webappName })
+    sku: useVnet ? {
+      name: 'Standard'
+      tier: 'Standard'
+    } : {
+      name: 'Free'
+      tier: 'Free'
+    }
   }
 }
 
@@ -234,6 +241,25 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
+// module cosmosDb './core/database/cosmos/sql/cosmos-sql-db.bicep' = {
+//   name: 'cosmosDb'
+//   scope: resourceGroup
+//   params: {
+//     accountName: '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
+//     location: location
+//     tags: tags
+//     containers: [
+//       {
+//         name: 'testcontainer'
+//         id: 'testcontainer'
+//         partitionKey: '/id'
+//       }
+//     ]
+//     databaseName: 'testdb'
+//     disableLocalAuth: false
+//   }
+// }
+
 module search 'core/search/search-services.bicep' = {
   name: 'search'
   scope: resourceGroup
@@ -357,3 +383,4 @@ output AZURE_AISEARCH_ENDPOINT string = searchUrl
 
 output API_URL string = useVnet ? api.outputs.uri : ''
 output WEBAPP_URL string = webapp.outputs.uri
+output UPLOAD_URL string = useVnet ? webapp.outputs.uri : api.outputs.uri

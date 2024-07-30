@@ -35,7 +35,7 @@ hooks:
   postup:
     windows:
       shell: pwsh
-      run: node scripts/upload-documents.js "$env:API_URL"
+      run: node scripts/upload-documents.js "$env:UPLOAD_URL"
     posix:
       shell: sh
-      run: node scripts/upload-documents.js "$API_URL"
+      run: node scripts/upload-documents.js "$UPLOAD_URL"
