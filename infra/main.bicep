@@ -69,6 +69,7 @@ var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
 var storageUrl = 'https://${storage.outputs.name}.blob.${environment().suffixes.storage}'
 var searchUrl = 'https://${search.outputs.name}.search.windows.net'
+var apiResourceName = '${abbrs.webSitesFunctions}api-${resourceToken}'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -100,7 +101,7 @@ module api './app/api.bicep' = {
   name: 'api'
   scope: resourceGroup
   params: {
-    name: '${abbrs.webSitesFunctions}api-${resourceToken}'
+    name: apiResourceName
     location: location
     tags: union(tags, { 'azd-service-name': apiServiceName })
     appServicePlanId: appServicePlan.outputs.id
@@ -161,7 +162,7 @@ module storage './core/storage/storage-account.bicep' = {
     ], useVnet ? [
       // Deployment storage container
       {
-        name: 'api'
+        name: apiResourceName
       }
     ] : [])
     networkAcls: useVnet ? {
