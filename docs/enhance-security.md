@@ -1,8 +1,10 @@
 # Enhance security
 
-When deploying the sample in a production environment, you may want to enforce tighter security restrictions to protect your data and resources.
+To achieve enterprise grade security we've ensured you can leverage the features below through an opt-in flag:
 
-One recommendation is to deploy the sample in a [virtual network](https://learn.microsoft.com/azure/virtual-network/virtual-networks-overview) to restrict access to the resources, including the Azure Functions API and the Azure Storage where the documents are stored. In addition, disabling all local authentication methods (ie API keys) and relying on [Azure Entra managed identity](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview) and [RBAC for access control](https://learn.microsoft.com/azure/role-based-access-control/overview) is another way to enhance security.
+- **Deploy in a [virtual network](https://learn.microsoft.com/azure/virtual-network/virtual-networks-overview)**, to restrict access to the resources including the Azure Functions API and the Azure Storage where the documents are stored.
+
+- **Leverage [Azure Entra managed identity](https://learn.microsoft.com/entra/identity/managed-identities-azure-resources/overview)** to disable all local authentication methods (ie API keys) and rely [Role-based Access Control (RBAC)](https://learn.microsoft.com/azure/role-based-access-control/overview).
 
 You can enable these features when deploying this sample by following these steps:
 
