@@ -19,7 +19,7 @@ You can enable these features when deploying this sample by following these step
    azd up
    ```
 
-Note that enabling virtual network will induce additional costs, as it requires the deployment of extra resources and needs the switch to paid plans for the Azure Functions and Azure Static Web App.
+Note that enabling virtual network will induce additional costs, as it requires the deployment of extra resources and needs to switch to paid plans for the Azure Functions and Azure Static Web App.
 
 > [!IMPORTANT]
 > When VNET is enabled, you will lose the ability to run the sample locally while connected to Azure resources.
