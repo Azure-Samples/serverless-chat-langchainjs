@@ -47,7 +47,6 @@ module api '../core/host/functions.bicep' = if (!useVnet) {
     storageAccountName: storageAccountName
     applicationInsightsName: applicationInsightsName
     managedIdentity: true
-    storageManagedIdentity: useVnet
     appSettings: appSettings
   }
 }

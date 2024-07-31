@@ -382,6 +382,6 @@ output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 output AZURE_AISEARCH_ENDPOINT string = searchUrl
 
-output API_URL string = useVnet ? api.outputs.uri : ''
+output API_URL string = useVnet ? '' : api.outputs.uri
 output WEBAPP_URL string = webapp.outputs.uri
 output UPLOAD_URL string = useVnet ? webapp.outputs.uri : api.outputs.uri
