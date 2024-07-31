@@ -242,25 +242,6 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
-// module cosmosDb './core/database/cosmos/sql/cosmos-sql-db.bicep' = {
-//   name: 'cosmosDb'
-//   scope: resourceGroup
-//   params: {
-//     accountName: '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-//     location: location
-//     tags: tags
-//     containers: [
-//       {
-//         name: 'testcontainer'
-//         id: 'testcontainer'
-//         partitionKey: '/id'
-//       }
-//     ]
-//     databaseName: 'testdb'
-//     disableLocalAuth: false
-//   }
-// }
-
 module search 'core/search/search-services.bicep' = {
   name: 'search'
   scope: resourceGroup
