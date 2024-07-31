@@ -42,6 +42,7 @@ resource functions 'Microsoft.Web/sites@2023-12-01' = {
   properties: {
     serverFarmId: appServicePlanId
     siteConfig: {
+      ftpsState: 'FtpsOnly'
       alwaysOn: alwaysOn
       minTlsVersion: '1.2'
       appCommandLine: appCommandLine
