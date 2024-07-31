@@ -7,16 +7,16 @@ import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { VectorStore } from '@langchain/core/vectorstores';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
-import { ChatOllama } from '@langchain/community/chat_models/ollama';
+import { ChatOllama } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
-import { badRequest, data, serviceUnavailable } from '../http-response';
-import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants';
-import { getAzureOpenAiTokenProvider, getCredentials } from '../security';
+import { badRequest, data, serviceUnavailable } from '../http-response.js';
+import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants.js';
+import { getAzureOpenAiTokenProvider, getCredentials } from '../security.js';
 
 const systemPrompt = `Assistant helps the Consto Real Estate company customers with questions and support requests. Be brief in your answers. Answer only plain text, DO NOT use Markdown.
 Answer ONLY with information from the sources below. If there isn't enough information in the sources, say you don't know. Do not generate answers that don't use the sources. If asking a clarifying question to the user would help, ask the question.

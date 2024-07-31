@@ -47,10 +47,10 @@
     "concurrently": "^8.2.2",
     "lint-staged": "^15.2.2",
     "prettier": "^3.0.3",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
-    "xo": "^0.58.0"
+    "xo": "^0.59.3"
   },
   "engines": {
     "node": ">=20",

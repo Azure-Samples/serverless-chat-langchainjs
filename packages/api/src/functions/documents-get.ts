@@ -5,8 +5,8 @@ import { finished } from 'node:stream/promises';
 import { HttpRequest, HttpResponseInit, InvocationContext, app } from '@azure/functions';
 import { BlobServiceClient } from '@azure/storage-blob';
 import 'dotenv/config';
-import { data, notFound } from '../http-response';
-import { getCredentials } from '../security';
+import { data, notFound } from '../http-response.js';
+import { getCredentials } from '../security.js';
 
 async function getDocument(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const storageUrl = process.env.AZURE_STORAGE_URL;

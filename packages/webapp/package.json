@@ -14,7 +14,7 @@
   "author": "Microsoft",
   "license": "MIT",
   "dependencies": {
-    "@microsoft/ai-chat-protocol": "^1.0.0-alpha.20240418.1",
+    "@microsoft/ai-chat-protocol": "^1.0.0-beta.20240610.1",
     "lit": "^3.0.0"
   },
   "devDependencies": {

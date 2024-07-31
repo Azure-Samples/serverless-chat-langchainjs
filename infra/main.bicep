@@ -57,6 +57,9 @@ param blobContainerName string = 'files'
 // Id of the user or app to assign application roles
 param principalId string = ''
 
+// Enable enhanced security with VNet integration
+param useVnet bool // Set in main.parameters.json
+
 // Differentiates between automated and manual deployments
 param isContinuousDeployment bool // Set in main.parameters.json
 
@@ -66,6 +69,7 @@ var tags = { 'azd-env-name': environmentName }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
 var storageUrl = 'https://${storage.outputs.name}.blob.${environment().suffixes.storage}'
 var searchUrl = 'https://${search.outputs.name}.search.windows.net'
+var apiResourceName = '${abbrs.webSitesFunctions}api-${resourceToken}'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -82,25 +86,32 @@ module webapp './core/host/staticwebapp.bicep' = {
     name: !empty(webappName) ? webappName : '${abbrs.webStaticSites}web-${resourceToken}'
     location: webappLocation
     tags: union(tags, { 'azd-service-name': webappName })
+    sku: useVnet ? {
+      name: 'Standard'
+      tier: 'Standard'
+    } : {
+      name: 'Free'
+      tier: 'Free'
+    }
   }
 }
 
 // The application backend API
-module api './core/host/functions.bicep' = {
+module api './app/api.bicep' = {
   name: 'api'
   scope: resourceGroup
   params: {
-    name: '${abbrs.webSitesFunctions}api-${resourceToken}'
+    name: apiResourceName
     location: location
     tags: union(tags, { 'azd-service-name': apiServiceName })
-    allowedOrigins: [webapp.outputs.uri]
-    alwaysOn: false
-    runtimeName: 'node'
-    runtimeVersion: '20'
     appServicePlanId: appServicePlan.outputs.id
+    allowedOrigins: [webapp.outputs.uri]
     storageAccountName: storage.outputs.name
-    managedIdentity: true
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    virtualNetworkSubnetId: useVnet ? vnet.outputs.appSubnetID : ''
+    staticWebAppName: webapp.outputs.name
     appSettings: {
+      APPINSIGHTS_INSTRUMENTATIONKEY: monitoring.outputs.applicationInsightsInstrumentationKey
       AZURE_OPENAI_API_INSTANCE_NAME: openAi.outputs.name
       AZURE_OPENAI_API_ENDPOINT: finalOpenAiUrl
       AZURE_OPENAI_API_VERSION: openAiApiVersion
@@ -122,10 +133,14 @@ module appServicePlan './core/host/appserviceplan.bicep' = {
     name: !empty(appServicePlanName) ? appServicePlanName : '${abbrs.webServerFarms}${resourceToken}'
     location: location
     tags: tags
-    sku: {
+    sku: useVnet ? {
+      name: 'FC1'
+      tier: 'FlexConsumption'
+    } : {
       name: 'Y1'
       tier: 'Dynamic'
     }
+    reserved: useVnet ? true : null
   }
 }
 
@@ -138,12 +153,55 @@ module storage './core/storage/storage-account.bicep' = {
     location: location
     tags: tags
     allowBlobPublicAccess: false
-    containers: [
+    allowSharedKeyAccess: !useVnet
+    containers: concat([
       {
         name: blobContainerName
         publicAccess: 'None'
       }
-    ]
+    ], useVnet ? [
+      // Deployment storage container
+      {
+        name: apiResourceName
+      }
+    ] : [])
+    networkAcls: useVnet ? {
+      defaultAction: 'Deny'
+      bypass: 'AzureServices'
+      virtualNetworkRules: [
+        {
+          id: vnet.outputs.appSubnetID
+          action: 'Allow'
+        }
+      ]
+    } : {
+      bypass: 'AzureServices'
+      defaultAction: 'Allow'
+    }
+  }
+}
+
+// Virtual network for Azure Functions API
+module vnet './app/vnet.bicep' = if (useVnet) {
+  name: 'vnet'
+  scope: resourceGroup
+  params: {
+    name: '${abbrs.networkVirtualNetworks}${resourceToken}'
+    location: location
+    tags: tags
+  }
+}
+
+// Monitor application with Azure Monitor
+module monitoring './core/monitor/monitoring.bicep' = {
+  name: 'monitoring'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    logAnalyticsName: '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
+    applicationInsightsName: '${abbrs.insightsComponents}${resourceToken}'
+    applicationInsightsDashboardName: '${abbrs.portalDashboards}${resourceToken}'
   }
 }
 
@@ -305,5 +363,6 @@ output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 output AZURE_AISEARCH_ENDPOINT string = searchUrl
 
-output API_URL string = api.outputs.uri
+output API_URL string = useVnet ? '' : api.outputs.uri
 output WEBAPP_URL string = webapp.outputs.uri
+output UPLOAD_URL string = useVnet ? webapp.outputs.uri : api.outputs.uri
