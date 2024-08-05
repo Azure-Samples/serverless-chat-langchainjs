@@ -33,7 +33,7 @@ module apiFlex '../core/host/functions-flex.bicep' = if (useVnet) {
 }
 
 module api '../core/host/functions.bicep' = if (!useVnet) {
-  name: 'api'
+  name: 'api-consumption'
   scope: resourceGroup()
   params: {
     name: name
