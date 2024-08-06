@@ -14,10 +14,10 @@ services:
       predeploy:
         windows:
           shell: pwsh
-          run: Export-ModuleMember -Variable API_URL && npm run build
+          run: npm run build
         posix:
           shell: sh
-          run: export API_URL && npm run build
+          run: npm run build
 
   api:
     project: ./packages/api
