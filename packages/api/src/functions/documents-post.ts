@@ -3,7 +3,7 @@ import { type HttpRequest, type HttpResponseInit, type InvocationContext, app } 
 import { AzureOpenAIEmbeddings } from '@langchain/openai';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
+import { AzureCosmosDBNoSQLVectorStore } from '@langchain/azure-cosmosdb';
 import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import 'dotenv/config';
@@ -25,7 +25,8 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       return badRequest('"file" field not found in form data.');
     }
 
-    const file = parsedForm.get('file') as File;
+    // Type mismatch between Node.js FormData and Azure Functions FormData
+    const file = parsedForm.get('file') as any as File;
     const filename = file.name;
 
     // Extract text from the PDF
@@ -49,7 +50,7 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
 
       // Initialize embeddings model and vector database
       const embeddings = new AzureOpenAIEmbeddings({ azureADTokenProvider });
-      await AzureAISearchVectorStore.fromDocuments(documents, embeddings, { credentials });
+      await AzureCosmosDBNoSQLVectorStore.fromDocuments(documents, embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');

@@ -11,7 +11,7 @@ import { ChatOllama } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
-import { AzureAISearchVectorStore } from '@langchain/community/vectorstores/azure_aisearch';
+import { AzureCosmosDBNoSQLVectorStore } from '@langchain/azure-cosmosdb';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response.js';
@@ -62,7 +62,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
         temperature: 0.7,
         azureADTokenProvider,
       });
-      store = new AzureAISearchVectorStore(embeddings, { credentials });
+      store = new AzureCosmosDBNoSQLVectorStore(embeddings, { credentials });
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
