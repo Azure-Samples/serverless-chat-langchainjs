@@ -73,7 +73,7 @@ RAG has significant implications in many fields:
 
 - **Educational Content:** Educators can update their materials with the latest research and studies to ensure relevance and accuracy.
 
-> **Note:** To learn more about the RAG architecture, please refer to the official documentation of the Azure AI Search Documentation service, which can be accessed [here](https://learn.microsoft.com/azure/search/retrieval-augmented-generation-overview).
+> **Note:** To learn more about the RAG architecture, please refer to the official documentation of the Azure Cosmos DB Documentation service, which can be accessed [here](https://learn.microsoft.com/azure/cosmos-db/gen-ai/rag).
 
 ## Next Steps
 
