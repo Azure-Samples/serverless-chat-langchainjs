@@ -35,9 +35,6 @@
     "webappLocation": {
       "value": "${AZURE_WEBAPP_LOCATION=eastus2}"
     },
-    "searchServiceSkuName": {
-      "value": "${AZURE_SEARCH_SERVICE_SKU=basic}"
-    },
     "useVnet": {
       "value": "${USE_VNET=false}"
     },
