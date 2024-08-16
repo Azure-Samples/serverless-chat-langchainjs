@@ -57,7 +57,7 @@ We use the [HTTP protocol for AI chat apps](https://aka.ms/chatprotocol) to comm
 - **Scalable and Cost-Effective**: Leverages Azure's serverless offerings to provide a scalable and cost-effective solution.
 - **Local Development**: Supports local development using Ollama for testing without any cloud costs.
 
-## Get started
+## Getting started
 
 There are multiple ways to get started with this project.
 
