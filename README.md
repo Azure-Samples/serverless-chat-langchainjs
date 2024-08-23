@@ -17,7 +17,7 @@
 
 :star: If you like this sample, star it on GitHub — it helps a lot!
 
-[Overview](#overview) • [Get started](#get-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
+[Overview](#overview) • [Get started](#getting-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
 
 ![Animation showing the chat app in action](./docs/images/demo.gif)
 
