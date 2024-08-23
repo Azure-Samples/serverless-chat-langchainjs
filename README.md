@@ -17,7 +17,7 @@
 
 :star: If you like this sample, star it on GitHub — it helps a lot!
 
-[Overview](#overview) • [Get started](#get-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
+[Overview](#overview) • [Get started](#getting-started) • [Run the sample](#run-the-sample) • [Resources](#resources) • [FAQ](#faq) • [Troubleshooting](#troubleshooting)
 
 ![Animation showing the chat app in action](./docs/images/demo.gif)
 
@@ -57,7 +57,7 @@ We use the [HTTP protocol for AI chat apps](https://aka.ms/chatprotocol) to comm
 - **Scalable and Cost-Effective**: Leverages Azure's serverless offerings to provide a scalable and cost-effective solution.
 - **Local Development**: Supports local development using Ollama for testing without any cloud costs.
 
-## Get started
+## Getting started
 
 There are multiple ways to get started with this project.
 
