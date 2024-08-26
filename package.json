@@ -49,6 +49,7 @@
     "prettier": "^3.0.3",
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.9.0",
+    "tsx": "^4.18.0",
     "typescript": "^5.3.3",
     "xo": "^0.59.3"
   },
@@ -114,5 +115,8 @@
         }
       }
     ]
+  },
+  "dependencies": {
+    "@langchain/ollama": "^0.0.4"
   }
 }
