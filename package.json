@@ -16,6 +16,7 @@
     "lint": "xo",
     "lint:fix": "xo --fix",
     "format": "prettier --list-different --write .",
+    "test": "node --loader tsx --test test/**/*.test.ts",
     "prepare": "simple-git-hooks || echo 'simple-git-hooks install skipped'"
   },
   "repository": {
