@@ -74,7 +74,7 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
     }
 
     // Create the chain that combines the prompt with the documents
-    const combineDocsChain = await createStuffDocumentsChain({
+    const ragChain = await createStuffDocumentsChain({
       llm: model,
       prompt: ChatPromptTemplate.fromMessages([
         ['system', systemPrompt],
@@ -82,16 +82,12 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
       ]),
       documentPrompt: PromptTemplate.fromTemplate('[{source}]: {page_content}\n'),
     });
-
-    // Create the chain to retrieve the documents from the database
-    const chain = await createRetrievalChain({
-      retriever: store.asRetriever(3),
-      combineDocsChain,
-    });
-
-    const lastUserMessage = messages.at(-1)!.content;
-    const responseStream = await chain.stream({
-      input: lastUserMessage,
+    // Retriever to search for the documents in the database
+    const retriever = store.asRetriever(3);
+    const question = messages.at(-1)!.content;
+    const responseStream = await ragChain.stream({
+      input: question,
+      context: await retriever.invoke(question),
     });
     const jsonStream = Readable.from(createJsonStream(responseStream));
 
@@ -108,13 +104,13 @@ export async function postChat(request: HttpRequest, context: InvocationContext)
 }
 
 // Transform the response chunks into a JSON stream
-async function* createJsonStream(chunks: AsyncIterable<{ context: Document[]; answer: string }>) {
+async function* createJsonStream(chunks: AsyncIterable<string>) {
   for await (const chunk of chunks) {
-    if (!chunk.answer) continue;
+    if (!chunk) continue;
 
     const responseChunk: AIChatCompletionDelta = {
       delta: {
-        content: chunk.answer,
+        content: chunk,
         role: 'assistant',
       },
     };
