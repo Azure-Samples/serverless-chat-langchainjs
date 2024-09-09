@@ -122,6 +122,17 @@ Related commands are `azd provision` for just provisioning (if infra files chang
 
 </details>
 
+<details>
+<summary><b>Why using Azure Cosmos DB for vector search? What about Azure AI Search?</b></summary><br>
+
+There are multiple Azure services that implement vector search capabilities, including Azure Cosmos DB. In this sample, we use Azure Cosmos DB for vector search because it's also a regular NoSQL database that can store any of your regular data workloads in addition to the vector search data. This makes it a versatile choice for a wide range of applications, all while keeping costs low by using a serverless tier.
+
+Azure AI Search is another option for vector search, but it's more focused on search capabilities: it provides more advanced vector search and hybrid search options, though it doesn't provide the same flexibility as Azure Cosmos DB. We also have a version of this sample that uses Azure AI Search, which you can find [here](https://github.com/Azure-Samples/serverless-chat-langchainjs/tree/ai-search).
+
+For more information about Azure vector search options, you can check out [this architecture guide](https://learn.microsoft.com/azure/architecture/guide/technology-choices/vector-search).
+
+</details>
+
 <!-- TODO: implement this in the code
 <details>
 <summary><b>I don't have access to Azure OpenAI, can I use the regular OpenAI API?</b></summary><br>
