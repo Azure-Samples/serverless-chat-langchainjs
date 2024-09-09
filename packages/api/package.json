@@ -21,7 +21,7 @@
     "@langchain/azure-cosmosdb": "^0.1.0",
     "@langchain/community": "^0.2.22",
     "@langchain/core": "~0.2.0",
-    "@langchain/ollama": "^0.0.2",
+    "@langchain/ollama": "^0.0.4",
     "@langchain/openai": "^0.2.5",
     "@microsoft/ai-chat-protocol": "^1.0.0-alpha.20240418.1",
     "dotenv": "^16.4.5",
