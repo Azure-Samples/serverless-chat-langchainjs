@@ -30,7 +30,8 @@
     "pdf-parse": "^1.1.1"
   },
   "devDependencies": {
-    "@types/node": "^20.x",
+    "@playwright/test": "^1.47.1",
+    "@types/node": "^20.16.5",
     "azure-functions-core-tools": "^4.0.5611",
     "typescript": "^5.4.4"
   }
