@@ -12,6 +12,8 @@
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "lib": ["ESNext"]
-  }
+    "lib": ["ESNext"],
+    "types": ["node", "@types/node"]
+  },
+  "include": ["src", "tests"]
 }
