@@ -1,7 +1,6 @@
 import { Readable } from 'node:stream';
 import { HttpRequest, InvocationContext, HttpResponseInit, app } from '@azure/functions';
 import { AIChatCompletionRequest, AIChatCompletionDelta } from '@microsoft/ai-chat-protocol';
-import { Document } from '@langchain/core/documents';
 import { AzureOpenAIEmbeddings, AzureChatOpenAI } from '@langchain/openai';
 import { Embeddings } from '@langchain/core/embeddings';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
@@ -11,7 +10,6 @@ import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { AzureCosmosDBNoSQLVectorStore } from '@langchain/azure-cosmosdb';
-import { createRetrievalChain } from 'langchain/chains/retrieval';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response.js';
 import { ollamaChatModel, ollamaEmbeddingsModel, faissStoreFolder } from '../constants.js';
