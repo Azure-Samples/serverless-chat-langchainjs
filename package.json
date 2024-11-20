@@ -82,6 +82,7 @@
       "@typescript-eslint/consistent-type-imports": "off",
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/ban-types": "off",
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
       "n/prefer-global/process": "off",

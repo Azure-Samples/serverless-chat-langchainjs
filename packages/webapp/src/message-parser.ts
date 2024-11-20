@@ -6,7 +6,7 @@ export type ParsedMessage = {
   citations: string[];
   followupQuestions: string[];
   role: string;
-  context?: Record<string, unknown>;
+  context?: object;
 };
 
 export function parseMessageIntoHtml(

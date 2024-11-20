@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import { type HttpRequest, type HttpResponseInit, type InvocationContext, app } from '@azure/functions';
 import { AzureOpenAIEmbeddings } from '@langchain/openai';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 import { AzureCosmosDBNoSQLVectorStore } from '@langchain/azure-cosmosdb';
 import { OllamaEmbeddings } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
