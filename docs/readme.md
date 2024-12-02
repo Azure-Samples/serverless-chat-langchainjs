@@ -104,6 +104,7 @@ If you have any issue when running or deploying this sample, please check the [t
 Here are some resources to learn more about the technologies used in this sample:
 
 - [LangChain.js documentation](https://js.langchain.com)
+- [Generative AI with JavaScript](https://github.com/microsoft/generative-ai-with-javascript)
 - [Generative AI For Beginners](https://github.com/microsoft/generative-ai-for-beginners)
 - [Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)
 - [Azure Cosmos DB for NoSQL](https://learn.microsoft.com/azure/cosmos-db/nosql/)
