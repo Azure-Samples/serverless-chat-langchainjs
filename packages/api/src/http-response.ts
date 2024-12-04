@@ -34,7 +34,7 @@ export function ok(body: Record<string, unknown>): HttpResponseInit {
   };
 }
 
-export function data(body: ArrayBuffer | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
+export function data(body: Uint8Array | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
   return {
     status: 200,
     headers,
