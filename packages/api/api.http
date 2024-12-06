@@ -21,7 +21,7 @@ Content-Type: application/pdf
 GET {{api_host}}/api/documents/support.pdf
 
 ### Chat with the bot
-POST {{api_host}}/api/chat/stream
+POST {{api_host}}/api/chats/stream?userId=1
 Content-Type: application/json
 
 {
@@ -31,4 +31,16 @@ Content-Type: application/json
       "role": "user"
     }
   ],
+  "context": {
+    "sessionId": "123"
+  }
 }
+
+### Retrieve all chat sessions
+GET {{api_host}}/api/chats?userId=1
+
+### Retrieve a chat session
+GET {{api_host}}/api/chats/123?userId=1
+
+### Delete a chat session
+DELETE {{api_host}}/api/chats/123?userId=1

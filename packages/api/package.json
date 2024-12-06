@@ -24,11 +24,12 @@
     "@langchain/ollama": "^0.1.2",
     "@langchain/openai": "^0.3.14",
     "@langchain/textsplitters": "^0.1.0",
-    "@microsoft/ai-chat-protocol": "^1.0.0-alpha.20240418.1",
+    "@microsoft/ai-chat-protocol": "^1.0.0-beta.20240814.1",
     "dotenv": "^16.4.5",
     "faiss-node": "^0.5.1",
     "langchain": "^0.3.6",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@types/node": "^20.x",
