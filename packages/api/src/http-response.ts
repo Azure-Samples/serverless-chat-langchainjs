@@ -27,14 +27,16 @@ export function serviceUnavailable(message: string): HttpResponseInit {
   };
 }
 
-export function ok(body: Record<string, unknown>): HttpResponseInit {
-  return {
-    status: 200,
-    jsonBody: body,
-  };
+export function ok(body?: object): HttpResponseInit {
+  return body
+    ? {
+        status: 200,
+        jsonBody: body,
+      }
+    : { status: 204 };
 }
 
-export function data(body: ArrayBuffer | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
+export function data(body: Uint8Array | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
   return {
     status: 200,
     headers,

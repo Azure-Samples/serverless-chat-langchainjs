@@ -100,3 +100,6 @@ __azurite_db*__.json
 
 # Faiss folder
 .faiss/
+
+# Chat history
+.history/

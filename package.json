@@ -86,6 +86,7 @@
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
       "n/prefer-global/process": "off",
+      "no-new-func": "off",
       "unicorn/prefer-module": "off",
       "unicorn/no-new-array": "off",
       "unicorn/prevent-abbreviations": [
@@ -93,7 +94,8 @@
         {
           "allowList": {
             "combineDocsChain": true,
-            "env": true
+            "env": true,
+            "Db": true
           }
         }
       ]
