@@ -61,8 +61,7 @@
   },
   "lint-staged": {
     "*.{js,ts,md,yaml,yml,html,css}": "prettier --write",
-    "*.{js,ts}": "xo --fix",
-    "packages/webapp/src/components/*.{js,ts}": "npx lit-analyzer"
+    "*.{js,ts}": "xo --fix"
   },
   "xo": {
     "space": true,
