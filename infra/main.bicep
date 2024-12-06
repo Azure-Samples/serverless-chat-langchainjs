@@ -220,7 +220,7 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
           version: chatModelVersion
         }
         sku: {
-          name: 'Standard'
+          name: 'GlobalStandard'
           capacity: chatDeploymentCapacity
         }
       }
