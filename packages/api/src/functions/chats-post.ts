@@ -36,7 +36,7 @@ Make sure the last question ends with ">>".
 SOURCES:
 {context}`;
 
-const titleSystemPrompt = `Create a title for this chat session, based on the user question. The title should be less than 32 characters.`;
+const titleSystemPrompt = `Create a title for this chat session, based on the user question. The title should be less than 32 characters. Do NOT use double-quotes.`;
 
 export async function postChats(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const azureOpenAiEndpoint = process.env.AZURE_OPENAI_API_ENDPOINT;
@@ -54,7 +54,8 @@ export async function postChats(request: HttpRequest, context: InvocationContext
     let model: BaseChatModel;
     let store: VectorStore;
     let chatHistory;
-    const sessionId = (chatContext?.sessionId as string) || uuidv4();
+    const sessionId = ((chatContext as any)?.sessionId as string) || uuidv4();
+    context.log(`UserId: ${userId}, sessionId: ${sessionId}`);
 
     if (azureOpenAiEndpoint) {
       const credentials = getCredentials();
@@ -109,10 +110,13 @@ export async function postChats(request: HttpRequest, context: InvocationContext
     // Retriever to search for the documents in the database
     const retriever = store.asRetriever(3);
     const question = messages.at(-1)!.content;
-    const responseStream = await ragChainWithHistory.stream({
-      input: question,
-      context: await retriever.invoke(question),
-    });
+    const responseStream = await ragChainWithHistory.stream(
+      {
+        input: question,
+        context: await retriever.invoke(question),
+      },
+      { configurable: { sessionId } },
+    );
     const jsonStream = Readable.from(createJsonStream(responseStream, sessionId));
 
     // Create a short title for this chat session
