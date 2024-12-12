@@ -45,7 +45,11 @@ async function getChats(request: HttpRequest, context: InvocationContext): Promi
     }
 
     const sessions = await chatHistory.getAllSessions();
-    return ok(sessions);
+    const chatSessions = sessions.map((session) => ({
+      id: session.id,
+      title: session.context?.title,
+    }));
+    return ok(chatSessions);
   } catch (_error: unknown) {
     const error = _error as Error;
     context.error(`Error when processing chats-get request: ${error.message}`);
