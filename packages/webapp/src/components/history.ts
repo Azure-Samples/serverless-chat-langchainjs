@@ -8,7 +8,6 @@ import deleteSvg from '../../assets/delete.svg?raw';
 export type ChatSession = {
   id: string;
   title: string;
-  date: string;
 };
 
 export type HistoryComponentState = {
@@ -40,12 +39,14 @@ export const historyDefaultOptions: HistoryComponentOptions = {
   },
 };
 
+export const isLargeScreen = () => window.matchMedia('(width >= 800px)').matches;
+
 /**
  * A component that displays a list of chat sessions for a user.
- *
  * Labels and other aspects are configurable via the `option` property.
  * @element azc-history
- * @fires historyUpdated - Fired when the message history is updated
+ * @fires loadSession - Fired when a chat session is loaded
+ * @fires chatsChanged - Fired when the chat history is updated
  * @fires stateChanged - Fired when the state of the component changes
  * */
 @customElement('azc-history')
@@ -56,27 +57,9 @@ export class HistoryComponent extends LitElement {
   })
   options: HistoryComponentOptions = historyDefaultOptions;
 
-  @property({ type: Boolean, reflect: true }) open = window.matchMedia('(width >= 800px)').matches;
+  @property({ type: Boolean, reflect: true }) open = isLargeScreen();
   @property() userId = '';
-  @property() onLoadSession = '';
-  @state() protected chats: ChatSession[] = [
-    {
-      id: '1',
-      title: 'Best place to visit in the world',
-      date: '2021-10-01',
-    },
-    {
-      id: '2',
-      title: 'Computer Science and a very very long title to check if',
-      date: '2021-10-02',
-    },
-    {
-      id: '3',
-      title: 'AI and implications',
-      date: '2021-10-03',
-    },
-  ];
-
+  @state() protected chats: ChatSession[] = [];
   @state() protected hasError = false;
   @state() protected isLoading = false;
 
@@ -86,29 +69,30 @@ export class HistoryComponent extends LitElement {
 
   async onChatClicked(sessionId: string) {
     try {
-      // TODO fetch
-      const session = { id: sessionId, messages: [] };
-
+      this.isLoading = true;
+      const response = await fetch(`${this.options.apiUrl}/api/chats/${sessionId}/?userId=${this.userId}`);
+      const messages = await response.json();
       const loadSessionEvent = new CustomEvent('loadSession', {
-        detail: { session },
+        detail: { id: sessionId, messages },
         bubbles: true,
       });
       this.dispatchEvent(loadSessionEvent);
 
-      if (this.onLoadSession) {
-        const onLoadSession = new Function('event', 'session', this.onLoadSession);
-        onLoadSession.call(this, loadSessionEvent, session);
+      if (!isLargeScreen()) {
+        this.open = false;
       }
     } catch (error) {
       console.error(error);
     }
+
+    this.isLoading = false;
   }
 
   async onDeleteChatClicked(sessionId: string) {
     try {
       this.chats = this.chats.filter((chat) => chat.id !== sessionId);
 
-      await fetch(`${this.options.apiUrl}/chats/${sessionId}?userId=${this.userId}`, {
+      await fetch(`${this.options.apiUrl}/api/chats/${sessionId}?userId=${this.userId}`, {
         method: 'DELETE',
       });
     } catch (error) {
@@ -160,6 +144,9 @@ export class HistoryComponent extends LitElement {
     this.isLoading = true;
     this.hasError = false;
     try {
+      const response = await fetch(`${this.options.apiUrl}/api/chats?userId=${this.userId}`);
+      const chats = await response.json();
+      this.chats = chats;
       this.isLoading = false;
     } catch (error) {
       this.hasError = true;
@@ -402,9 +389,9 @@ export class HistoryComponent extends LitElement {
       }
     }
     .loader-animation {
-      width: 100px;
-      height: 4px;
-      border-radius: var(--border-radius);
+      position: absolute;
+      width: var(--panel-width);
+      height: 2px;
       overflow: hidden;
       background-color: var(--primary);
       transform: scaleX(0);
