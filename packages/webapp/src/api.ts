@@ -4,6 +4,7 @@ export const apiBaseUrl: string = import.meta.env.VITE_API_URL || '';
 
 export type ChatRequestOptions = {
   messages: AIChatMessage[];
+  context?: Record<string, unknown>;
   chunkIntervalMs: number;
   apiUrl: string;
 };
@@ -11,7 +12,7 @@ export type ChatRequestOptions = {
 export async function* getCompletion(options: ChatRequestOptions) {
   const apiUrl = options.apiUrl || apiBaseUrl;
   const client = new AIChatProtocolClient(`${apiUrl}/api/chats`);
-  const result = await client.getStreamedCompletion(options.messages);
+  const result = await client.getStreamedCompletion(options.messages, { context: options.context });
 
   for await (const response of result) {
     if (!response.delta) {

@@ -44,7 +44,7 @@ export async function postChats(request: HttpRequest, context: InvocationContext
   try {
     const requestBody = (await request.json()) as AIChatCompletionRequest;
     const { messages, context: chatContext } = requestBody;
-    const userId = getUserId(request);
+    const userId = getUserId(request, requestBody);
 
     if (!messages || messages.length === 0 || !messages.at(-1)?.content) {
       return badRequest('Invalid or missing messages in the request body');
@@ -55,7 +55,7 @@ export async function postChats(request: HttpRequest, context: InvocationContext
     let store: VectorStore;
     let chatHistory;
     const sessionId = ((chatContext as any)?.sessionId as string) || uuidv4();
-    context.log(`UserId: ${userId}, sessionId: ${sessionId}`);
+    context.log(`userId: ${userId}, sessionId: ${sessionId}`);
 
     if (azureOpenAiEndpoint) {
       const credentials = getCredentials();

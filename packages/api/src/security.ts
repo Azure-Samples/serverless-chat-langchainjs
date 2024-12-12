@@ -17,7 +17,7 @@ export function getAzureOpenAiTokenProvider() {
   return getBearerTokenProvider(getCredentials(), azureOpenAiScope);
 }
 
-export function getUserId(request: HttpRequest): string | undefined {
+export function getUserId(request: HttpRequest, body?: any): string | undefined {
   let userId: string | undefined;
 
   // Get the user ID from Azure easy auth if it's available
@@ -27,8 +27,8 @@ export function getUserId(request: HttpRequest): string | undefined {
     userId = infos?.userId;
   } catch {}
 
-  // Get the user ID from the query string as a fallback
-  userId ??= request.query.get('userId') ?? undefined;
+  // Get the user ID from the request as a fallback
+  userId ??= body?.context?.userId ?? request.query.get('userId') ?? undefined;
 
   return userId;
 }
