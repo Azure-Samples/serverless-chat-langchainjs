@@ -97,6 +97,12 @@ export class ChatComponent extends LitElement {
     window.open(path, '_blank');
   }
 
+  onNewChatClicked() {
+    this.messages = [];
+    this.sessionId = '';
+    this.fireMessagesUpdatedEvent();
+  }
+
   async onKeyPressed(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -124,7 +130,14 @@ export class ChatComponent extends LitElement {
     this.isLoading = true;
     this.scrollToLastMessage();
     try {
-      const response = getCompletion({ ...this.options, messages: this.messages });
+      const response = getCompletion({
+        ...this.options,
+        messages: this.messages,
+        context: {
+          userId: this.userId,
+          sessionId: this.sessionId,
+        },
+      });
       const chunks = response as AsyncGenerator<AIChatCompletionDelta>;
       const { messages } = this;
       const message: AIChatMessage = {
@@ -136,12 +149,17 @@ export class ChatComponent extends LitElement {
           this.isStreaming = true;
           message.content += chunk.delta.content;
           this.messages = [...messages, message];
-          this.scrollToLastMessage();
+        }
+
+        const sessionId = (chunk.context as any)?.sessionId;
+        if (!this.sessionId && sessionId) {
+          this.sessionId = sessionId;
         }
       }
 
       this.isLoading = false;
       this.isStreaming = false;
+      this.fireMessagesUpdatedEvent();
     } catch (error) {
       this.hasError = true;
       this.isLoading = false;
@@ -152,11 +170,7 @@ export class ChatComponent extends LitElement {
 
   override requestUpdate(name?: string, oldValue?: any) {
     if (name === 'messages') {
-      const messagesUpdatedEvent = new CustomEvent('messagesUpdated', {
-        detail: { messages: this.messages },
-        bubbles: true,
-      });
-      this.dispatchEvent(messagesUpdatedEvent);
+      this.scrollToLastMessage();
     } else if (name === 'hasError' || name === 'isLoading' || name === 'isStreaming') {
       const state = {
         hasError: this.hasError,
@@ -171,6 +185,14 @@ export class ChatComponent extends LitElement {
     }
 
     super.requestUpdate(name, oldValue);
+  }
+
+  protected fireMessagesUpdatedEvent() {
+    const messagesUpdatedEvent = new CustomEvent('messagesUpdated', {
+      detail: { messages: this.messages },
+      bubbles: true,
+    });
+    this.dispatchEvent(messagesUpdatedEvent);
   }
 
   protected scrollToLastMessage() {
@@ -286,7 +308,7 @@ export class ChatComponent extends LitElement {
       <button
         class="button new-chat-button"
         @click=${() => {
-          this.messages = [];
+          this.onNewChatClicked();
         }}
         title=${this.options.strings.newChatButton}
         .disabled=${this.messages?.length === 0 || this.isLoading || this.isStreaming}

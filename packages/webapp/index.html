@@ -62,9 +62,26 @@
       AI Chat with Enterprise Data
     </nav>
     <main>
-      <azc-history onLoadSession="chat.messages = session.messages"></azc-history>
+      <azc-history id="chatHistory"></azc-history>
       <azc-chat id="chat"></azc-chat>
     </main>
     <script type="module" src="/src/index.ts"></script>
+    <script>
+      // Generate a unique ID and store it in local storage
+      const userId = localStorage.getItem('userId') || crypto.randomUUID();
+      localStorage.setItem('userId', userId);
+
+      window.chatHistory.userId = userId;
+      window.chatHistory.addEventListener('loadSession', (e) => {
+        const { id, messages } = e.detail;
+        window.chat.sessionId = id;
+        window.chat.messages = messages;
+      });
+
+      window.chat.userId = userId;
+      window.chat.addEventListener('messagesUpdated', () => {
+        window.chatHistory.refresh();
+      });
+    </script>
   </body>
 </html>
