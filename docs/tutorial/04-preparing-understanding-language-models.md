@@ -1,12 +1,12 @@
-# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Installing Ollama with Mistral 7B
+# Preparing and Understanding Language Models: Configuring Azure OpenAI Service and Installing Ollama with Llama3.1 8B
 
 This section we will cover the language models used in the project. Throughout the tutorial, we will also learn how to generate the environment variables needed to use the Azure Services, including the **[Azure OpenAI Service](https://learn.microsoft.com/azure/ai-services/openai/overview)**.
 
-We will also teach you how to use **[Ollama](https://ollama.com/)** with **[Mistral 7B](https://mistral.ai/)**, an Open Source Language Model, if you want to use it locally.
+We will also teach you how to use **[Ollama](https://ollama.com/)** with **[Llama3.1 8B](https://www.llama.com/)**, an Open Source Language Model, if you want to use it locally.
 
 ## Models to be used in the project
 
-We will teach you how to use two different language models: GPT-3.5 Turbo integrated with _Azure OpenAI Service_ (on Azure) and _Ollama with Mistral 7B_ (if you decide to use a model locally). Let's take a look at each of them.
+We will teach you how to use two different language models: GPT-3.5 Turbo integrated with _Azure OpenAI Service_ (on Azure) and _Ollama with Llama3.1 8B_ (if you decide to use a model locally). Let's take a look at each of them.
 
 ### GPT-3.5 Turbo Integrated with Azure OpenAI Service
 
@@ -18,17 +18,17 @@ You have the choice to use either **[OpenAI Service](https://openai.com/)** or *
 
 Azure OpenAI Service provides REST API access in many programming languages, including Python, Node.js, and C#. Additionally, it offers advanced language models like GPT-4, GPT-4-Turbo with Vision, which are versatile and adaptable to various tasks such as content generation, summarization, image recognition, semantic search, and text-to-code translation.
 
-### Ollama with Mistral 7B
+### Ollama with Llama3.1 8B
 
 ![Ollama Page](./images/ollama-page.png)
 
-**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Mistral 7B model has 7 billion parameters and is designed to be effective, efficient in terms of cost and scability.
+**[Ollama](https://ollama.com/)** presents itself as an open-source solution, offering a transparent and modifiable platform. The Llama3.1 8B has 8 billion parameters and is designed to be effective, efficient in terms of cost and scability.
 
 Ollama's openness encourages innovation and collaboration within the developer community. Users can adapt the model to their specific needs, experiment with innovative ideas, or integrate the model in ways that proprietary services might not allow.
 
 Additionally, using an open-source language model can decrease expenses, which is a crucial factor for projects with restricted budgets or for those who only wish to experiment with language models.
 
-![Mistral 7B Page](./images/mistral-7b-page.png)
+![Llama3.1 8B Page](./images/mistral-7b-page.png)
 
 ## Creating Azure resources
 
@@ -83,23 +83,23 @@ Before installing Ollama, please ensure you meet the prerequisites, which includ
 To begin, download the necessary models for this project by running the following commands in your terminal:
 
 ```bash
-ollama pull mistral:v0.2
-ollama pull all-minilm:l6-v2
+ollama pull llama3.1:latest
+ollama pull nomic-embed-text:latest
 ```
 
-We will use the Mistral 7B model, a powerful language model, and the All-MiniLM model, a small embedding model, to generate vectors from the text for the chatbot.
+We will use the Llama3.1 8B model, a powerful language model, and the All-MiniLM model, a small embedding model, to generate vectors from the text for the chatbot.
 
-> **Note:** The Mistral model will download several gigabytes of data, so the process may take some time depending on your internet connection.
+> **Note:** The Llama3.1 model will download several gigabytes of data, so the process may take some time depending on your internet connection.
 
 After downloading the models, you can verify the proper functioning of the Ollama server by executing the following command:
 
 ```bash
-ollama run mistral:v0.2
+ollama run llama3.1:latest
 ```
 
 An invite will be displayed in your terminal, allowing you to directly communicate with the AI model in a chat-like format.
 
-![Ollama Mistral](./images/ollama-mistra-cli.png)
+![Ollama Llama3.1 8B](./images/ollama-mistra-cli.png)
 
 Ask the model some questions and watch the answers. This will provide insight into the model's capabilities and how to interact with it.
 
@@ -107,7 +107,7 @@ After to finish to test the Ollama server, you can stop it by pressing **Ctrl+D*
 
 ## Next Steps
 
-This tutorial covers language models that will be used in the project. Choose the best model to suit your needs. To use the Azure OpenAI Service, follow the instructions to set up the service in Azure. To use Ollama with Mistral 7B, follow the instructions to install Ollama and the local models.
+This tutorial covers language models that will be used in the project. Choose the best model to suit your needs. To use the Azure OpenAI Service, follow the instructions to set up the service in Azure. To use Ollama with Llama3.1 8B, follow the instructions to install Ollama and the local models.
 
 To begin developing the application, we first need to create some configuration files for the project. We'll cover this in the next section!
 

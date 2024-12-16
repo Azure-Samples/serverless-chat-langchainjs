@@ -11,7 +11,7 @@
 [![dev.to blog post walkthrough](https://img.shields.io/badge/Blog%20post-black?style=flat-square&logo=dev.to)](https://dev.to/azure/build-a-serverless-chatgpt-with-rag-using-langchainjs-3487)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Azure-Samples/serverless-chat-langchainjs/build-test.yaml?style=flat-square&label=Build)](https://github.com/Azure-Samples/serverless-chat-langchainjs/actions)
 ![Node version](https://img.shields.io/badge/Node.js->=20-3c873a?style=flat-square)
-[![Ollama + Mistral](https://img.shields.io/badge/Ollama-Mistral-ff7000?style=flat-square)](https://ollama.com/library/mistral)
+[![Ollama + Llama3.1](https://img.shields.io/badge/Ollama-Llama3.1-ff7000?style=flat-square)](https://ollama.com/library/llama3.1)
 [![TypeScript](https://img.shields.io/badge/TypeScript-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
@@ -154,12 +154,12 @@ The resource group and all the resources will be deleted.
 If you have a machine with enough resources, you can run this sample entirely locally without using any cloud resources. To do that, you first have to install [Ollama](https://ollama.com) and then run the following commands to download the models on your machine:
 
 ```bash
-ollama pull mistral:v0.2
-ollama pull all-minilm:l6-v2
+ollama pull llama3.1:latest
+ollama pull nomic-embed-text:latest
 ```
 
 > [!NOTE]
-> The `mistral` model with download a few gigabytes of data, so it can take some time depending on your internet connection.
+> The `llama3.1` model with download a few gigabytes of data, so it can take some time depending on your internet connection.
 
 After that you have to install the NPM dependencies:
 

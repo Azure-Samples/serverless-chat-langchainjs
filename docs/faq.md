@@ -93,8 +93,8 @@ You may also need to adjust the capacity in `infra/main.bicep` file, depending o
 To change the local models used by Ollama, you can edit the file `packages/api/src/constants.ts`:
 
 ```typescript
-export const ollamaEmbeddingsModel = 'all-minilm:l6-v2';
-export const ollamaChatModel = 'mistral:v0.2';
+export const ollamaEmbeddingsModel = 'nomic-embed-text:latest';
+export const ollamaChatModel = 'llama3.1:latest';
 ```
 
 You can see the complete list of available models at https://ollama.ai/models.
