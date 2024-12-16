@@ -61,8 +61,7 @@
   },
   "lint-staged": {
     "*.{js,ts,md,yaml,yml,html,css}": "prettier --write",
-    "*.{js,ts}": "xo --fix",
-    "packages/webapp/src/components/*.{js,ts}": "npx lit-analyzer"
+    "*.{js,ts}": "xo --fix"
   },
   "xo": {
     "space": true,
@@ -86,6 +85,7 @@
       "import/no-unassigned-import": "off",
       "import/extensions": "off",
       "n/prefer-global/process": "off",
+      "no-new-func": "off",
       "unicorn/prefer-module": "off",
       "unicorn/no-new-array": "off",
       "unicorn/prevent-abbreviations": [
@@ -93,7 +93,8 @@
         {
           "allowList": {
             "combineDocsChain": true,
-            "env": true
+            "env": true,
+            "Db": true
           }
         }
       ]

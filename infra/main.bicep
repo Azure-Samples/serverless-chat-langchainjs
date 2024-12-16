@@ -220,7 +220,7 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
           version: chatModelVersion
         }
         sku: {
-          name: 'Standard'
+          name: 'GlobalStandard'
           capacity: chatDeploymentCapacity
         }
       }
@@ -237,22 +237,63 @@ module openAi 'core/ai/cognitiveservices.bicep' = if (empty(openAiUrl)) {
   }
 }
 
-module cosmosDb './core/database/cosmos/sql/cosmos-sql-db.bicep' = {
+module cosmosDb 'br/public:avm/res/document-db/database-account:0.9.0' = {
   name: 'cosmosDb'
   scope: resourceGroup
   params: {
-    accountName: !empty(cosmosDbServiceName) ? cosmosDbServiceName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
-    location: location
+    name: !empty(cosmosDbServiceName) ? cosmosDbServiceName : '${abbrs.documentDBDatabaseAccounts}${resourceToken}'
     tags: tags
-    containers: [
+    locations: [
       {
-        name: 'vectorSearchContainer'
-        id: 'vectorSearchContainer'
-        partitionKey: '/id'
+        locationName: location
+        failoverPriority: 0
+        isZoneRedundant: false
       }
     ]
-    databaseName: 'vectorSearchDB'
-    disableLocalAuth: true
+    managedIdentities: {
+      systemAssigned: true
+    }
+    capabilitiesToAdd: [
+      'EnableServerless'
+      'EnableNoSQLVectorSearch'
+    ]
+    networkRestrictions: {
+      ipRules: []
+      virtualNetworkRules: []
+      publicNetworkAccess: 'Enabled'
+    }
+    sqlDatabases: [
+      {
+        containers: [
+          {
+            name: 'vectorSearchContainer'
+            paths: [
+              '/id'
+            ]
+          }
+        ]
+        name: 'vectorSearchDB'
+      }
+      {
+        containers: [
+          {
+            name: 'chatHistoryContainer'
+            paths: [
+              '/userId'
+            ]
+          }
+        ]
+        name: 'chatHistoryDB'
+      }
+    ]
+  }
+}
+
+module dbRoleDefinition './core/database/cosmos/sql/cosmos-sql-role-def.bicep' = {
+  scope: resourceGroup
+  name: 'db-contrib-role-definition'
+  params: {
+    accountName: cosmosDb.outputs.name
   }
 }
 
@@ -287,10 +328,10 @@ module dbContribRoleUser './core/database/cosmos/sql/cosmos-sql-role-assign.bice
   scope: resourceGroup
   name: 'db-contrib-role-user'
   params: {
-    accountName: cosmosDb.outputs.accountName
+    accountName: cosmosDb.outputs.name
     principalId: principalId
     // Cosmos DB Data Contributor
-    roleDefinitionId: cosmosDb.outputs.roleDefinitionId
+    roleDefinitionId: dbRoleDefinition.outputs.id
   }
 }
 
@@ -321,10 +362,10 @@ module dbContribRoleApi './core/database/cosmos/sql/cosmos-sql-role-assign.bicep
   scope: resourceGroup
   name: 'db-contrib-role-api'
   params: {
-    accountName: cosmosDb.outputs.accountName
+    accountName: cosmosDb.outputs.name
     principalId: api.outputs.identityPrincipalId
     // Cosmos DB Data Contributor
-    roleDefinitionId: cosmosDb.outputs.roleDefinitionId
+    roleDefinitionId: dbRoleDefinition.outputs.id
   }
 }
 

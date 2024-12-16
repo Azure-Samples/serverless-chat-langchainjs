@@ -21,10 +21,10 @@
       "value": "${AZURE_OPENAI_API_VERSION=2024-02-01}"
     },
     "chatModelName": {
-      "value": "${AZURE_OPENAI_API_MODEL=gpt-4}"
+      "value": "${AZURE_OPENAI_API_MODEL=gpt-4o-mini}"
     },
     "chatModelVersion": {
-      "value": "${AZURE_OPENAI_API_MODEL_VERSION=turbo-2024-04-09}"
+      "value": "${AZURE_OPENAI_API_MODEL_VERSION=2024-07-18}"
     },
     "embeddingsModelName": {
       "value": "${AZURE_OPENAI_API_EMBEDDINGS_MODEL=text-embedding-ada-002}"

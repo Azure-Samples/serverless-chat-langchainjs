@@ -34,7 +34,7 @@ export type ChatComponentOptions = ChatRequestOptions & {
   };
 };
 
-export const defaultOptions: ChatComponentOptions = {
+export const chatDefaultOptions: ChatComponentOptions = {
   chunkIntervalMs: 30,
   apiUrl: '',
   enablePromptSuggestions: true,
@@ -72,15 +72,18 @@ export const defaultOptions: ChatComponentOptions = {
 export class ChatComponent extends LitElement {
   @property({
     type: Object,
-    converter: (value) => ({ ...defaultOptions, ...JSON.parse(value ?? '{}') }),
+    converter: (value) => ({ ...chatDefaultOptions, ...JSON.parse(value ?? '{}') }),
   })
-  options: ChatComponentOptions = defaultOptions;
+  options: ChatComponentOptions = chatDefaultOptions;
 
   @property() question = '';
   @property({ type: Array }) messages: AIChatMessage[] = [];
+  @property() userId = '';
+  @property() sessionId = '';
   @state() protected hasError = false;
   @state() protected isLoading = false;
   @state() protected isStreaming = false;
+  @query('.chat-container') protected chatContainerElement!: HTMLElement;
   @query('.messages') protected messagesElement!: HTMLElement;
   @query('.chat-input') protected chatInputElement!: HTMLElement;
 
@@ -92,6 +95,12 @@ export class ChatComponent extends LitElement {
   onCitationClicked(citation: string) {
     const path = getCitationUrl(citation);
     window.open(path, '_blank');
+  }
+
+  onNewChatClicked() {
+    this.messages = [];
+    this.sessionId = '';
+    this.fireMessagesUpdatedEvent();
   }
 
   async onKeyPressed(event: KeyboardEvent) {
@@ -121,7 +130,14 @@ export class ChatComponent extends LitElement {
     this.isLoading = true;
     this.scrollToLastMessage();
     try {
-      const response = getCompletion({ ...this.options, messages: this.messages });
+      const response = getCompletion({
+        ...this.options,
+        messages: this.messages,
+        context: {
+          userId: this.userId,
+          sessionId: this.sessionId,
+        },
+      });
       const chunks = response as AsyncGenerator<AIChatCompletionDelta>;
       const { messages } = this;
       const message: AIChatMessage = {
@@ -133,12 +149,17 @@ export class ChatComponent extends LitElement {
           this.isStreaming = true;
           message.content += chunk.delta.content;
           this.messages = [...messages, message];
-          this.scrollToLastMessage();
+        }
+
+        const sessionId = (chunk.context as any)?.sessionId;
+        if (!this.sessionId && sessionId) {
+          this.sessionId = sessionId;
         }
       }
 
       this.isLoading = false;
       this.isStreaming = false;
+      this.fireMessagesUpdatedEvent();
     } catch (error) {
       this.hasError = true;
       this.isLoading = false;
@@ -149,11 +170,7 @@ export class ChatComponent extends LitElement {
 
   override requestUpdate(name?: string, oldValue?: any) {
     if (name === 'messages') {
-      const messagesUpdatedEvent = new CustomEvent('messagesUpdated', {
-        detail: { messages: this.messages },
-        bubbles: true,
-      });
-      this.dispatchEvent(messagesUpdatedEvent);
+      this.scrollToLastMessage();
     } else if (name === 'hasError' || name === 'isLoading' || name === 'isStreaming') {
       const state = {
         hasError: this.hasError,
@@ -170,13 +187,21 @@ export class ChatComponent extends LitElement {
     super.requestUpdate(name, oldValue);
   }
 
+  protected fireMessagesUpdatedEvent() {
+    const messagesUpdatedEvent = new CustomEvent('messagesUpdated', {
+      detail: { messages: this.messages },
+      bubbles: true,
+    });
+    this.dispatchEvent(messagesUpdatedEvent);
+  }
+
   protected scrollToLastMessage() {
     // Need to be delayed to run after the DOM refresh
     setTimeout(() => {
       const { bottom } = this.messagesElement.getBoundingClientRect();
       const { top } = this.chatInputElement.getBoundingClientRect();
       if (bottom > top) {
-        window.scrollBy(0, bottom - top);
+        this.chatContainerElement.scrollBy(0, bottom - top);
       }
     }, 0);
   }
@@ -283,7 +308,7 @@ export class ChatComponent extends LitElement {
       <button
         class="button new-chat-button"
         @click=${() => {
-          this.messages = [];
+          this.onNewChatClicked();
         }}
         title=${this.options.strings.newChatButton}
         .disabled=${this.messages?.length === 0 || this.isLoading || this.isStreaming}
@@ -383,6 +408,8 @@ export class ChatComponent extends LitElement {
       --submit-button-border: var(--azc-submit-button-border, none);
       --submit-button-bg: var(--azc-submit-button-bg, none);
       --submit-button-bg-hover: var(--azc-submit-button-color, #f0f0f0);
+
+      container-type: size;
     }
     *:focus-visible {
       outline: var(--focus-outline) var(--primary);
@@ -405,6 +432,8 @@ export class ChatComponent extends LitElement {
       }
     }
     .chat-container {
+      height: 100cqh;
+      overflow: auto;
       container-type: inline-size;
       position: relative;
       background: var(--bg);
@@ -548,18 +577,10 @@ export class ChatComponent extends LitElement {
       }
     }
     .submit-button {
-      padding: 0;
-      width: 48px;
-    }
-    .close-button {
-      position: absolute;
-      top: var(--space-md);
-      right: var(--space-md);
-      width: auto;
-      padding: var(--space-md);
-      &:hover:not(:disabled) {
-        background: var(--card-bg);
-      }
+      flex: 0 0 auto;
+      padding: var(--space-xs);
+      width: 36px;
+      align-self: flex-end;
     }
     .error {
       color: var(--error-color);
@@ -587,17 +608,17 @@ export class ChatComponent extends LitElement {
       flex: 1;
     }
     .chat-input {
-      --half-space-xl: calc(var(--space-xl) / 2);
       position: sticky;
       bottom: 0;
       padding: var(--space-xl);
-      padding-top: var(--half-space-xl);
+      padding-top: var(--space-md);
       background: var(--bg);
-      box-shadow: 0 calc(-1 * var(--half-space-xl)) var(--half-space-xl) var(--bg);
+      box-shadow: 0 calc(-1 * var(--space-md)) var(--space-md) var(--bg);
       display: flex;
       gap: var(--space-md);
     }
     .new-chat-button {
+      flex: 0 0 auto;
       width: 48px;
       height: 48px;
       padding: var(--space-md);
@@ -620,6 +641,7 @@ export class ChatComponent extends LitElement {
       box-shadow: var(--card-shadow);
       outline: var(--focus-outline) transparent;
       transition: outline 0.3s ease;
+      overflow: hidden;
 
       &:has(.text-input:focus-visible) {
         outline: var(--focus-outline) var(--primary);
