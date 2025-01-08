@@ -86,7 +86,7 @@ export async function postElaborate(request: HttpRequest, context: InvocationCon
     return ok({ response: response.content.toString() });
   } catch (_error: unknown) {
     const error = _error as Error;
-    context.error(`Error when processing chat-post request: ${error.message}`);
+    context.error(`Error when processing elaborate-post request: ${error.message}`);
 
     return serviceUnavailable('Service temporarily unavailable. Please try again later.');
   }
