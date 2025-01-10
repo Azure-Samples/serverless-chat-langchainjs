@@ -61,7 +61,7 @@ param isContinuousDeployment bool // Set in main.parameters.json
 
 var abbrs = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var tags = { 'azd-env-name': environmentName }
+var tags = { 'azd-env-name': environmentName, 'owner': 'Gen AI Team - Callum Kindred' }
 var finalOpenAiUrl = empty(openAiUrl) ? 'https://${openAi.outputs.name}.openai.azure.com' : openAiUrl
 var storageUrl = 'https://${storage.outputs.name}.blob.${environment().suffixes.storage}'
 var apiResourceName = '${abbrs.webSitesFunctions}api-${resourceToken}'
