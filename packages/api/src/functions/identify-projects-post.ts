@@ -5,18 +5,21 @@ import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { VectorStore } from '@langchain/core/vectorstores';
 import { v4 as uuidv4 } from 'uuid';
 import { AzureChatOpenAI, AzureOpenAIEmbeddings } from '@langchain/openai';
-import { AzureCosmosDBNoSQLVectorStore, AzureCosmsosDBNoSQLChatMessageHistory } from '@langchain/azure-cosmosdb';
+import { AzureCosmosDBNoSQLVectorStore } from '@langchain/azure-cosmosdb';
 import { ChatOllama, OllamaEmbeddings } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
+import { LanguageModelLike } from '@langchain/core/dist/language_models/base';
 import { faissStoreFolder, ollamaChatModel, ollamaEmbeddingsModel } from '../constants.js';
 import { badRequest, ok, serviceUnavailable } from '../http-response.js';
 import { getAzureOpenAiTokenProvider, getCredentials, getUserId } from '../security.js';
 
 const ragSystemPrompt = `You are an assistant writing a response to a bid document for Kainos, a software consultancy. Be brief in your answers. Answer only plain text, DO NOT use Markdown.
 
-I want you to suggest project(s) that serve as examples of the below bid question. In your answer justify why each project is a good example and reference the documents that you use in your answer.
+I want you to return the name of only one project that serves as examples of the below bid question.
+
+E.g. Project name: <project name>
 
 Answer ONLY with information from the sources below. Do not generate answers that don't use the sources.
 {context}
@@ -65,15 +68,29 @@ export async function postIdentifyProjects(
       store = await FaissStore.load(faissStoreFolder, embeddings);
     }
 
+    const structuredModel = model.withStructuredOutput({
+      name: 'project info',
+      description: 'Project Info',
+      parameters: {
+        title: 'Project Info',
+        type: 'object',
+        properties: {
+          name: { type: 'string', description: 'Name of the project' },
+        },
+        required: ['name'],
+      },
+    });
+
     // Create the chain that combines the prompt with the documents
     const ragChain = await createStuffDocumentsChain({
-      llm: model,
+      llm: structuredModel as LanguageModelLike,
       prompt: ChatPromptTemplate.fromMessages([
         ['system', ragSystemPrompt],
         ['human', '{input}'],
       ]),
       documentPrompt: PromptTemplate.fromTemplate('[{source}]: {page_content}\n'),
     });
+
     // Retriever to search for the documents in the database
     const retriever = store.asRetriever(3);
     const question = messages.at(-1)!.content;
@@ -86,7 +103,7 @@ export async function postIdentifyProjects(
       { configurable: { sessionId } },
     );
 
-    context.log(JSON.stringify(response));
+    context.log(`response: ${JSON.stringify(response)}`);
     return ok({ response });
   } catch (_error: unknown) {
     const error = _error as Error;
