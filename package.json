@@ -116,5 +116,8 @@
         }
       }
     ]
+  },
+  "dependencies": {
+    "langsmith": "^0.2.15"
   }
 }
