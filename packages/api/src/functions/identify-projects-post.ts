@@ -77,6 +77,7 @@ export async function postIdentifyProjects(
     // Retriever to search for the documents in the database
     const retriever = store.asRetriever(3);
     const question = messages.at(-1)!.content;
+    // TODO stream response
     const response = await ragChain.invoke(
       {
         input: question,
