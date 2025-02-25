@@ -50,7 +50,7 @@
     "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
-    "xo": "^0.59.3"
+    "xo": "^0.60.0"
   },
   "engines": {
     "node": ">=20",
@@ -86,6 +86,7 @@
       "import/extensions": "off",
       "n/prefer-global/process": "off",
       "no-new-func": "off",
+      "unicorn/prefer-global-this": "off",
       "unicorn/prefer-module": "off",
       "unicorn/no-new-array": "off",
       "unicorn/prevent-abbreviations": [
