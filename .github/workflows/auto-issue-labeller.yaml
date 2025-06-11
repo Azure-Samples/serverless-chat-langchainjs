@@ -1,0 +1,17 @@
+name: Auto Issue Labeller
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Auto label issues
+        uses: pelikhan/action-genai-issue-labeller@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,17 @@
+name: Auto Issue Deduplication
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  dedup_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Check for duplicate issues
+        uses: pelikhan/action-genai-issue-dedup@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
