@@ -11,7 +11,13 @@ jobs:
       issues: write
       contents: read
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Check for duplicate issues
         uses: pelikhan/action-genai-issue-dedup@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          model: 'gpt-4o-mini'
+          similarity-threshold: '0.8'
