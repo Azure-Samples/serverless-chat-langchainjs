@@ -143,6 +143,18 @@ You can now open the web app in your browser and start chatting with the bot.
 
 When deploying the sample in an enterprise context, you may want to enforce tighter security restrictions to protect your data and resources. See the [enhance security](./docs/enhance-security.md) guide for more information.
 
+#### Enable CI/CD
+
+If you want to enable Continuous Deployment for your forked repository, you need to configure the Azure pipeline first:
+
+1. Open a terminal at the root of your forked project.
+2. Authenticate with Azure by running `azd auth login`.
+3. Run `azd pipeline config` to configure the required secrets and variables for connecting to Azure from GitHub Actions.
+   - This command will set up the necessary Azure service principal and configure GitHub repository secrets.
+   - Follow the prompts to complete the configuration.
+
+Once configured, the GitHub Actions workflow will automatically deploy your application to Azure whenever you push changes to the main branch.
+
 #### Clean up
 
 To clean up all the Azure resources created by this sample:
