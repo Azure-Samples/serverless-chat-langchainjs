@@ -50,7 +50,20 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
 
       // Initialize embeddings model and vector database
       const embeddings = new AzureOpenAIEmbeddings({ azureADTokenProvider });
-      await AzureCosmosDBNoSQLVectorStore.fromDocuments(documents, embeddings, { credentials });
+      const store = await AzureCosmosDBNoSQLVectorStore.fromDocuments([], embeddings, { credentials });
+
+      // Remove existing documents with the same filename to avoid duplicates
+      try {
+        await store.delete({
+          filter: `SELECT * FROM c WHERE c.metadata.source = "${filename.replaceAll('"', '\\"')}"`,
+        });
+      } catch (error: unknown) {
+        // If deletion fails (e.g., container doesn't exist yet), just log and continue
+        context.log(`Warning: Could not delete existing documents: ${(error as Error).message}`);
+      }
+
+      // Add the new documents
+      await store.addDocuments(documents);
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
@@ -58,6 +71,10 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       const folderExists = await checkFolderExists(faissStoreFolder);
       if (folderExists) {
         const store = await FaissStore.load(faissStoreFolder, embeddings);
+
+        // Remove existing documents with the same filename to avoid duplicates
+        await removeDuplicateDocuments(store, filename);
+
         await store.addDocuments(documents);
         await store.save(faissStoreFolder);
       } else {
@@ -87,6 +104,25 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
     context.error(`Error when processing document-post request: ${error.message}`);
 
     return serviceUnavailable('Service temporarily unavailable. Please try again later.');
+  }
+}
+
+async function removeDuplicateDocuments(store: FaissStore, filename: string): Promise<void> {
+  const docstore = store.getDocstore();
+  const mapping = store.getMapping();
+  const idsToDelete: string[] = [];
+
+  // Find all document IDs that have the same filename
+  for (const [vectorIndex, documentId] of Object.entries(mapping)) {
+    const document = docstore.search(documentId);
+    if (document && document.metadata?.source === filename) {
+      idsToDelete.push(documentId);
+    }
+  }
+
+  // Delete the existing documents with the same filename
+  if (idsToDelete.length > 0) {
+    await store.delete({ ids: idsToDelete });
   }
 }
 
