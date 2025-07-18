@@ -13,6 +13,9 @@
     "build:api": "npm run build --workspace=api",
     "clean": "npm run clean --workspaces --if-present",
     "upload:docs": "node scripts/upload-documents.js http://localhost:7071",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
     "lint": "xo",
     "lint:fix": "xo --fix",
     "format": "prettier --list-different --write .",
@@ -44,6 +47,7 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@playwright/test": "^1.54.1",
     "concurrently": "^9.0.0",
     "lint-staged": "^16.0.0",
     "prettier": "^3.0.3",
@@ -68,6 +72,25 @@
     "prettier": true,
     "envs": [
       "node"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "test/**/*.ts",
+          "test/**/*.js",
+          "playwright.config.ts"
+        ],
+        "rules": {
+          "@typescript-eslint/no-unsafe-call": "off",
+          "@typescript-eslint/no-unsafe-assignment": "off",
+          "@typescript-eslint/no-unsafe-argument": "off",
+          "@typescript-eslint/no-unsafe-return": "off",
+          "@typescript-eslint/no-unsafe-member-access": "off",
+          "no-implicit-coercion": "off",
+          "unicorn/numeric-separators-style": "off",
+          "no-await-in-loop": "off"
+        }
+      }
     ],
     "rules": {
       "@typescript-eslint/triple-slash-reference": "off",

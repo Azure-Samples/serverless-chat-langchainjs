@@ -11,6 +11,10 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Testing
+test-results/
+playwright-report/
+
 # Deployment
 *.env
 .azure
