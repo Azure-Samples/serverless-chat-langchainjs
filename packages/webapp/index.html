@@ -43,16 +43,33 @@
           margin-right: 0.5em;
         }
       }
+      .nav-tabs {
+        margin-left: auto;
+      }
+      .nav-tabs button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1rem;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      .nav-tabs button.active {
+        text-decoration: underline;
+      }
       main {
         container-type: size;
         flex: 1;
         position: relative;
         display: flex;
       }
-      azc-chat {
+      azc-chat, azc-article {
         flex: 1;
         max-width: 1024px;
         margin: 0 auto;
+      }
+      azc-article, #chatHistory {
+        display: none;
       }
     </style>
   </head>
@@ -60,10 +77,15 @@
     <nav>
       <img src="/favicon.png" alt="" />
       AI Chat with Enterprise Data
+      <div class="nav-tabs">
+        <button id="chat-tab" class="active">Chat</button>
+        <button id="article-tab">Article Generator</button>
+      </div>
     </nav>
     <main>
       <azc-history id="chatHistory"></azc-history>
       <azc-chat id="chat"></azc-chat>
+      <azc-article id="article"></azc-article>
     </main>
     <script type="module" src="/src/index.ts"></script>
     <script>
@@ -81,6 +103,28 @@
       window.chat.userId = userId;
       window.chat.addEventListener('messagesUpdated', () => {
         window.chatHistory.refresh();
+      });
+
+      const chatTab = document.getElementById('chat-tab');
+      const articleTab = document.getElementById('article-tab');
+      const chatHistory = document.getElementById('chatHistory');
+      const chat = document.getElementById('chat');
+      const article = document.getElementById('article');
+
+      chatTab.addEventListener('click', () => {
+        chatTab.classList.add('active');
+        articleTab.classList.remove('active');
+        chatHistory.style.display = 'block';
+        chat.style.display = 'block';
+        article.style.display = 'none';
+      });
+
+      articleTab.addEventListener('click', () => {
+        articleTab.classList.add('active');
+        chatTab.classList.remove('active');
+        chatHistory.style.display = 'none';
+        chat.style.display = 'none';
+        article.style.display = 'block';
       });
     </script>
   </body>

@@ -30,3 +30,19 @@ export async function* getCompletion(options: ChatRequestOptions) {
 export function getCitationUrl(citation: string): string {
   return `${apiBaseUrl}/api/documents/${citation}`;
 }
+
+export async function postArticle(body: { topic: string }): Promise<{ article: string }> {
+  const response = await fetch(`${apiBaseUrl}/api/article`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return await response.json();
+}
