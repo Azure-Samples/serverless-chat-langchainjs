@@ -81,7 +81,7 @@ var finalOpenAiUrl = empty(openAiUrl) ? 'https://${aiFoundry.outputs.aiServicesN
 var storageUrl = 'https://${storage.outputs.name}.blob.${environment().suffixes.storage}'
 var apiResourceName = '${abbrs.webSitesFunctions}api-${resourceToken}'
 var webappUrl = 'https://${webapp.outputs.defaultHostname}'
-var apiUrl = useVnet ? webappUrl : 'https://${api.outputs.defaultHostname}'
+var apiUrl = 'https://${api.outputs.defaultHostname}'
 
 // Organize resources in a resource group
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -429,6 +429,6 @@ output AZURE_STORAGE_URL string = storageUrl
 output AZURE_STORAGE_CONTAINER_NAME string = blobContainerName
 output AZURE_COSMOSDB_NOSQL_ENDPOINT string = cosmosDb.outputs.endpoint
 
-output API_URL string = useVnet ? '' : api.outputs.defaultHostname
+output API_URL string = useVnet ? '' : apiUrl
 output WEBAPP_URL string = webappUrl
-output UPLOAD_URL string = apiUrl
+output UPLOAD_URL string = useVnet ? webappUrl : apiUrl
