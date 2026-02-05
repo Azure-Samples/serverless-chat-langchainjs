@@ -36,7 +36,7 @@ export function ok(body?: object): HttpResponseInit {
     : { status: 204 };
 }
 
-export function data(body: Uint8Array | AsyncIterable<Uint8Array>, headers: Record<string, string>): HttpResponseInit {
+export function data(body: any, headers: Record<string, string>): HttpResponseInit {
   return {
     status: 200,
     headers,
