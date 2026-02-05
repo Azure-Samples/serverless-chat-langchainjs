@@ -12,12 +12,7 @@ services:
     host: staticwebapp
     hooks:
       predeploy:
-        windows:
-          shell: pwsh
-          run: npm run build
-        posix:
-          shell: sh
-          run: npm run build
+        run: npm run build
 
   api:
     project: ./packages/api
@@ -26,12 +21,7 @@ services:
 
 hooks:
   postprovision:
-    windows:
-      shell: pwsh
-      run: azd env get-values > packages/api/.env
-    posix:
-      shell: sh
-      run: azd env get-values > packages/api/.env
+    run: azd env get-values > packages/api/.env
   postup:
     windows:
       shell: pwsh
