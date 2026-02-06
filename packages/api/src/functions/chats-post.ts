@@ -11,7 +11,7 @@ import { VectorStore } from '@langchain/core/vectorstores';
 import { ChatOllama, OllamaEmbeddings } from '@langchain/ollama';
 import { FaissStore } from '@langchain/community/vectorstores/faiss';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
+import { createStuffDocumentsChain } from '@langchain/classic/chains/combine_documents';
 import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config';
 import { badRequest, data, serviceUnavailable } from '../http-response.js';

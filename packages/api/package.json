@@ -18,21 +18,22 @@
     "@azure/identity": "^4.2.0",
     "@azure/search-documents": "^12.0.0",
     "@azure/storage-blob": "^12.17.0",
-    "@langchain/azure-cosmosdb": "^0.2.2",
-    "@langchain/community": "^0.3.15",
-    "@langchain/core": "^0.3.18",
-    "@langchain/ollama": "^0.2.0",
-    "@langchain/openai": "^0.5.10",
-    "@langchain/textsplitters": "^0.1.0",
+    "@langchain/azure-cosmosdb": "^1.1.0",
+    "@langchain/classic": "^1.0.14",
+    "@langchain/community": "^1.1.11",
+    "@langchain/core": "^1.1.19",
+    "@langchain/ollama": "^1.2.2",
+    "@langchain/openai": "^1.2.4",
+    "@langchain/textsplitters": "^1.0.1",
     "@microsoft/ai-chat-protocol": "^1.0.0-beta.20240814.1",
     "dotenv": "^16.4.5",
     "faiss-node": "^0.5.1",
-    "langchain": "^0.3.6",
+    "langchain": "^1.2.17",
     "pdf-parse": "^1.1.1",
-    "uuid": "^11.0.3"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.x",
+    "@types/node": "^22.x",
     "azure-functions-core-tools": "^4.0.5611",
     "typescript": "^5.4.4"
   }
