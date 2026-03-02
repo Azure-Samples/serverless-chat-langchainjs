@@ -1,4 +1,4 @@
-import { HttpResponseInit } from '@azure/functions';
+import { HttpResponseBodyInit, HttpResponseInit } from '@azure/functions';
 
 export function badRequest(message: string): HttpResponseInit {
   return {
@@ -36,7 +36,7 @@ export function ok(body?: object): HttpResponseInit {
     : { status: 204 };
 }
 
-export function data(body: any, headers: Record<string, string>): HttpResponseInit {
+export function data(body: HttpResponseBodyInit, headers: Record<string, string>): HttpResponseInit {
   return {
     status: 200,
     headers,
