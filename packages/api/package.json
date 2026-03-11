@@ -29,7 +29,7 @@
     "dotenv": "^16.4.5",
     "faiss-node": "^0.5.1",
     "langchain": "^1.2.17",
-    "pdf-parse": "^1.1.1",
+    "pdf-parse": "^2.4.5",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
