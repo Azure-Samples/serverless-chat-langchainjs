@@ -58,6 +58,21 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       const folderExists = await checkFolderExists(faissStoreFolder);
       if (folderExists) {
         const store = await FaissStore.load(faissStoreFolder, embeddings);
+
+        // Delete existing chunks with the same filename before inserting
+        const docstore = (store as any).docstore._docs as Map<string, any>;
+        const idsToDelete = [];
+        for (const [id, document] of docstore.entries()) {
+          if (document.metadata?.source === filename) {
+            idsToDelete.push(id);
+          }
+        }
+
+        if (idsToDelete.length > 0) {
+          await store.delete({ ids: idsToDelete });
+          context.log(`Deleted ${idsToDelete.length} existing chunks for "${filename}"`);
+        }
+
         await store.addDocuments(documents);
         await store.save(faissStoreFolder);
       } else {
