@@ -48,9 +48,14 @@ export async function postDocuments(request: HttpRequest, context: InvocationCon
       const credentials = getCredentials();
       const azureADTokenProvider = getAzureOpenAiTokenProvider();
 
-      // Initialize embeddings model and vector database
       const embeddings = new AzureOpenAIEmbeddings({ azureADTokenProvider });
-      await AzureCosmosDBNoSQLVectorStore.fromDocuments(documents, embeddings, { credentials });
+      const store = new AzureCosmosDBNoSQLVectorStore(embeddings, { credentials });
+
+      // Delete existing chunks with the same filename before inserting
+      await store.delete({ filter: `SELECT c.id FROM c WHERE c.metadata.source = "${filename}"` });
+      context.log(`Deleted existing chunks for "${filename}" from CosmosDB`);
+
+      await store.addDocuments(documents);
     } else {
       // If no environment variables are set, it means we are running locally
       context.log('No Azure OpenAI endpoint set, using Ollama models and local DB');
