@@ -28,7 +28,7 @@
 This sample shows how to build a serverless AI chat experience with Retrieval-Augmented Generation using [LangChain.js](https://js.langchain.com/) and Azure. The application is hosted on [Azure Static Web Apps](https://learn.microsoft.com/azure/static-web-apps/overview) and [Azure Functions](https://learn.microsoft.com/azure/azure-functions/functions-overview?pivots=programming-language-javascript), with [Azure Cosmos DB for NoSQL](https://learn.microsoft.com/azure/cosmos-db/nosql/vector-) as the vector database. You can use it as a starting point for building more complex AI applications.
 
 > [!TIP]
-> You can test this application locally without any cost using [Ollama](https://ollama.com/). Follow the instructions in the [Local Development](#local-development) section to get started.
+> New to RAG? [Explore the code with CodeTour](#explore-the-code-with-codetour) without starting the app, or [run the sample locally with Ollama](#run-the-sample-locally-with-ollama) without an Azure account.
 
 ## Overview
 
@@ -68,6 +68,12 @@ The quickest way is to use [GitHub Codespaces](#use-github-codespaces) that prov
 
 > [!IMPORTANT]
 > If you want to run this sample entirely locally using Ollama, you have to follow the instructions in the [local environment](#use-your-local-environment) section.
+
+### Explore the code with CodeTour
+
+1. Open the repository folder in VS Code and install the [CodeTour extension](https://marketplace.visualstudio.com/items?itemName=vsls-contrib.codetour).
+2. In the Explorer sidebar, open **CodeTour** and start **1 - RAG Overview: Understanding the Architecture**. The [first tour](.tours/1-rag-overview.tour) follows a PDF from ingestion to a streamed answer. You don't need to install npm dependencies, run Ollama, or provision Azure resources to follow it.
+3. Continue to the document ingestion tour, or [run the sample locally with Ollama](#run-the-sample-locally-with-ollama) and [verify your first answer against a source](#verify-your-first-answer).
 
 ### Use your local environment
 
@@ -196,7 +202,11 @@ npm run upload:docs
 
 This only has to be done once, unless you want to add more documents.
 
-You can now open the URL `http://localhost:8000` in your browser to start chatting with the bot.
+#### Verify your first answer
+
+1. With the app still running and the sample PDFs uploaded, open [the local chat](http://localhost:8000).
+2. Ask **What types of personal information does Contoso Real Estate collect?**
+3. If the answer cites `privacy-policy.pdf`, open the citation and compare the claims with the PDF. If there is no usable citation, open the [sample privacy policy](./data/privacy-policy.pdf) directly and look for the passage that supports the answer. If you can't find one, treat the answer as unverified.
 
 > [!NOTE]
 > While local models usually works well enough to answer the questions, sometimes they may not be able to follow perfectly the advanced formatting instructions for the citations and follow-up questions. This is expected, and a limitation of using smaller local models.
